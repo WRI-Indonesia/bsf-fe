@@ -68,23 +68,23 @@ export default function Home() {
             priority
           />
         </div>
-        <nav className="hidden items-center gap-7 text-sm font-medium text-[#1f3b2c] md:ml-auto md:mr-10 md:flex">
-          <a className="hover:text-[#0f6a3d]" href="#">
+        <nav className="hidden items-center gap-20 text-sm font-medium ml-auto mr-10 md:flex">
+          <a className="text-text-green" href="#">
             Home
           </a>
-          <a className="flex items-center gap-1 hover:text-[#0f6a3d]" href="#">
+          <a className="flex items-center gap-1 text-text-green" href="#">
             About
             <span className="text-[10px]">▼</span>
-          </a>
-          <a className="flex items-center gap-1 hover:text-[#0f6a3d]" href="#">
+          </a>  
+          <a className="flex items-center gap-1 text-text-green" href="#">
             Events
             <span className="text-[10px]">▼</span>
           </a>
-          <a className="flex items-center gap-1 hover:text-[#0f6a3d]" href="#">
+          <a className="flex items-center gap-1 text-text-green" href="#">
             Publications
             <span className="text-[10px]">▼</span>
           </a>
-          <a className="flex items-center gap-1 hover:text-[#0f6a3d]" href="#">
+          <a className="flex items-center gap-1 text-text-green" href="#">
             Media
             <span className="text-[10px]">▼</span>
           </a>
@@ -106,39 +106,39 @@ export default function Home() {
           }}
         >
           <div className="absolute inset-0 bg-gradient-to-b from-white/0 via-white/5 to-[#0f1c14]/70" />
-          <div className="relative mx-auto grid w-full gap-10 pb-16 pt-28 md:grid-cols-[1.1fr_0.9fr] h-[820px]">
-            <div className="pl-20 space-y-5 text-[#1f3b2c]">
-              <div className="text-[88px] font-semibold leading-tight text-[#4a4a4a]">
+          <div className="relative mx-auto grid w-full gap-10 pb-16 pt-28 md:grid-cols-[1.2fr_0.8fr] h-[820px]">
+            <div className="pl-25 space-y-5 text-[#1f3b2c]">
+              <div className="text-[88px] font-semibold leading-tight text-text-grey-dark">
                 ASEAN Biodiversity
                 <br />
                 Science Forum
               </div>
-              <p className="max-w-md text-[20px] font-normal text-[#515151]">
+              <p className="font-['inter'] text-[20px] font-normal text-text-grey-dark">
                 A hub for community to get the biodiversity science updates around ACB.
               </p>
             </div>
             <div className="pr-10 flex items-end md:justify-end">
-              <div className="w-[480px] rounded-2xl bg-white/60 p-[24px] text-[#1f4a31]">
-                <p className="text-[20px] font-bold text-[#887000]">
+              <div className="w-[480px] rounded-2xl bg-white/75 p-[24px]">
+                <p className="text-[20px] font-bold text-text-lime">
                   Upcoming Forum
                 </p>
-                <h3 className="mt-2 text-[38px] font-bold leading-[1.1] tracking-tight text-[#1f4a31]">
+                <h3 className="mt-2 text-[38px] font-bold leading-[1.1] tracking-tight text-text-green">
                   Connecting Biodiversity Science,
                   Policy, and Action
                 </h3>
-                <div className="mt-6 flex w-full items-center justify-center gap-6 rounded-lg bg-[#aac0ac]/50 py-3 text-[#1f4a31]">
+                <div className="mt-6 flex w-full items-center justify-center gap-6 rounded-lg bg-[#aac0ac]/50 py-3 text-text-green">
                   <div className="flex items-baseline gap-2">
-                    <span className="text-[24px] font-bold text-[#265F44]">14-19</span>
-                    <span className="font-['Inter'] text-[16px] font-normal leading-none tracking-normal text-[#265F44]">June 2026</span>
+                    <span className="text-[24px] font-bold text-text-green">14-19</span>
+                    <span className="font-['inter'] text-[16px] font-normal leading-none tracking-normal text-text-green">June 2026</span>
                   </div>
                   <div className="h-7 w-[1.5px] bg-[#668270]" />
                   <div className="flex items-baseline gap-2">
-                    <span className="text-[24px] font-bold text-[#265F44]">500+</span>
-                    <span className="font-['Inter'] text-[16px] font-normal leading-none tracking-normal text-[#265F44]">Participants</span>
+                    <span className="text-[24px] font-bold text-text-green">500+</span>
+                    <span className="font-['inter'] text-[16px] font-normal leading-none tracking-normal text-text-green">Participants</span>
                   </div>
                 </div>
                 <div className="mt-4 grid w-full grid-cols-2 gap-3">
-                  <button className="flex items-center justify-center rounded-xl border border-[#1f4a31] bg-white px-4 py-[10px] text-[15px] font-semibold text-[#1f4a31] transition-colors hover:bg-gray-50">
+                  <button className="flex items-center justify-center rounded-xl border border-[#1f4a31] bg-white px-4 py-[10px] text-[15px] font-semibold text-text-green transition-colors hover:bg-gray-50">
                     Explore Publications
                   </button>
                   <button className="flex items-center justify-center gap-2 rounded-xl bg-[#1f4a31] px-4 py-[10px] text-[15px] font-semibold text-white transition-colors hover:bg-[#163824]">
@@ -159,7 +159,7 @@ export default function Home() {
         <section className="bg-[#101612] px-[80px] py-[100px] text-white">
           <div className="mx-auto grid w-full gap-16 md:grid-cols-[1fr_1.1fr] ">
             <div className="flex flex-col w-[636px]">
-              <p className="font-['Inter'] text-[20px] font-semibold uppercase tracking-wider text-[#887000]">
+              <p className="font-['inter'] text-[20px] font-semibold uppercase tracking-wider text-[#887000]">
                 ABOUT THE FORUM
               </p>
               <div>
@@ -168,7 +168,7 @@ export default function Home() {
                   <br className="hidden md:block" />
                   collaboration, and knowledge exchange.
                 </h2>
-                <p className="mt-2 font-['Inter'] font-normal text-[20px] leading-[1.6] text-[#93a299]">
+                <p className="mt-2 font-['inter'] font-normal text-[20px] leading-[1.6] text-[#93a299]">
                   The Biodiversity Science Forum brings together researches,
                   practitioners, institutions, and decision-makers to strengthen
                   dialogue, biodiversity conservation across the ASEAN region
@@ -222,71 +222,99 @@ export default function Home() {
                       />                    )}
                     <h3 className="text-[18px] font-semibold text-white">{item.title}</h3>
                   </div>
-                  <p className="font-['Inter'] mt-2 whitespace-pre-line text-[13px] font-normal leading-[1.6] text-[#AFAFAF]">{item.text}</p>
+                  <p className="font-['inter'] mt-2 whitespace-pre-line text-[13px] font-normal leading-[1.6] text-[#AFAFAF]">{item.text}</p>
                 </div>
               ))}
             </div>
           </div>
         </section>
-        <section className="bg-[#e9efdf] py-12 text-[#1b2d1f]">
-          <div className="mx-auto grid w-full gap-10 px-6 md:grid-cols-[1.1fr_0.9fr]">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#b28d3c]">
-                Upcoming Forum
+        <section className="bg-[#e4ebd8] py-20 px-[80px] text-[#1b2d1f]">
+          <div className="mx-auto grid w-full gap-16 lg:grid-cols-[1.2fr_0.8fr] lg:max-w-[1400px]">
+            <div className="flex flex-col justify-center">
+              <p className="font-['inter'] text-[20px] font-semibold uppercase tracking-wider text-[#887000]">
+                UPCOMING FORUM
               </p>
-              <h2 className="mt-4 text-2xl font-semibold">
+              <h2 className="mt-6 text-[40px] font-semibold tracking-tight text-text-black">
                 ASEAN Biodiversity Science Forum 2026
               </h2>
-              <p className="mt-4 max-w-md text-sm text-[#4a5d4f]">
+              <p className="mt-6 max-w-[600px] text-[18px] leading-[1.6] text-[#697d70]">
                 Join leading scientists, policy experts, and conservation
                 practitioners for five days of keynotes, sessions, and
                 collaborative workshops on the future of biodiversity in
                 Southeast Asia.
               </p>
-              <div className="mt-6 flex flex-wrap gap-3 text-xs font-semibold text-[#1f3b2c]">
-                <div className="inline-flex items-center gap-2 rounded-2xl border border-[#b7c5b3] bg-white/70 px-3 py-2">
-                  <span>14-19 June 2026</span>
-                  <span className="text-[10px] text-[#6a7c6f]">6 Days Event</span>
+              <div className="mt-8 flex flex-wrap gap-4">
+                <div className="flex flex-1 items-center gap-3 rounded-[12px] border border-[#aabda7] bg-[#c3d4be] px-5 py-4">
+                  <svg className="h-[22px] w-[22px] text-[#173e28]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                  <div className="flex flex-col">
+                    <span className="text-[15px] font-bold text-[#173e28]">14-19 June 2026</span>
+                    <span className="text-[13px] font-medium text-[#3b664d]">5 Days Event</span>
+                  </div>
                 </div>
-                <div className="inline-flex items-center gap-2 rounded-2xl border border-[#b7c5b3] bg-white/70 px-3 py-2">
-                  <span>Jakarta, Indonesia</span>
-                  <span className="text-[10px] text-[#6a7c6f]">ASEAN HQ</span>
+                <div className="flex flex-1 items-center gap-3 rounded-[12px] border border-[#aabda7] bg-[#c3d4be] px-5 py-4">
+                  <svg className="h-[22px] w-[22px] text-[#173e28]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                  <div className="flex flex-col">
+                    <span className="text-[15px] font-bold text-[#173e28]">Jakarta, Indonesia</span>
+                    <span className="text-[13px] font-medium text-[#3b664d]">ASEAN HQ</span>
+                  </div>
                 </div>
-                <div className="inline-flex items-center gap-2 rounded-2xl border border-[#b7c5b3] bg-white/70 px-3 py-2">
-                  <span>500+ Expected</span>
-                  <span className="text-[10px] text-[#6a7c6f]">Participants</span>
+                <div className="flex flex-1 items-center gap-3 rounded-[12px] border border-[#aabda7] bg-[#c3d4be] px-5 py-4">
+                  <svg className="h-[22px] w-[22px] text-[#173e28]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                  <div className="flex flex-col">
+                    <span className="text-[15px] font-bold text-[#173e28]">500+ Expected</span>
+                    <span className="text-[13px] font-medium text-[#3b664d]">Participants</span>
+                  </div>
                 </div>
               </div>
-              <div className="mt-6 flex flex-wrap gap-3">
-                <button className="rounded-full bg-[#1f3b2c] px-5 py-2 text-xs font-semibold text-white">
+              <div className="mt-8 flex gap-4">
+                <button className="flex items-center gap-2 rounded-[8px] bg-[#225139] px-6 py-[10px] text-[14px] font-semibold text-white transition-colors hover:bg-[#173e28]">
                   Register Now
+                  <svg className="h-[18px] w-[18px]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                 </button>
-                <button className="rounded-full border border-[#1f3b2c] px-5 py-2 text-xs font-semibold text-[#1f3b2c]">
+                <button className="rounded-[8px] border border-[#225139] bg-white px-6 py-[10px] text-[14px] font-semibold text-[#225139] transition-colors hover:bg-[#f6f9f5]">
                   View Program
                 </button>
               </div>
             </div>
-            <div className="rounded-2xl border border-[#c7d3c2] bg-white/70 p-6">
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#51685d]">
-                Key Dates
+            <div className="flex flex-col justify-center lg:pl-10">
+              <p className="text-[14px] font-bold uppercase tracking-wider text-[#1d3d2a]">
+                KEY DATES
               </p>
-              <div className="mt-5 space-y-4 text-sm">
-                {keyDates.map((item, index) => (
-                  <div key={item.date} className="flex gap-4">
-                    <div className="flex flex-col items-center">
-                      <span className="h-2 w-2 rounded-full bg-[#1f3b2c]" />
-                      {index < 4 ? (
-                        <span className="mt-1 h-7 w-px bg-[#c7d3c2]" />
-                      ) : null}
+              <div className="mt-6 space-y-6">
+                {keyDates.map((item, index) => {
+                  let textColClass = "text-[#173e28]";
+                  let textSubClass = "text-[#486e57]";
+                  let dotClass = "bg-[#173e28]";
+                  
+                  if (index === 1) {
+                    textColClass = "text-[#44a877]";
+                    textSubClass = "text-[#44a877]";
+                    dotClass = "bg-[#173e28] ring-[3px] ring-[#44a877] ring-offset-[#e4ebd8] ring-offset-2";
+                  } else if (index > 1) {
+                    textColClass = "text-[#a4aba1]";
+                    textSubClass = "text-[#a4aba1]";
+                    dotClass = "bg-[#a4aba1]";
+                  }
+                  
+                  return (
+                    <div key={item.date + index} className="relative flex gap-5">
+                      <div className="relative z-10 mt-[6px] flex flex-col items-center w-[12px]">
+                        <span className={`h-[10px] w-[10px] rounded-full flex-shrink-0 ${dotClass}`} />
+                        {index < keyDates.length - 1 ? (
+                          <span className="absolute top-[10px] h-[calc(100%+1.5rem)] w-[1.5px] bg-[#c3cdbe]" />
+                        ) : null}
+                      </div>
+                      <div className="relative -top-[1px]">
+                        <p className={`text-[12px] tracking-wide font-medium ${textColClass}`}>
+                          {item.date}
+                        </p>
+                        <p className={`text-[15px] font-medium leading-[1.4] ${textSubClass}`}>
+                          {item.text}
+                        </p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="text-xs font-semibold text-[#1f3b2c]">
-                        {item.date}
-                      </p>
-                      <p className="text-xs text-[#5e7365]">{item.text}</p>
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           </div>
