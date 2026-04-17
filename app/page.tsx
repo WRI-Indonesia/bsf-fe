@@ -1,4 +1,5 @@
 import Image from "next/image";
+import BookIcon from "../public/book.svg"
 
 const aboutItems = [
   {
@@ -219,14 +220,8 @@ export default function Home() {
                       />
                     )}
                     {item.title === "Evidence-Based" && (
-                      <Image
-                        src="/book.svg"
-                        alt="Evidence-Based"
-                        width={22}
-                        height={22}
-                        style={{ width: "22px", height: "22px" }}
-                        className="brightness-0 invert"
-                      />                    )}
+                      <BookIcon/>
+                    )}
                     {item.title === "Open Access" && (
                       <Image
                         src="/bulb.svg"
@@ -355,11 +350,11 @@ export default function Home() {
                 key={item.title}
                 className="flex flex-col justify-between gap-4 rounded-2xl border border-[#e2e8e2] bg-[#fcfdfb] px-5 py-4"
               >
-                <div>
+                <div className="space-y-2">
                   <p className="text-[24px] font-semibold text-text-black">
                     {item.title}
                   </p>
-                  <p className="font-['inter'] text-[16px] mt-2 leading-[24px] tracking-[0px] text-text-grey-mid">
+                  <p className="font-['inter'] text-[16px] leading-[24px] tracking-[0px] text-text-grey-mid">
                     {item.description}
                   </p>
                   <p className="font-['inter'] text-[16px] text-text-grey-light">
@@ -375,11 +370,11 @@ export default function Home() {
                     </span>
                   </div>
                   <div className="ml-auto flex items-center gap-2">
-                    <button className="rounded-full border border-[#1f3b2c] px-4 py-2 text-xs font-semibold text-[#1f3b2c]">
-                      Download
+                    <button className="flex h-[36px] w-[136px] items-center justify-center gap-2 rounded-xl border border-text-green text-sm font-semibold text-text-green">
+                      Download <Image src="/download.svg" alt="Download Icon" width={16} height={16} />
                     </button>
-                    <button className="rounded-full bg-[#1f3b2c] px-4 py-2 text-xs font-semibold text-white">
-                      Open
+                    <button className="flex h-[36px] w-[136px] items-center justify-center gap-2 rounded-xl bg-text-green text-sm font-semibold text-white">
+                      Open <Image src="/arrow_right.svg" alt="Download Icon" width={10} height={10} style={{ height: "auto" }} />
                     </button>
                   </div>
                 </div>
@@ -387,75 +382,86 @@ export default function Home() {
             ))}
           </div>
         </section>
-        <section className="bg-[#cbd8c7] py-12 text-[#1b2d1f]">
-          <div className="mx-auto grid w-full gap-10 px-6 md:grid-cols-[1.1fr_0.9fr]">
+        <section className="bg-background-base-green-light px-20 py-30">
+          <div className="mx-auto grid w-full gap-[48px] lg:grid-cols-2 xl:grid-cols-[572px_1fr]">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#b28d3c]">
+              <p className="font-['inter'] text-xl font-semibold uppercase text-text-lime">
                 Contact Us
               </p>
-              <h2 className="mt-4 text-2xl font-semibold">
+              <h2 className="mt-4 text-[2.5rem] font-semibold text-text-black">
                 Get in touch with the BSF team
               </h2>
-              <p className="mt-4 max-w-md text-sm text-[#4a5d4f]">
-                Whether you are interested in partnerships, have questions about
-                the forum, or want to contribute to biodiversity science, we
-                would love to hear from you.
+              <p className="font-['inter'] mt-4 text-xl text-text-grey-mid">
+                Whether you&apos;re interested in partnerships, have questions about 
+                the forum, or want to contribute to biodiversity science, we&apos;d 
+                love to hear from you.
               </p>
-              <div className="mt-6 space-y-4 text-sm text-[#2c4537]">
-                <div>
-                  <p className="text-xs font-semibold">Email</p>
-                  <p>contact@bsf-asean.org</p>
+              <div className="mt-10 flex flex-col gap-8 text-text-green">
+                <div className="flex items-center gap-4">
+                  <BookIcon/>
+                  <div>
+                    <p className="font-['inter'] text-lg font-semibold leading-6">Email</p>
+                    <p className="font-['inter'] text-base">contact@bsf-asean.org</p>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-xs font-semibold">Address</p>
-                  <p>ACB Annex, Los Banos, Laguna, Philippines</p>
+                <div className="flex items-center gap-4">
+                  <BookIcon className="mb-[1.5rem]" />
+                  <div>
+                    <p className="font-['inter'] text-lg font-semibold leading-6">Address</p>
+                    <p className="font-['inter'] text-base">ASEAN Centre for Biodiversity<br />Los Banos, Laguna, Philippines</p>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-xs font-semibold">Phone</p>
-                  <p>+62 (0491) 558-2865</p>
+                <div className="flex items-center gap-4">
+                  <BookIcon/>
+                  <div>
+                    <p className="font-['inter'] text-lg font-semibold leading-6">Phone</p>
+                    <p className="font-['inter'] text-base">+62 (049) 536-2865</p>
+                  </div>
                 </div>
               </div>
             </div>
-            <div className="rounded-2xl bg-white/85 p-6">
+            <div className="flex flex-col justify-space-evenly w-full rounded-2xl font-['Plus_Jakarta_Sans']">
               <div className="grid gap-4 sm:grid-cols-2">
-                <label className="text-xs font-semibold text-[#5f7366]">
-                  Full Name
+                <label className="flex flex-col gap-2">
+                  <span className="block h-[22px] text-sm font-semibold leading-[22px] text-text-black">Full Name</span>
                   <input
-                    className="mt-2 w-full rounded-lg border border-[#d7e0d5] bg-white px-3 py-2 text-sm text-[#1b2d1f]"
+                    className="w-full rounded-lg border border-outline-grey-light bg-white px-3 py-3 text-sm font-normal text-[#1b2d1f]"
                     placeholder="Your name"
                     type="text"
                   />
                 </label>
-                <label className="text-xs font-semibold text-[#5f7366]">
-                  Email
+                <label className="flex flex-col gap-2">
+                  <span className="block h-[22px] text-sm font-semibold leading-[22px] text-text-black">Email</span>
                   <input
-                    className="mt-2 w-full rounded-lg border border-[#d7e0d5] bg-white px-3 py-2 text-sm text-[#1b2d1f]"
+                    className="w-full rounded-lg border border-outline-grey-light bg-white px-3 py-3 text-sm font-normal text-[#1b2d1f]"
                     placeholder="you@example.com"
                     type="email"
                   />
                 </label>
               </div>
-              <label className="mt-4 block text-xs font-semibold text-[#5f7366]">
-                Subject
+              <label className="mt-6 flex flex-col gap-2">
+                <span className="block h-[22px] text-sm font-semibold leading-[22px] text-text-black">Subject</span>
                 <input
-                  className="mt-2 w-full rounded-lg border border-[#d7e0d5] bg-white px-3 py-2 text-sm text-[#1b2d1f]"
+                  className="w-full rounded-lg border border-outline-grey-light bg-white px-3 py-3 text-sm font-normal text-[#1b2d1f]"
                   placeholder="Add a subject"
                   type="text"
                 />
               </label>
-              <label className="mt-4 block text-xs font-semibold text-[#5f7366]">
-                Message
+              <label className="mt-6 flex flex-col gap-2">
+                <span className="block h-[22px] text-sm font-semibold leading-[22px] text-text-black">Message</span>
                 <textarea
-                  className="mt-2 min-h-[120px] w-full rounded-lg border border-[#d7e0d5] bg-white px-3 py-2 text-sm text-[#1b2d1f]"
+                  className="min-h-[158px] w-full rounded-lg border border-outline-grey-light bg-white px-3 py-3 text-sm font-normal text-[#1b2d1f]"
                   placeholder="Write your message"
                 />
               </label>
-              <p className="mt-4 text-[11px] text-[#7a8d80]">
+              <p className="my-6 text-sm text-text-grey-mid">
                 Your request will be sent securely and remain private.
               </p>
-              <button className="mt-4 rounded-full bg-[#1f3b2c] px-5 py-2 text-xs font-semibold text-white">
-                Send your message
-              </button>
+              <div>
+                <button className="rounded-md bg-text-green px-6 py-4 text-md font-semibold text-white">
+                  Send your message
+                </button>
+              </div>
             </div>
           </div>
         </section>
