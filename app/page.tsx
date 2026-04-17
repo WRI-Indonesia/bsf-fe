@@ -85,7 +85,7 @@ export default function Home() {
             priority
           />
         </div>
-        <nav className="hidden items-center gap-20 text-sm font-medium ml-auto mr-10 md:flex">
+        <nav className="hidden items-center gap-20 text-base font-medium ml-auto mr-10 md:flex">
           <a className="text-text-green" href="#">
             Home
           </a>
@@ -123,19 +123,19 @@ export default function Home() {
           }}
         >
           <div className="absolute inset-0 bg-gradient-to-b from-white/0 via-white/5 to-[#0f1c14]/70" />
-          <div className="relative mx-auto grid w-full gap-10 pb-16 pt-28 md:grid-cols-[1.2fr_0.8fr] h-[820px]">
-            <div className="pl-25 space-y-5 text-[#1f3b2c]">
-              <div className="text-[88px] font-semibold leading-tight text-text-grey-dark">
+          <div className="relative mx-auto grid w-full gap-10 pb-16 pt-28 lg:grid-cols-[1.2fr_0.8fr] min-h-[820px]">
+            <div className="px-8 md:px-12 lg:px-0 lg:pl-[100px] space-y-5 text-[#1f3b2c] flex flex-col justify-center lg:justify-start">
+              <div className="text-[56px] md:text-[72px] lg:text-[88px] font-semibold text-text-grey-dark leading-[1]">
                 ASEAN Biodiversity
                 <br />
                 Science Forum
               </div>
-              <p className="font-['inter'] text-[20px] font-normal text-text-grey-dark">
+              <p className="font-['inter'] text-[18px] lg:text-[20px] font-normal text-text-grey-dark">
                 A hub for community to get the biodiversity science updates around ACB.
               </p>
             </div>
-            <div className="pr-10 flex items-end md:justify-end">
-              <div className="w-[480px] rounded-2xl bg-white/75 p-[24px]">
+            <div className="px-8 md:px-12 lg:px-0 lg:pr-10 flex items-end lg:justify-end">
+              <div className="w-full sm:max-w-[480px] rounded-2xl bg-white/75 p-[24px]">
                 <p className="text-[20px] font-bold text-text-lime">
                   Upcoming Forum
                 </p>
@@ -143,15 +143,15 @@ export default function Home() {
                   Connecting Biodiversity Science,
                   Policy, and Action
                 </h3>
-                <div className="mt-6 flex w-full items-center justify-center gap-6 rounded-lg bg-[#aac0ac]/50 py-3 text-text-green">
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-[24px] font-bold text-text-green">14-19</span>
-                    <span className="font-['inter'] text-[16px] font-normal leading-none tracking-normal text-text-green">June 2026</span>
+                <div className="mt-6 flex w-full items-center justify-center gap-4 sm:gap-6 rounded-lg bg-[#aac0ac]/50 py-3 text-text-green">
+                  <div className="flex items-baseline gap-2 whitespace-nowrap">
+                    <span className="text-[22px] sm:text-[24px] font-bold text-text-green">14-19</span>
+                    <span className="font-['inter'] text-[14px] sm:text-[16px] font-normal leading-none tracking-normal text-text-green">June 2026</span>
                   </div>
-                  <div className="h-7 w-[1.5px] bg-[#668270]" />
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-[24px] font-bold text-text-green">500+</span>
-                    <span className="font-['inter'] text-[16px] font-normal leading-none tracking-normal text-text-green">Participants</span>
+                  <div className="h-7 w-[1.5px] bg-[#668270] shrink-0" />
+                  <div className="flex items-baseline gap-2 whitespace-nowrap">
+                    <span className="text-[22px] sm:text-[24px] font-bold text-text-green">500+</span>
+                    <span className="font-['inter'] text-[14px] sm:text-[16px] font-normal leading-none tracking-normal text-text-green">Participants</span>
                   </div>
                 </div>
                 <div className="mt-4 grid w-full grid-cols-2 gap-3">
@@ -173,19 +173,19 @@ export default function Home() {
             </div>
           </div>
         </section>
-        <section className="bg-[#101612] px-[80px] py-[100px] text-white">
-          <div className="mx-auto grid w-full gap-16 md:grid-cols-[1fr_1.1fr] ">
-            <div className="flex flex-col w-[636px]">
+        <section className="bg-[#101612] px-[40px] md:px-[80px] py-[100px] text-white">
+          <div className="mx-auto grid w-full gap-16 lg:grid-cols-[1fr_1.1fr] ">
+            <div className="flex flex-col w-full lg:max-w-[636px]">
               <p className="font-['inter'] text-[20px] font-semibold uppercase tracking-wider text-text-lime">
                 ABOUT THE FORUM
               </p>
               <div>
-                <h2 className="mt-10 text-[40px] font-semibold leading-[1.2] text-white">
+                <h2 className="mt-10 text-[32px] sm:text-[40px] font-semibold leading-[1.2] text-white">
                   A space for biodiversity science,
-                  <br className="hidden md:block" />
+                  <br className="hidden lg:block" />
                   collaboration, and knowledge exchange.
                 </h2>
-                <p className="mt-2 font-['inter'] font-normal text-[20px] leading-[1.6] text-[#93a299]">
+                <p className="mt-2 font-['inter'] font-normal text-[18px] sm:text-[20px] leading-[1.6] text-[#93a299]">
                   The Biodiversity Science Forum brings together researches,
                   practitioners, institutions, and decision-makers to strengthen
                   dialogue, biodiversity conservation across the ASEAN region
@@ -196,7 +196,7 @@ export default function Home() {
               {aboutItems.map((item) => (
                 <div
                   key={item.title}
-                  className="rounded-[16px] h-[121px] bg-[#3f4a41] p-[24px]"
+                  className="rounded-[16px] min-h-[121px] flex flex-col justify-center bg-[#3f4a41] p-[24px]"
                 >
                   <div className="flex items-center gap-3">
                     {item.title === "Regional Collaboration" && (
@@ -361,7 +361,7 @@ export default function Home() {
                     ACB/NRI, 15 Mar 2024, 15MB
                   </p>
                 </div>
-                <div className="mt-1 flex items-center justify-between">
+                <div className="mt-1 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   <div className="flex items-center gap-3">
                     <span
                       className={`font-['inter'] font-medium border rounded-md px-3 py-1 text-[14px] font-semibold ${item.tagBg} ${item.tagText}`}
@@ -369,11 +369,11 @@ export default function Home() {
                       {item.tag}
                     </span>
                   </div>
-                  <div className="ml-auto flex items-center gap-2">
-                    <button className="flex h-[36px] w-[136px] items-center justify-center gap-2 rounded-xl border border-text-green text-sm font-semibold text-text-green">
+                  <div className="flex flex-wrap items-center gap-2 sm:ml-auto">
+                    <button className="flex h-[36px] flex-1 sm:flex-none sm:w-[136px] items-center justify-center gap-2 rounded-xl border border-text-green text-sm font-semibold text-text-green min-w-[120px]">
                       Download <Image src="/download.svg" alt="Download Icon" width={16} height={16} />
                     </button>
-                    <button className="flex h-[36px] w-[136px] items-center justify-center gap-2 rounded-xl bg-text-green text-sm font-semibold text-white">
+                    <button className="flex h-[36px] flex-1 sm:flex-none sm:w-[136px] items-center justify-center gap-2 rounded-xl bg-text-green text-sm font-semibold text-white min-w-[120px]">
                       Open <Image src="/arrow_right.svg" alt="Download Icon" width={10} height={10} style={{ height: "auto" }} />
                     </button>
                   </div>
@@ -420,7 +420,7 @@ export default function Home() {
                 </div>
               </div>
             </div>
-            <div className="flex flex-col justify-space-evenly w-full rounded-2xl font-['Plus_Jakarta_Sans']">
+            <div className="flex flex-col justify-space-between w-full rounded-2xl font-['Plus_Jakarta_Sans']">
               <div className="grid gap-4 sm:grid-cols-2">
                 <label className="flex flex-col gap-2">
                   <span className="block h-[22px] text-sm font-semibold leading-[22px] text-text-black">Full Name</span>
@@ -465,70 +465,71 @@ export default function Home() {
             </div>
           </div>
         </section>
-        <footer className="bg-[#0f1c14] py-12 text-white">
-          <div className="mx-auto grid w-full gap-10 px-6 md:grid-cols-[1.2fr_0.8fr_0.8fr_0.8fr_0.8fr]">
-            <div>
-              <div className="flex items-center gap-3">
-                <Image
-                  src="/bsf_logo.png"
-                  alt="BSF logo"
-                  width={28}
-                  height={28}
-                  style={{ width: "auto", height: "auto" }}
-                />
-                <div className="text-xs font-semibold uppercase tracking-[0.16em] text-[#f2f4ef]">
-                  Biodiversity
-                  <br />
-                  Science Forum
+        <footer className="bg-background-base-dark px-10 lg:px-20 py-16 lg:py-30 text-text-lime-light">
+          <div className="flex flex-col xl:flex-row gap-12 xl:gap-[5rem]">
+            <div className="flex w-full xl:max-w-[285px] flex-col items-start">
+              <div className="flex flex-row items-center gap-4">
+                <div className="relative h-[80px] w-[80px] shrink-0 min-[1440px]:h-[120px] min-[1440px]:w-[120px]">
+                  <Image
+                    src="/bsf_logo.png"
+                    alt="BSF logo"
+                    fill
+                    className="object-contain"
+                  />
+                </div>
+                <div className="text-[2rem] font-semibold leading-[1.1] text-[#f2f4ef]">
+                  Biodiversity Science Forum
                 </div>
               </div>
-              <p className="mt-4 text-xs text-[#a8b5ac]">
+              <p className="font-['inter'] font-normal mt-4 text-base leading-[100%] tracking-[0%] text-text-grey-mid">
                 The Biodiversity Science Forum brings together researchers,
                 institutions, and policy makers to strengthen dialogue for
                 biodiversity conservation across the ASEAN region.
               </p>
             </div>
-            <div className="text-xs">
-              <p className="font-semibold text-[#b28d3c]">About</p>
-              <div className="mt-3 space-y-2 text-[#c6d1c8]">
-                <p>About the forum</p>
-                <p>Mission & Objectives</p>
-                <p>Scientific Committee</p>
+            <div className="mt-8 xl:mt-0 flex-1 grid grid-cols-2 md:grid-cols-4 gap-8 lg:gap-12 xl:gap-20">
+              <div className="text-base flex flex-col gap-[1.75rem]">
+                <p className="font-['inter'] text-xl font-semibold uppercase text-text-lime">About</p>
+                <div className="font-['inter'] font-base space-y-2 text-text-lime-light grid gap-[1.75rem]">
+                  <p>About the forum</p>
+                  <p>Mission & Objectives</p>
+                  <p>Scientific Committee</p>
+                </div>
               </div>
-            </div>
-            <div className="text-xs">
-              <p className="font-semibold text-[#b28d3c]">Events</p>
-              <div className="mt-3 space-y-2 text-[#c6d1c8]">
-                <p>Upcoming forum</p>
-                <p>Participate</p>
-                <p>Past Events</p>
+              <div className="text-base flex flex-col gap-[1.75rem]">
+                <p className="font-['inter'] text-xl font-semibold uppercase text-text-lime">Events</p>
+                <div className="font-['inter'] font-base space-y-2 text-text-lime-light grid gap-[1.75rem]">
+                  <p>Upcoming forum</p>
+                  <p>Participate</p>
+                  <p>Past Events</p>
+                </div>
               </div>
-            </div>
-            <div className="text-xs">
-              <p className="font-semibold text-[#b28d3c]">Publications</p>
-              <div className="mt-3 space-y-2 text-[#c6d1c8]">
-                <p>Featured Publications</p>
-                <p>Proceedings</p>
-                <p>Policy Briefs</p>
-                <p>Reports</p>
-                <p>Scientific Articles</p>
-                <p>Presentations & Slides</p>
+              <div className="text-base flex flex-col gap-[1.75rem]">
+                <p className="font-['inter'] text-xl font-semibold uppercase text-text-lime">Publications</p>
+                <div className="font-['inter'] font-base space-y-2 text-text-lime-light grid gap-[1.75rem]">
+                  <p>Featured Publications</p>
+                  <p>Proceedings</p>
+                  <p>Policy Briefs</p>
+                  <p>Reports</p>
+                  <p>Scientific Articles</p>
+                  <p>Presentations & Slides</p>
+                </div>
               </div>
-            </div>
-            <div className="text-xs">
-              <p className="font-semibold text-[#b28d3c]">Media</p>
-              <div className="mt-3 space-y-2 text-[#c6d1c8]">
-                <p>Featured Media</p>
-                <p>News & Announcements</p>
-                <p>Press Releases</p>
-                <p>Photos & Videos</p>
-                <p>Media Kit</p>
+              <div className="text-base flex flex-col gap-[1.75rem]">
+                <p className="font-['inter'] text-xl font-semibold uppercase text-text-lime">Media</p>
+                <div className="font-['inter'] font-base space-y-2 text-text-lime-light grid gap-[1.75rem]">
+                  <p>Featured Media</p>
+                  <p>News & Announcements</p>
+                  <p>Press Releases</p>
+                  <p>Photos & Videos</p>
+                  <p>Media Kit</p>
+                </div>
               </div>
             </div>
           </div>
-          <div className="mx-auto mt-10 flex w-full flex-wrap items-center justify-between gap-4 border-t border-white/10 px-6 pt-6 text-[11px] text-[#94a397]">
+          <div className="mx-auto mt-10 grid grid-cols-2 items-center gap-4 border-t border-white/10 px-6 pt-6 text-[11px] text-[#94a397]">
             <p>© 2026 Biodiversity Science Forum. All rights reserved.</p>
-            <div className="flex gap-4">
+            <div className="flex justify-end gap-4">
               <p>Privacy Policy</p>
               <p>Terms of Use</p>
             </div>
