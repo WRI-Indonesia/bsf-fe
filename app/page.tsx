@@ -30,27 +30,43 @@ const keyDates = [
 const publications = [
   {
     title: "Proceedings of the 5th ASEAN Biodiversity Conference",
+    description: "Guide to Invasive Species Control in SEA Proceedings \
+                    of the 5th ASEAN Biodiversity Conference Guide to  \
+                    Invasive Species Control in SEA Proceedings of \
+                    the 5th ASEAN Biodiversity Conference",
     tag: "Policy brief",
-    tagBg: "bg-[#e8f0ea]",
-    tagText: "text-[#2a6b44]",
+    tagBg: "bg-background-light-primary-second",
+    tagText: "text-text-icons-light-primary",
   },
   {
     title: "Guide to Invasive Species Control in SEA",
+    description: "Guide to Invasive Species Control in SEA Proceedings \
+                  of the 5th ASEAN Biodiversity Conference Guide to \
+                  Invasive Species Control in SEA Proceedings of the 5th \
+                  ASEAN Biodiversity Conference",
     tag: "Proceedings",
-    tagBg: "bg-[#e9f5ec]",
-    tagText: "text-[#2a6b44]",
+    tagBg: "bg-background-light-success-second",
+    tagText: "text-text-icons-light-success",
   },
   {
     title: "State of Coral Reefs in the Coral Triangle",
+    description: "Guide to Invasive Species Control in SEA Proceedings \
+              of the 5th ASEAN Biodiversity Conference Guide to \
+              Invasive Species Control in SEA Proceedings of the 5th \
+              ASEAN Biodiversity Conference",
     tag: "Publications",
-    tagBg: "bg-[#f7f0e1]",
-    tagText: "text-[#9a7b2f]",
+    tagBg: "bg-background-light-warning-second",
+    tagText: "text-text-icons-light-warning",
   },
   {
     title: "Proceedings of Mangrove Forests Conservation",
+    description: "Guide to Invasive Species Control in SEA Proceedings \
+              of the 5th ASEAN Biodiversity Conference Guide to \
+              Invasive Species Control in SEA Proceedings of the 5th \
+              ASEAN Biodiversity Conference",
     tag: "Technical Outputs",
-    tagBg: "bg-[#f7e7e7]",
-    tagText: "text-[#a03b3b]",
+    tagBg: "bg-background-light-danger-second",
+    tagText: "text-text-icons-light-danger",
   },
 ];
 
@@ -159,7 +175,7 @@ export default function Home() {
         <section className="bg-[#101612] px-[80px] py-[100px] text-white">
           <div className="mx-auto grid w-full gap-16 md:grid-cols-[1fr_1.1fr] ">
             <div className="flex flex-col w-[636px]">
-              <p className="font-['inter'] text-[20px] font-semibold uppercase tracking-wider text-[#887000]">
+              <p className="font-['inter'] text-[20px] font-semibold uppercase tracking-wider text-text-lime">
                 ABOUT THE FORUM
               </p>
               <div>
@@ -231,7 +247,7 @@ export default function Home() {
         <section className="bg-[#e4ebd8] py-20 px-[80px] text-[#1b2d1f]">
           <div className="mx-auto grid w-full gap-16 lg:grid-cols-[1.2fr_0.8fr] lg:max-w-[1400px]">
             <div className="flex flex-col justify-center">
-              <p className="font-['inter'] text-[20px] font-semibold uppercase tracking-wider text-[#887000]">
+              <p className="font-['inter'] text-[20px] font-semibold uppercase text-text-lime">
                 UPCOMING FORUM
               </p>
               <h2 className="mt-6 text-[40px] font-semibold tracking-tight text-text-black">
@@ -319,52 +335,53 @@ export default function Home() {
             </div>
           </div>
         </section>
-        <section className="bg-white py-12 text-[#1b2d1f]">
-          <div className="mx-auto flex w-full flex-wrap items-center justify-between gap-4 px-6">
+        <section className="bg-white px-[80px] py-[120px] text-[#1b2d1f]">
+          <div className="mx-auto flex w-full flex-wrap items-end justify-between gap-4">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#b28d3c]">
+              <p className="font-['inter'] text-[20px] font-semibold uppercase text-[#b28d3c]">
                 Latest Publication
               </p>
-              <h2 className="mt-4 text-2xl font-semibold">
+              <h2 className="font-semibold text-[40px] mt-4 font-semibold">
                 Recent Knowledge Products
               </h2>
             </div>
-            <button className="text-xs font-semibold text-[#1f3b2c]">
+            <button className="text-[16px] font-semibold text-text-green">
               View all publications →
             </button>
           </div>
-          <div className="mx-auto mt-8 w-full space-y-4 px-6">
+          <div className="mx-auto mt-8 w-full space-y-4">
             {publications.map((item) => (
               <div
                 key={item.title}
-                className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-[#e2e8e2] bg-[#fcfdfb] px-5 py-4"
+                className="flex flex-col justify-between gap-4 rounded-2xl border border-[#e2e8e2] bg-[#fcfdfb] px-5 py-4"
               >
                 <div>
-                  <p className="text-sm font-semibold text-[#1f3b2c]">
+                  <p className="text-[24px] font-semibold text-text-black">
                     {item.title}
                   </p>
-                  <p className="mt-2 text-xs text-[#6a7c6f]">
-                    Guide to Invasive Species Control in SEA Proceedings of the
-                    5th ASEAN Biodiversity Conference
+                  <p className="font-['inter'] text-[16px] mt-2 leading-[24px] tracking-[0px] text-text-grey-mid">
+                    {item.description}
                   </p>
-                  <div className="mt-3 flex items-center gap-3">
+                  <p className="font-['inter'] text-[16px] text-text-grey-light">
+                    ACB/NRI, 15 Mar 2024, 15MB
+                  </p>
+                </div>
+                <div className="mt-1 flex items-center justify-between">
+                  <div className="flex items-center gap-3">
                     <span
-                      className={`rounded-full px-3 py-1 text-[11px] font-semibold ${item.tagBg} ${item.tagText}`}
+                      className={`font-['inter'] font-medium border rounded-md px-3 py-1 text-[14px] font-semibold ${item.tagBg} ${item.tagText}`}
                     >
                       {item.tag}
                     </span>
-                    <span className="text-[11px] text-[#8a998f]">
-                      ACB/NRI, 15 Mar 2024, 15MB
-                    </span>
                   </div>
-                </div>
-                <div className="flex flex-wrap gap-3">
-                  <button className="rounded-full border border-[#1f3b2c] px-4 py-2 text-xs font-semibold text-[#1f3b2c]">
-                    Download
-                  </button>
-                  <button className="rounded-full bg-[#1f3b2c] px-4 py-2 text-xs font-semibold text-white">
-                    Open
-                  </button>
+                  <div className="ml-auto flex items-center gap-2">
+                    <button className="rounded-full border border-[#1f3b2c] px-4 py-2 text-xs font-semibold text-[#1f3b2c]">
+                      Download
+                    </button>
+                    <button className="rounded-full bg-[#1f3b2c] px-4 py-2 text-xs font-semibold text-white">
+                      Open
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}
