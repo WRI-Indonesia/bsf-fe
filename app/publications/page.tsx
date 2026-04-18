@@ -2,7 +2,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 
 export default function Publications() {
-  const publications = [
+  const PUBLICATIONS_DATA = [
     {
       title: "Proceedings of the 5th ASEAN Biodiversity Conference",
       desc: "Guide to Invasive Species Control in SEA Proceedings of the 5th ASEAN Biodiversity Conference Guide to Invasive Species Control in SEA Proceedings of the 5th ASEAN Biodiversity Conference",
@@ -164,7 +164,7 @@ export default function Publications() {
               </div>
 
               <div className="flex-1 flex flex-col gap-6">
-                {publications.map((pub, i) => (
+                {PUBLICATIONS_DATA.map((pub, i) => (
                   <div key={i} className="bg-white border border-[#e8efe8] rounded-[24px] p-6 md:p-8">
                     <h3 className="font-bold text-[20px] md:text-[22px] text-[#111a13] leading-[1.3]">{pub.title}</h3>
                     <p className="font-['inter'] mt-3 text-[15px] text-text-grey-dark leading-[1.6]">

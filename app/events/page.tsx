@@ -3,6 +3,19 @@ import Link from "next/link";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
+const EVENT_DATA = {
+  title: "4th Biodiversity Science Forum 2026",
+  date: "10-12 November 2026",
+  location: "Singapore",
+  participants: "500+ Expected Participants",
+  description: "Join leading scientists, policy experts, and conservation practitioners for five days of keynotes, sessions, and collaborative workshops on the future of biodiversity in Southeast Asia.",
+  buttons: [
+    { text: "Register Now", style: "bg-[#225139]", hoverStyle: "hover:bg-[#173e28]" },
+    { text: "Submit Abstract", style: "bg-white", hoverStyle: "hover:bg-[#f6f9f5]" }
+  ],
+  image: "/events/hero.png"
+};
+
 export default function Events() {
   return (
     <div className="min-h-screen bg-white">
@@ -15,24 +28,23 @@ export default function Events() {
                 UPCOMING FORUM
               </p>
               <h1 className="mt-6 text-[48px] md:text-[64px] lg:text-[76px] font-bold leading-[1.1] tracking-tight">
-                4th Biodiversity<br/>Science Forum 2026
+                {EVENT_DATA.title}
               </h1>
               <div className="mt-8 flex flex-wrap gap-8 font-['inter'] text-[16px] text-[#AFAFAF]">
-                <div>10-12 November 2026</div>
-                <div>Singapore</div>
-                <div>500+ Expected Participants</div>
+                <div>{EVENT_DATA.date}</div>
+                <div>{EVENT_DATA.location}</div>
+                <div>{EVENT_DATA.participants}</div>
               </div>
               <p className="mt-8 max-w-[500px] font-['inter'] text-[18px] text-[#93a299] leading-[1.6]">
-                Join leading scientists, policy experts, and conservation
-                practitioners for five days of keynotes, sessions, and
-                collaborative workshops on the future of biodiversity in
-                Southeast Asia.
+                {EVENT_DATA.description}
               </p>
               <div className="mt-10 flex gap-4">
-                <button className="flex items-center gap-2 rounded-[8px] bg-[#225139] px-6 py-[12px] text-[15px] font-semibold text-white transition-colors hover:bg-[#173e28]">
-                  Register Now
-                  <svg className="h-[18px] w-[18px]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </button>
+                {EVENT_DATA.buttons.map((button, i) => (
+                  <button key={i} className="flex items-center gap-2 rounded-[8px] bg-[#225139] px-6 py-[12px] text-[15px] font-semibold text-white transition-colors hover:bg-[#173e28]">
+                    {button.text}
+                    <svg className="h-[18px] w-[18px]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                  </button>
+                ))}
                 <button className="rounded-[8px] bg-white px-6 py-[12px] text-[15px] font-semibold text-text-black transition-colors hover:bg-[#f6f9f5]">
                   Submit Abstract
                 </button>
@@ -40,7 +52,7 @@ export default function Events() {
             </div>
             <div className="relative h-[400px] md:h-[500px] lg:h-[600px] w-full rounded-l-[80px] overflow-hidden ml-auto">
               <Image
-                src="/events/hero.png"
+                src={EVENT_DATA.image}
                 alt="Forum discussion"
                 fill
                 className="object-cover"

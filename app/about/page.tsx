@@ -2,6 +2,13 @@ import Image from "next/image";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
+const ABOUT_DATA = {
+  title: "Advancing biodiversity science through regional collaboration",
+  description:
+    "Join leading scientists, policy experts, and conservation practitioners for five days of keynotes, sessions, and collaborative workshops on the future of biodiversity in Southeast Asia.",
+  image: "/about/hero.png",
+};
+
 export default function About() {
   return (
     <div className="min-h-screen bg-white">
@@ -15,24 +22,15 @@ export default function About() {
                 ABOUT THE FORUM
               </p>
               <h1 className="mt-6 text-[48px] md:text-[64px] lg:text-[76px] font-bold leading-[1] text-text-black tracking-tight">
-                Advancing
-                <br />
-                biodiversity science
-                <br />
-                through regional
-                <br />
-                collaboration
+                {ABOUT_DATA.title}
               </h1>
               <p className="mt-8 max-w-[500px] font-['inter'] text-[18px] text-text-grey-dark leading-[1.5]">
-                Join leading scientists, policy experts, and conservation
-                practitioners for five days of keynotes, sessions, and
-                collaborative workshops on the future of biodiversity in
-                Southeast Asia.
+                {ABOUT_DATA.description}
               </p>
             </div>
             <div className="relative h-[400px] md:h-[500px] lg:h-[600px] w-full rounded-tl-[80px] overflow-hidden">
               <Image
-                src="/about/hero.png"
+                src={ABOUT_DATA.image}
                 alt="Forum discussion"
                 fill
                 className="object-cover"
