@@ -87,7 +87,7 @@ export default function Home() {
             backgroundPosition: "center",
           }}
         >
-          <div className="absolute inset-0 bg-gradient-to-b from-white/0 via-white/5 to-[#0f1c14]/70" />
+          <div className="absolute inset-0" />
           <div className="relative mx-auto grid w-full gap-10 pb-16 pt-28 lg:grid-cols-[1.2fr_0.8fr] min-h-[820px]">
             <div className="px-8 md:px-12 lg:px-0 lg:pl-[100px] space-y-5 text-[#1f3b2c] flex flex-col justify-center lg:justify-start">
               <div className="text-[56px] md:text-[72px] lg:text-[88px] font-semibold text-text-grey-dark leading-[1]">
@@ -147,7 +147,7 @@ export default function Home() {
               <div>
                 <h2 className="mt-10 text-[32px] sm:text-[40px] font-semibold leading-[1.2] text-white">
                   A space for biodiversity science,
-                  <br className="hidden lg:block" />
+                  <br className="lg:block" />
                   collaboration, and knowledge exchange.
                 </h2>
                 <p className="mt-2 font-['inter'] font-normal text-[18px] sm:text-[20px] leading-[1.6] text-[#93a299]">
