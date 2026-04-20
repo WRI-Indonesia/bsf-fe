@@ -1,6 +1,5 @@
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import BookIcon from "@/public/book.svg";
 
 const galleryItems = Array.from({ length: 6 }).map((_, index) => ({
   title: "BSF 2024 Opening Ceremony",
