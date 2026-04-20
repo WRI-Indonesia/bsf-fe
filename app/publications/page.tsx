@@ -64,7 +64,7 @@ export default function Publications() {
       <Header />
       
       <main className="w-full relative z-0">
-        <section className="bg-[#eef1e6] pt-[150px] pb-24 px-[40px] md:px-[80px]">
+        <section className="bg-[#eef1e6] pt-[150px] px-[40px] md:px-[80px]">
           <div className="mx-auto max-w-[1400px]">
             <p className="font-['inter'] text-[14px] font-bold uppercase tracking-widest text-[#857C00]">
               PUBLICATIONS

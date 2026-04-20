@@ -120,7 +120,7 @@ export default function Home() {
           </button>
         </div>
       </header>
-      <main className="w-full pb-24">
+      <main className="w-full">
         <section
           className="relative overflow-hidden"
           style={{

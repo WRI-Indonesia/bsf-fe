@@ -15,7 +15,7 @@ export default function About() {
       <Header />
       <main className="w-full">
         {/* Hero Section */}
-        <section className="bg-[#e2e8d9] relative overflow-hidden pt-32 pb-24 px-[40px] md:px-[80px]">
+        <section className="bg-[#e2e8d9] relative overflow-hidden pt-32 px-[40px] md:px-[80px]">
           <div className="mx-auto max-w-[1400px] grid lg:grid-cols-[1fr_1fr] gap-10 items-center">
             <div className="flex flex-col z-10">
               <p className="font-['inter'] text-[14px] font-bold uppercase tracking-widest text-text-lime">
