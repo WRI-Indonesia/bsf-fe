@@ -53,10 +53,20 @@ export default function Publications() {
     }
   ];
 
+  const tabs = ["Proceedings", "Policy Brief", "Publications", "Technical Outputs", "Research Reports"];
+
+  const thematicTags = ["Marine", "Forest", "Invasive Species", "Forest", "Marine"];
+
+  const popularPosts = [
+    { date: "25 Apr 2023", title: "Lorem ipsum dolor sit amet, consectetur adipiscing elit." },
+    { date: "25 Apr 2023", title: "Lorem ipsum dolor sit amet, consectetur adipiscing elit." },
+    { date: "25 Apr 2023", title: "Lorem ipsum dolor sit amet, consectetur adipiscing elit." },
+  ];
+
   return (
     <div className="min-h-screen bg-white">
       <Header />
-      
+
       <main className="w-full relative z-0">
         <section className="bg-[#eef1e6] pt-[150px] px-[40px] md:px-[80px]">
           <div className="mx-auto max-w-[1400px]">
@@ -77,12 +87,11 @@ export default function Publications() {
 
         <section className="py-12 px-[40px] md:px-[80px]">
           <div className="mx-auto max-w-[1400px]">
-            
             <div className="flex bg-white rounded-2xl shadow-sm border border-[#e8efe8] p-2 overflow-x-auto gap-2 mb-10 max-w-fit">
               <button className="px-6 py-[8px] rounded-full bg-[#E9F8F1] text-[#27B973] border border-[#27B973] text-[14px] font-semibold whitespace-nowrap">
                 All
               </button>
-              {["Proceedings", "Policy Brief", "Publications", "Technical Outputs", "Research Reports"].map(tab => (
+              {tabs.map(tab => (
                 <button key={tab} className="px-6 py-[8px] rounded-full text-text-grey-dark text-[14px] font-semibold whitespace-nowrap hover:bg-gray-50 transition-colors">
                   {tab}
                 </button>
@@ -132,7 +141,7 @@ export default function Publications() {
                 <div className="bg-white rounded-[20px] border border-[#e8efe8] p-6">
                   <h3 className="font-bold text-[#111A13] text-[18px] mb-5">Thematic Area</h3>
                   <div className="flex flex-wrap gap-3">
-                    {["Marine", "Forest", "Invasive Species", "Forest", "Marine"].map((tag, i) => (
+                    {thematicTags.map((tag, i) => (
                       <span key={i} className="px-4 py-2 border border-[#d1d5db] rounded-[8px] text-[13px] font-semibold text-[#111a13]">
                         {tag}
                       </span>
@@ -143,11 +152,11 @@ export default function Publications() {
                 <div className="bg-white rounded-[20px] border border-[#e8efe8] p-6">
                   <h3 className="font-bold text-[#111A13] text-[18px] mb-5">Popular Post</h3>
                   <div className="flex flex-col">
-                    {[1, 2, 3].map((_, i) => (
+                    {popularPosts.map((post, i) => (
                       <div key={i} className="py-4 border-b border-[#e8efe8] last:border-0 first:pt-0 last:pb-0">
-                        <p className="font-['inter'] text-[13px] font-semibold text-[#265F44] mb-2">25 Apr 2023</p>
+                        <p className="font-['inter'] text-[13px] font-semibold text-[#265F44] mb-2">{post.date}</p>
                         <p className="font-semibold text-[15px] text-[#111a13] leading-[1.4]">
-                          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                          {post.title}
                         </p>
                       </div>
                     ))}
