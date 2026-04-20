@@ -29,6 +29,7 @@ html {
   --color-foreground: var(--foreground);
   --color-background-base-dark: #111A13;
   --color-background-base-green-light: #C3D2C3;
+  --color-background-base-lime-light: #E3E7D7;
   --color-background-light-danger-second: #FFEFEE;
   --color-background-light-primary-second: #ECF4FC;
   --color-background-light-success-second: #E9F8F1;

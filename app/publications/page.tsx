@@ -129,7 +129,6 @@ export default function Publications() {
                   </div>
                 </div>
 
-                {/* Thematic Area */}
                 <div className="bg-white rounded-[20px] border border-[#e8efe8] p-6">
                   <h3 className="font-bold text-[#111A13] text-[18px] mb-5">Thematic Area</h3>
                   <div className="flex flex-wrap gap-3">
@@ -141,7 +140,6 @@ export default function Publications() {
                   </div>
                 </div>
 
-                {/* Popular Post */}
                 <div className="bg-white rounded-[20px] border border-[#e8efe8] p-6">
                   <h3 className="font-bold text-[#111A13] text-[18px] mb-5">Popular Post</h3>
                   <div className="flex flex-col">

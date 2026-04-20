@@ -76,15 +76,30 @@ export default function Header() {
         </div>
         {navMenus.map((menu, idx) => (
           <div key={menu.label} className="relative">
-            <button
-              className={`flex items-center gap-1 focus:outline-none ${isHome ? 'text-text-green' : 'text-text-white-broken'}`}
-              onClick={() => handleMenuClick(idx)}
-              aria-expanded={openMenu === idx}
-              aria-controls={`submenu-${idx}`}
-            >
-              {menu.label}
-              <span className="text-[10px]">▼</span>
-            </button>
+            {menu.label === "Media" ? (
+              <div className={`flex items-center gap-1 ${isHome ? 'text-text-green' : 'text-text-white-broken'}`}>
+                <Link href={menu.href}>{menu.label}</Link>
+                <button
+                  className="focus:outline-none"
+                  onClick={() => handleMenuClick(idx)}
+                  aria-label="Toggle Media submenu"
+                  aria-expanded={openMenu === idx}
+                  aria-controls={`submenu-${idx}`}
+                >
+                  <span className="text-[10px]">▼</span>
+                </button>
+              </div>
+            ) : (
+              <button
+                className={`flex items-center gap-1 focus:outline-none ${isHome ? 'text-text-green' : 'text-text-white-broken'}`}
+                onClick={() => handleMenuClick(idx)}
+                aria-expanded={openMenu === idx}
+                aria-controls={`submenu-${idx}`}
+              >
+                {menu.label}
+                <span className="text-[10px]">▼</span>
+              </button>
+            )}
             {openMenu === idx && (
               <div
                 id={`submenu-${idx}`}
@@ -112,10 +127,13 @@ export default function Header() {
           className="flex items-center gap-2 rounded-full border border-[#b7c5b3] bg-white px-5 py-1 text-xs font-semibold text-[#1f3b2c] w-fit min-w-0 max-w-[140px]"
           style={{ maxWidth: "140px" }}
         >
-          <img
+          <Image
             src="https://flagcdn.com/w20/us.png"
             alt="US Flag"
             className="w-4 h-auto sm:w-5"
+            width={20}
+            height={20}
+            priority
           />
           <span className="xs:inline">EN</span>
           <span className="text-[10px] text-[#6a7c6f] sm:text-xs">▼</span>

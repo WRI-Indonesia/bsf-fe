@@ -54,7 +54,7 @@ export default function Footer() {
                 </div>
               </div>
               <div className="text-base flex flex-col gap-[1.75rem]">
-                <p className="font-['inter'] text-xl font-semibold uppercase text-text-lime">Media</p>
+                <Link href="/media" className="font-['inter'] text-xl font-semibold uppercase text-text-lime">Media</Link>
                 <div className="font-['inter'] font-base space-y-2 text-text-lime-light grid gap-[1.75rem]">
                   <Link href="/media">Featured Media</Link>
                   <Link href="/media#news">News & Announcements</Link>
