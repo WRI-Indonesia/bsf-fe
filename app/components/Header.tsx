@@ -68,7 +68,7 @@ export default function Header() {
           priority
         />
       </div>
-      <nav className="hidden items-center gap-20 text-base font-medium ml-auto mr-10 md:flex">
+      <nav className="font-['inter']hidden items-center gap-20 text-base font-medium ml-auto mr-10 md:flex">
         <div className="relative">
           <Link className={`${isHome ? 'text-text-green' : 'text-text-white-broken'}`} href="/">
             Home

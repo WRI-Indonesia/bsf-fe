@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Footer from "./components/Footer";
-import BookIcon from "../public/book.svg";
 import Link from 'next/link';
 import Header from './components/Header';
 
@@ -185,7 +184,14 @@ export default function Home() {
                       />
                     )}
                     {item.title === "Evidence-Based" && (
-                      <BookIcon/>
+                      <Image
+                        src="/book.svg"
+                        alt="Evidence-Based"
+                        width={22}
+                        height={22}
+                        style={{ width: "22px", height: "22px" }}
+                        className="brightness-0 invert"
+                      />
                     )}
                     {item.title === "Open Access" && (
                       <Image
@@ -363,21 +369,42 @@ export default function Home() {
               </p>
               <div className="mt-10 flex flex-col gap-8 text-text-green">
                 <div className="flex items-center gap-4">
-                  <BookIcon/>
+                  <Image
+                        src="/book.svg"
+                        alt="Email"
+                        width={22}
+                        height={22}
+                        style={{ width: "22px", height: "22px" }}
+                        className="brightness-0 invert"
+                      />
                   <div>
                     <p className="font-['inter'] text-lg font-semibold leading-6">Email</p>
                     <p className="font-['inter'] text-base">contact@bsf-asean.org</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-4">
-                  <BookIcon className="mb-[1.5rem]" />
+                  <Image
+                        src="/book.svg"
+                        alt="Address"
+                        width={22}
+                        height={22}
+                        style={{ width: "22px", height: "22px" }}
+                        className="brightness-0 invert"
+                      />
                   <div>
                     <p className="font-['inter'] text-lg font-semibold leading-6">Address</p>
                     <p className="font-['inter'] text-base">ASEAN Centre for Biodiversity<br />Los Banos, Laguna, Philippines</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-4">
-                  <BookIcon/>
+                  <Image
+                        src="/book.svg"
+                        alt="Phone"
+                        width={22}
+                        height={22}
+                        style={{ width: "22px", height: "22px" }}
+                        className="brightness-0 invert"
+                      />
                   <div>
                     <p className="font-['inter'] text-lg font-semibold leading-6">Phone</p>
                     <p className="font-['inter'] text-base">+62 (049) 536-2865</p>
