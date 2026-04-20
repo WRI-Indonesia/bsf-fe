@@ -1,5 +1,6 @@
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import Image from "next/image";
 
 const galleryItems = Array.from({ length: 6 }).map((_, index) => ({
   title: "BSF 2024 Opening Ceremony",
@@ -47,7 +48,14 @@ export default function MediaPage() {
                   key={item.id}
                   className="flex min-h-[240px] flex-col items-center justify-center rounded-[24px] border border-outline-grey-light bg-[#f7f7f7] px-6 text-center"
                 >
-                  <BookIcon className="h-10 w-10 text-text-green" aria-hidden="true" />
+                  <Image
+                        src="/book.svg"
+                        alt="Address"
+                        width={22}
+                        height={22}
+                        style={{ width: "22px", height: "22px" }}
+                        className="brightness-0 invert"
+                      />
                   <p className="mt-2 font-['inter'] text-[19px] font-semibold text-text-black">
                     {item.title}
                   </p>
@@ -110,7 +118,14 @@ export default function MediaPage() {
                     type="button"
                     className="flex w-full items-center gap-4 rounded-[14px] bg-white px-6 py-6 text-left shadow-[0_0_0_1px_rgba(17,26,19,0.04)]"
                   >
-                    <BookIcon className="h-6 w-6 text-text-green" aria-hidden="true" />
+                    <Image
+                          src="/book.svg"
+                          alt="Address"
+                          width={22}
+                          height={22}
+                          style={{ width: "22px", height: "22px" }}
+                          className="brightness-0 invert"
+                        />
                     <div className="min-w-0 flex flex-col flex-1 gap-1">
                       <p className="font-['inter'] text-lg font-semibold leading-[1] text-text-black">
                         {resource.title}
