@@ -8,6 +8,12 @@
   font-weight: 400;
 }
 
+@font-face {
+  font-family: "Plus Jakarta Sans";
+  src: url("/PlusJakartaSans.ttf") format("truetype");
+  font-display: swap;
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -21,6 +27,8 @@ html {
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-background-base-dark: #111A13;
+  --color-background-base-green-light: #C3D2C3;
   --color-background-light-danger-second: #FFEFEE;
   --color-background-light-primary-second: #ECF4FC;
   --color-background-light-success-second: #E9F8F1;
@@ -34,12 +42,15 @@ html {
   --color-text-grey-light: #AFAFAF;
   --color-text-grey-mid: #68727D;
   --color-text-lime: #857C00;
+  --color-text-lime-light: #E3E7D7;
   --color-text-white-broken: #FBFBF9;
 
   --color-text-icons-light-danger: #E33B32;
   --color-text-icons-light-primary: #0A77FF;
   --color-text-icons-light-success: #27B973;
   --color-text-icons-light-warning: #EFA22F;
+
+  --color-outline-grey-light: #DBDBDB;
 }
 
 @media (prefers-color-scheme: dark) {
