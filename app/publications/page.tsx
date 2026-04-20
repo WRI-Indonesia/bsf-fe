@@ -54,17 +54,11 @@ export default function Publications() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#fbfcfb]">
-      <div className="absolute top-0 w-full h-[95px] bg-[#111a13] z-10" />
-      <style dangerouslySetInnerHTML={{__html: `
-        header nav a { color: #ffffff !important; }
-        header button { background: rgba(255,255,255,0.1) !important; color: white !important; border-color: rgba(255,255,255,0.2) !important; }
-        header button span { color: white !important; }
-      `}} />
+    <div className="min-h-screen bg-white">
       <Header />
       
       <main className="w-full relative z-0">
-        <section className="bg-[#eef1e6] pt-[150px] pb-24 px-[40px] md:px-[80px]">
+        <section className="bg-[#eef1e6] pt-[150px] px-[40px] md:px-[80px]">
           <div className="mx-auto max-w-[1400px]">
             <p className="font-['inter'] text-[14px] font-bold uppercase tracking-widest text-[#857C00]">
               PUBLICATIONS
@@ -135,7 +129,6 @@ export default function Publications() {
                   </div>
                 </div>
 
-                {/* Thematic Area */}
                 <div className="bg-white rounded-[20px] border border-[#e8efe8] p-6">
                   <h3 className="font-bold text-[#111A13] text-[18px] mb-5">Thematic Area</h3>
                   <div className="flex flex-wrap gap-3">
@@ -147,7 +140,6 @@ export default function Publications() {
                   </div>
                 </div>
 
-                {/* Popular Post */}
                 <div className="bg-white rounded-[20px] border border-[#e8efe8] p-6">
                   <h3 className="font-bold text-[#111A13] text-[18px] mb-5">Popular Post</h3>
                   <div className="flex flex-col">

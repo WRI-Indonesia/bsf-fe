@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Footer() {
   return (
@@ -28,38 +29,38 @@ export default function Footer() {
               <div className="text-base flex flex-col gap-[1.75rem]">
                 <p className="font-['inter'] text-xl font-semibold uppercase text-text-lime">About</p>
                 <div className="font-['inter'] font-base space-y-2 text-text-lime-light grid gap-[1.75rem]">
-                  <p>About the forum</p>
-                  <p>Mission & Objectives</p>
-                  <p>Scientific Committee</p>
+                  <Link href="/about">About the forum</Link>
+                  <Link href="/about#mission">Mission & Objectives</Link>
+                  <Link href="/about#committee">Scientific Committee</Link>
                 </div>
               </div>
               <div className="text-base flex flex-col gap-[1.75rem]">
                 <p className="font-['inter'] text-xl font-semibold uppercase text-text-lime">Events</p>
                 <div className="font-['inter'] font-base space-y-2 text-text-lime-light grid gap-[1.75rem]">
-                  <p>Upcoming forum</p>
-                  <p>Participate</p>
-                  <p>Past Events</p>
+                  <Link href="/events">Upcoming forum</Link>
+                  <Link href="/events#participate">Participate</Link>
+                  <Link href="/events#past">Past Events</Link>
                 </div>
               </div>
               <div className="text-base flex flex-col gap-[1.75rem]">
                 <p className="font-['inter'] text-xl font-semibold uppercase text-text-lime">Publications</p>
                 <div className="font-['inter'] font-base space-y-2 text-text-lime-light grid gap-[1.75rem]">
-                  <p>Featured Publications</p>
-                  <p>Proceedings</p>
-                  <p>Policy Briefs</p>
-                  <p>Reports</p>
-                  <p>Scientific Articles</p>
-                  <p>Presentations & Slides</p>
+                  <Link href="/publications">Featured Publications</Link>
+                  <Link href="/publications#proceedings">Proceedings</Link>
+                  <Link href="/publications#policy-briefs">Policy Briefs</Link>
+                  <Link href="/publications#reports">Reports</Link>
+                  <Link href="/publications#articles">Scientific Articles</Link>
+                  <Link href="/publications#presentations">Presentations & Slides</Link>
                 </div>
               </div>
               <div className="text-base flex flex-col gap-[1.75rem]">
-                <p className="font-['inter'] text-xl font-semibold uppercase text-text-lime">Media</p>
+                <Link href="/media" className="font-['inter'] text-xl font-semibold uppercase text-text-lime">Media</Link>
                 <div className="font-['inter'] font-base space-y-2 text-text-lime-light grid gap-[1.75rem]">
-                  <p>Featured Media</p>
-                  <p>News & Announcements</p>
-                  <p>Press Releases</p>
-                  <p>Photos & Videos</p>
-                  <p>Media Kit</p>
+                  <Link href="/media">Featured Media</Link>
+                  <Link href="/media#news">News & Announcements</Link>
+                  <Link href="/media#press">Press Releases</Link>
+                  <Link href="/media#photos">Photos & Videos</Link>
+                  <Link href="/media#kit">Media Kit</Link>
                 </div>
               </div>
             </div>
@@ -67,8 +68,8 @@ export default function Footer() {
           <div className="mx-auto mt-10 grid grid-cols-2 items-center gap-4 border-t border-white/10 px-6 pt-6 text-[11px] text-[#94a397]">
             <p>© 2026 Biodiversity Science Forum. All rights reserved.</p>
             <div className="flex justify-end gap-4">
-              <p>Privacy Policy</p>
-              <p>Terms of Use</p>
+              <Link href="/privacy">Privacy Policy</Link>
+              <Link href="/terms">Terms of Use</Link>
             </div>
           </div>
         </footer>

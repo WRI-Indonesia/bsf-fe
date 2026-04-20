@@ -21,7 +21,7 @@ export default function Events() {
     <div className="min-h-screen bg-white">
       <Header />
       <main className="w-full">
-        <section className="bg-[#101612] relative overflow-hidden pt-32 pb-24 px-[40px] md:px-[80px]">
+        <section className="bg-background-base-dark relative overflow-hidden pt-32 px-[40px] md:px-[80px]">
           <div className="mx-auto max-w-[1400px] grid lg:grid-cols-[1fr_1fr] gap-10 items-center">
             <div className="flex flex-col z-10 text-white">
               <p className="font-['inter'] text-[14px] font-bold uppercase tracking-widest text-[#857C00]">

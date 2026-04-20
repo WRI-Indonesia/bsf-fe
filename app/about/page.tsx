@@ -14,8 +14,7 @@ export default function About() {
     <div className="min-h-screen bg-white">
       <Header />
       <main className="w-full">
-        {/* Hero Section */}
-        <section className="bg-[#e2e8d9] relative overflow-hidden pt-32 pb-24 px-[40px] md:px-[80px]">
+        <section className="bg-[#e2e8d9] relative overflow-hidden pt-32 px-[40px] md:px-[80px]">
           <div className="mx-auto max-w-[1400px] grid lg:grid-cols-[1fr_1fr] gap-10 items-center">
             <div className="flex flex-col z-10">
               <p className="font-['inter'] text-[14px] font-bold uppercase tracking-widest text-text-lime">
@@ -40,7 +39,6 @@ export default function About() {
           </div>
         </section>
 
-        {/* Mission & Objectives Section */}
         <section className="bg-white py-24 px-[40px] md:px-[80px]">
           <div className="mx-auto max-w-[1400px] grid lg:grid-cols-2 gap-16 lg:gap-24">
             <div>
@@ -86,21 +84,19 @@ export default function About() {
           </div>
         </section>
 
-        {/* Our Journey Section */}
-        <section className="bg-[#EDF2EA] py-24 px-[40px] md:px-[80px]">
+        <section className="bg-background-base-lime-light py-24 px-[40px] md:px-[80px]">
           <div className="mx-auto max-w-[1000px]">
             <div className="text-center mb-16">
-              <p className="font-['inter'] text-[14px] font-bold uppercase tracking-widest text-text-lime">
+              <p className="font-['inter'] text-xl font-semibold uppercase tracking-widest text-text-lime">
                 OUR JOURNEY
               </p>
-              <h2 className="mt-2 text-[48px] font-bold text-text-black">
+              <h2 className="mt-2 text-[2.5rem] font-semibold text-text-black">
                 Key Milestones
               </h2>
             </div>
             
             <div className="relative">
-              {/* Vertical line centered */}
-              <div className="absolute left-1/2 top-0 bottom-0 w-[2px] bg-[#265F44] -translate-x-1/2" />
+              <div className="absolute left-1/2 top-0 bottom-0 w-[2px] bg-background-base-lime-light -translate-x-1/2" />
               
               {[
                 { year: "2018", right: true },
@@ -111,20 +107,18 @@ export default function About() {
               ].map((milestone, i) => (
                 <div key={i} className={`relative flex items-center mb-16 last:mb-0 ${milestone.right ? "justify-end" : "justify-start"}`}>
                   <div className={`w-1/2 ${milestone.right ? "pl-12" : "pr-12 text-right"}`}>
-                    <p className="font-['inter'] text-[14px] font-bold text-text-green mb-1">{milestone.year}</p>
-                    <h4 className="font-['inter'] text-[18px] font-semibold text-text-green mb-2">Forum Concept Developed</h4>
-                    <p className="font-['inter'] text-[15px] text-text-grey-dark">Initial proposal for a regional biodiversity science<br/>platform by ACB</p>
+                    <p className="font-['inter'] text-sm font-semibold text-text-green mb-1">{milestone.year}</p>
+                    <h4 className="font-['inter'] text-lg font-semibold text-text-green mb-2">Forum Concept Developed</h4>
+                    <p className="font-['inter'] text-base text-text-green">Initial proposal for a regional biodiversity science<br/>platform by ACB</p>
                   </div>
                   
-                  {/* Dot */}
-                  <div className="absolute left-1/2 w-[12px] h-[12px] bg-[#265F44] rounded-full -translate-x-1/2 border-2 border-[#EDF2EA]" />
+                  <div className="absolute left-1/2 w-4 h-4 bg-text-green rounded-full -translate-x-1/2 border-2 border-[#EDF2EA]" />
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* Scientific Committee Section */}
         <section className="bg-white py-24 px-[40px] md:px-[80px]">
           <div className="mx-auto max-w-[1400px]">
             <div className="flex flex-col md:flex-row md:items-end justify-between mb-16">
@@ -165,20 +159,16 @@ export default function About() {
                     </p>
                     <div className="flex gap-4 items-center">
                       <a href="#" className="w-5 h-5 flex items-center justify-center text-text-black">
-                        {/* X Logo minimal */}
                         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
                       </a>
                       <a href="#" className="w-5 h-5 flex items-center justify-center text-text-black">
-                        {/* Facebook Minimal */}
                         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 13.5h2.5l1-4H14v-2c0-1.03 0-2 2-2h1.5V2.14c-.326-.043-1.557-.14-2.857-.14C11.928 2 10 3.657 10 6.7v2.8H7v4h3V22h4v-8.5z"/></svg>
                       </a>
                       <a href="#" className="w-5 h-5 flex items-center justify-center text-text-black">
-                        {/* LinkedIn */}
                         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
                       </a>
                       <a href="#" className="w-5 h-5 flex items-center justify-center text-text-black">
-                        {/* Telegram */}
-                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.96-.63-.34-.98.22-1.56.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.18-.08-.05-.19-.02-.27 0-.11.03-1.85 1.18-5.23 3.46-.49.34-.94.51-1.35.5-.45-.01-1.3-.25-1.94-.46-.78-.26-1.4-.39-1.35-.83.03-.23.35-.47.96-.73 3.76-1.64 6.27-2.72 7.54-3.25 3.58-1.49 4.32-1.75 4.81-1.76.11 0 .35.03.48.14.11.09.14.22.15.34-.01.07-.01.19-.02.26z"/></svg>
+\                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.96-.63-.34-.98.22-1.56.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.18-.08-.05-.19-.02-.27 0-.11.03-1.85 1.18-5.23 3.46-.49.34-.94.51-1.35.5-.45-.01-1.3-.25-1.94-.46-.78-.26-1.4-.39-1.35-.83.03-.23.35-.47.96-.73 3.76-1.64 6.27-2.72 7.54-3.25 3.58-1.49 4.32-1.75 4.81-1.76.11 0 .35.03.48.14.11.09.14.22.15.34-.01.07-.01.19-.02.26z"/></svg>
                       </a>
                     </div>
                   </div>
