@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Footer from "./components/Footer";
-import BookIcon from "../public/book.svg"
+import BookIcon from "../public/book.svg";
+import Link from 'next/link';
 
 const aboutItems = [
   {
@@ -163,7 +164,7 @@ export default function Home() {
                 </div>
                 <div className="mt-4 grid w-full grid-cols-2 gap-3">
                   <button className="flex items-center justify-center rounded-xl border border-[#1f4a31] bg-white px-4 py-[10px] text-[15px] font-semibold text-text-green transition-colors hover:bg-gray-50">
-                    Explore Publications
+                    <Link href="/publications">Explore Publications</Link>
                   </button>
                   <button className="flex items-center justify-center gap-2 rounded-xl bg-[#1f4a31] px-4 py-[10px] text-[15px] font-semibold text-white transition-colors hover:bg-[#163824]">
                     Register Now
