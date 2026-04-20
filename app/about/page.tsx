@@ -164,16 +164,16 @@ export default function About() {
                     </p>
                     <div className="flex gap-4 items-center">
                       <a href="#" className="w-5 h-5 flex items-center justify-center text-text-black">
-                        <Image src="/x.svg" alt="Icon X" className="w-full h-full" />
+                        <Image src="/x.svg" alt="Icon X" width={20} height={20} />
                       </a>
                       <a href="#" className="w-5 h-5 flex items-center justify-center text-text-black">
-                        <Image src="/facebook.svg" alt="Facebook Icon" className="w-full h-full" />
+                        <Image src="/facebook.svg" alt="Facebook Icon" width={20} height={20} />
                       </a>
                       <a href="#" className="w-5 h-5 flex items-center justify-center text-text-black">
-                        <Image src="/linkedin.svg" alt="LinkedIn Icon" className="w-full h-full" />
+                        <Image src="/linkedin.svg" alt="LinkedIn Icon" width={20} height={20} />
                       </a>
                       <a href="#" className="w-5 h-5 flex items-center justify-center text-text-black">
-                        <Image src="/telegram.svg" alt="Telegram Icon" className="w-full h-full" />
+                        <Image src="/telegram.svg" alt="Telegram Icon" width={20} height={20} />
                       </a>
                     </div>
                   </div>
