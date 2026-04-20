@@ -54,13 +54,7 @@ export default function Publications() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#fbfcfb]">
-      <div className="absolute top-0 w-full h-[95px] bg-[#111a13] z-10" />
-      <style dangerouslySetInnerHTML={{__html: `
-        header nav a { color: #ffffff !important; }
-        header button { background: rgba(255,255,255,0.1) !important; color: white !important; border-color: rgba(255,255,255,0.2) !important; }
-        header button span { color: white !important; }
-      `}} />
+    <div className="min-h-screen bg-white">
       <Header />
       
       <main className="w-full relative z-0">

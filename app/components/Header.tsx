@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from 'next/navigation';
 
 const navMenus = [
   {
@@ -49,12 +50,14 @@ const navMenus = [
 ];
 
 export default function Header() {
+  const pathname = usePathname();
+  const isHome = pathname === '/';
   const [openMenu, setOpenMenu] = useState<number | null>(null);
   const handleMenuClick = (idx: number) => {
     setOpenMenu(openMenu === idx ? null : idx);
   };
   return (
-    <header className="absolute top-0 z-20 mx-auto flex w-full items-center justify-between px-[40px] py-[11px]">
+    <header className={`${!isHome ? 'bg-background-base-dark' : ''} absolute top-0 z-20 mx-auto flex w-full items-center justify-between px-[40px] py-[11px]`}>
       <div className="flex items-center">
         <Image
           src="/bsf_logo.png"
@@ -67,14 +70,14 @@ export default function Header() {
       </div>
       <nav className="hidden items-center gap-20 text-base font-medium ml-auto mr-10 md:flex">
         <div className="relative">
-          <Link className="text-text-green" href="/">
+          <Link className={`${isHome ? 'text-text-green' : 'text-text-white-broken'}`} href="/">
             Home
           </Link>
         </div>
         {navMenus.map((menu, idx) => (
           <div key={menu.label} className="relative">
             <button
-              className="flex items-center gap-1 text-text-green focus:outline-none"
+              className={`flex items-center gap-1 focus:outline-none ${isHome ? 'text-text-green' : 'text-text-white-broken'}`}
               onClick={() => handleMenuClick(idx)}
               aria-expanded={openMenu === idx}
               aria-controls={`submenu-${idx}`}
@@ -114,7 +117,7 @@ export default function Header() {
             alt="US Flag"
             className="w-4 h-auto sm:w-5"
           />
-          <span className="hidden xs:inline">EN</span>
+          <span className="xs:inline">EN</span>
           <span className="text-[10px] text-[#6a7c6f] sm:text-xs">▼</span>
         </button>
       </div>
