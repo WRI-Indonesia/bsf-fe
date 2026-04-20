@@ -1,15 +1,45 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: "Acumin Pro Condensed";
+  src: url("/Acumin%20Pro%20Condensed.ttf") format("truetype");
+  font-display: swap;
+  font-style: normal;
+  font-weight: 400;
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --font-acumin: "Acumin Pro Condensed";
+}
+
+html {
+  --font-acumin: "Acumin Pro Condensed";
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-background-light-danger-second: #FFEFEE;
+  --color-background-light-primary-second: #ECF4FC;
+  --color-background-light-success-second: #E9F8F1;
+  --color-background-light-warning-second: #FDF6EA;
+  --font-sans: var(--font-acumin);
+  --font-mono: var(--font-acumin);
+  --color-text-black: #111A13;
+  --color-text-green: #265F44;
+  --color-text-green-light: #42AF7B;
+  --color-text-grey-dark: #515151;
+  --color-text-grey-light: #AFAFAF;
+  --color-text-grey-mid: #68727D;
+  --color-text-lime: #857C00;
+  --color-text-white-broken: #FBFBF9;
+
+  --color-text-icons-light-danger: #E33B32;
+  --color-text-icons-light-primary: #0A77FF;
+  --color-text-icons-light-success: #27B973;
+  --color-text-icons-light-warning: #EFA22F;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -22,5 +52,5 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Acumin Pro Condensed", sans-serif;
 }
