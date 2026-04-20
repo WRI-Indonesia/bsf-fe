@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
@@ -68,38 +69,40 @@ export default function Publications() {
       <Header />
 
       <main className="w-full relative z-0">
-        <section className="bg-[#eef1e6] pt-[150px] px-[40px] md:px-[80px]">
-          <div className="mx-auto max-w-[1400px]">
-            <p className="font-['inter'] text-[14px] font-bold uppercase tracking-widest text-[#857C00]">
-              PUBLICATIONS
-            </p>
-            <h1 className="mt-4 text-[48px] md:text-[64px] font-bold leading-[1.1] text-[#111A13] tracking-tight">
-              Featured Publications
-            </h1>
-            <p className="mt-6 max-w-[600px] font-['inter'] text-[18px] text-[#515151] leading-[1.6]">
-              Join leading scientists, policy experts, and conservation
-              practitioners for five days of keynotes, sessions, and
-              collaborative workshops on the future of biodiversity in
-              Southeast Asia.
-            </p>
+        <section className="bg-background-base-lime-light mt-[98px] px-20 py-30">
+          <div className="mx-auto max-w-[1280px]">
+            <div className="flex flex-col max-w-[800px] gap-12">
+              <p className="font-['inter'] text-xl font-semibold uppercase tracking-widest text-text-lime">
+                PUBLICATIONS
+              </p>
+              <h1 className="text-8xl font-semibold text-text-black leading-[96px] tracking-[0]">
+                Featured Publications
+              </h1>
+              <p className="font-['inter'] text-xl text-text-grey-dark">
+                Join leading scientists, policy experts, and conservation
+                practitioners for five days of keynotes, sessions, and
+                collaborative workshops on the future of biodiversity in
+                Southeast Asia.
+              </p>
+            </div>
           </div>
         </section>
 
         <section className="py-12 px-[40px] md:px-[80px]">
           <div className="mx-auto max-w-[1400px]">
-            <div className="flex bg-white rounded-2xl shadow-sm border border-[#e8efe8] p-2 overflow-x-auto gap-2 mb-10 max-w-fit">
-              <button className="px-6 py-[8px] rounded-full bg-[#E9F8F1] text-[#27B973] border border-[#27B973] text-[14px] font-semibold whitespace-nowrap">
+            <div className="flex bg-white w-[678px] rounded-2xl shadow-sm border border-[#e8efe8] p-3 overflow-x-auto gap-5 mb-10">
+              <button className="px-3 py-1 rounded-full bg-background-base-lime-light text-text-green border border-text-green text-[14px] font-semibold whitespace-nowrap">
                 All
               </button>
               {tabs.map(tab => (
-                <button key={tab} className="px-6 py-[8px] rounded-full text-text-grey-dark text-[14px] font-semibold whitespace-nowrap hover:bg-gray-50 transition-colors">
+                <button key={tab} className="font-['inter'] rounded-full text-text-grey-mid text-sm font-semibold whitespace-nowrap hover:bg-gray-50 transition-colors">
                   {tab}
                 </button>
               ))}
             </div>
 
             <div className="flex flex-col lg:flex-row gap-8">
-              <div className="w-full lg:w-[280px] xl:w-[320px] flex-shrink-0 flex flex-col gap-6">
+              <div className="w-full lg:w-[240px] flex-shrink-0 flex flex-col gap-6">
                 <div className="bg-white rounded-[20px] border border-[#e8efe8] p-6">
                   <h3 className="font-bold text-[#111A13] text-[18px] mb-5">File Type</h3>
                   <div className="flex flex-col gap-4 font-['inter']">
@@ -142,7 +145,7 @@ export default function Publications() {
                   <h3 className="font-bold text-[#111A13] text-[18px] mb-5">Thematic Area</h3>
                   <div className="flex flex-wrap gap-3">
                     {thematicTags.map((tag, i) => (
-                      <span key={i} className="px-4 py-2 border border-[#d1d5db] rounded-[8px] text-[13px] font-semibold text-[#111a13]">
+                      <span key={i} className="font-['inter'] px-4 py-2 border border-[#d1d5db] rounded-[8px] text-[13px] font-semibold text-[#111a13]">
                         {tag}
                       </span>
                     ))}
@@ -150,12 +153,12 @@ export default function Publications() {
                 </div>
 
                 <div className="bg-white rounded-[20px] border border-[#e8efe8] p-6">
-                  <h3 className="font-bold text-[#111A13] text-[18px] mb-5">Popular Post</h3>
+                  <h3 className="font-['inter'] font-bold text-text-black text-[18px] mb-5">Popular Post</h3>
                   <div className="flex flex-col">
                     {popularPosts.map((post, i) => (
                       <div key={i} className="py-4 border-b border-[#e8efe8] last:border-0 first:pt-0 last:pb-0">
-                        <p className="font-['inter'] text-[13px] font-semibold text-[#265F44] mb-2">{post.date}</p>
-                        <p className="font-semibold text-[15px] text-[#111a13] leading-[1.4]">
+                        <p className="font-['inter'] text-[13px] font-semibold text-text-green mb-2">{post.date}</p>
+                        <p className="font-['inter'] font-semibold text-[15px] text-[#111a13] leading-[1.4]">
                           {post.title}
                         </p>
                       </div>
@@ -164,28 +167,31 @@ export default function Publications() {
                 </div>
               </div>
 
-              <div className="flex-1 flex flex-col gap-6">
+              <div className="flex-1 flex flex-col gap-4">
                 {PUBLICATIONS_DATA.map((pub, i) => (
-                  <div key={i} className="bg-white border border-[#e8efe8] rounded-[24px] p-6 md:p-8">
-                    <h3 className="font-bold text-[20px] md:text-[22px] text-[#111a13] leading-[1.3]">{pub.title}</h3>
-                    <p className="font-['inter'] mt-3 text-[15px] text-text-grey-dark leading-[1.6]">
+                  <div
+                    key={i}
+                    className="flex flex-col justify-between gap-4 rounded-2xl border border-[#e2e8e2] bg-[#fcfdfb] px-5 py-4"
+                  >
+                    <h3 className="text-[24px] font-semibold text-text-black leading-[1.25]">{pub.title}</h3>
+                    <p className="font-['inter'] text-[16px] leading-[24px] tracking-[0px] text-text-grey-mid">
                       {pub.desc}
                     </p>
-                    <p className="font-['inter'] mt-4 text-[14px] text-[#AFAFAF]">
+                    <p className="font-['inter'] text-[16px] text-text-grey-light">
                       {pub.meta}
                     </p>
-                    <div className="mt-6 flex flex-col md:flex-row md:items-center justify-between gap-6">
-                      <span className={`px-4 py-[6px] rounded-full text-[13px] font-bold inline-block border border-transparent ${pub.tagBg} ${pub.tagText}`}>
+                    <div className="mt-1 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                      <span className={`font-['inter'] font-medium border rounded-md px-3 py-1 text-[14px] font-semibold ${pub.tagBg} ${pub.tagText}`}>
                         {pub.tag}
                       </span>
-                      <div className="flex items-center gap-3">
-                        <button className="flex items-center gap-2 px-5 py-[10px] rounded-[8px] border border-[#265F44] text-[#265F44] font-semibold text-[14px] transition-colors hover:bg-[#F2F7F4]">
+                      <div className="flex flex-wrap items-center gap-2 sm:ml-auto">
+                        <button className="flex h-[36px] flex-1 sm:flex-none sm:w-[136px] items-center justify-center gap-2 rounded-xl border border-text-green text-sm font-semibold text-text-green min-w-[120px]">
                           Download
-                          <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                          <Image src="/download.svg" alt="Download Icon" width={16} height={16} />
                         </button>
-                        <button className="flex items-center gap-2 px-5 py-[10px] rounded-[8px] bg-[#265F44] text-white font-semibold text-[14px] transition-colors hover:bg-[#1f4a31]">
+                        <button className="flex h-[36px] flex-1 sm:flex-none sm:w-[136px] items-center justify-center gap-2 rounded-xl bg-text-green text-sm font-semibold text-white min-w-[120px]">
                           Open
-                          <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                          <Image src="/arrow_right.svg" alt="Arrow Right" width={10} height={10} style={{ height: "auto" }} />
                         </button>
                       </div>
                     </div>
