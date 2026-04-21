@@ -28,6 +28,7 @@ html {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-background-base-dark: #111A13;
+  --color-background-base-green: #469B25;
   --color-background-base-green-light: #C3D2C3;
   --color-background-base-lime-light: #E3E7D7;
   --color-background-light-danger-second: #FFEFEE;
@@ -39,7 +40,7 @@ html {
   --color-text-black: #111A13;
   --color-text-green: #265F44;
   --color-text-green-light: #42AF7B;
-  --color-text-grey-dark: #2E2F1F;
+  --color-text-grey-dark: #515151;
   --color-text-grey-light: #AFAFAF;
   --color-text-grey-mid: #68727D;
   --color-text-lime: #857C00;
@@ -51,6 +52,8 @@ html {
   --color-text-icons-light-success: #27B973;
   --color-text-icons-light-warning: #EFA22F;
 
+  --color-outline-green: #265F44;
+  --color-outline-green-light: #9BB69B;
   --color-outline-grey-light: #DBDBDB;
 }
 
