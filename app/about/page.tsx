@@ -10,10 +10,10 @@ const ABOUT_DATA = {
 };
 
 const missionObjectives = [
-  { title: "Regional Collaboration", desc: "have questions about the forum, or want to contribute to biodiversity science, we&apos;d love to hear from you." },
-  { title: "Multi-Stakeholder Dialogue", desc: "Ahave questions about the forum, or want to contribute to biodiversity science, we&apos;d love to hear from you." },
-  { title: "Evidence-Based Policy", desc: "have questions about the forum, or want to contribute to biodiversity science, we&apos;d love to hear from you." },
-  { title: "Open Access Knowledge", desc: "have questions about the forum, or want to contribute to biodiversity science, we&apos;d love to hear from you." },
+  { title: "Regional Collaboration", desc: "have questions about the forum, or want to contribute to biodiversity science, we'd love to hear from you." },
+  { title: "Multi-Stakeholder Dialogue", desc: "have questions about the forum, or want to contribute to biodiversity science, we'd love to hear from you." },
+  { title: "Evidence-Based Policy", desc: "have questions about the forum, or want to contribute to biodiversity science, we'd love to hear from you." },
+  { title: "Open Access Knowledge", desc: "have questions about the forum, or want to contribute to biodiversity science, we'd love to hear from you." },
 ];
 
 const milestones = [
@@ -36,64 +36,84 @@ export default function About() {
     <div className="min-h-screen bg-white">
       <Header />
       <main className="w-full">
-        <section className="bg-[#e2e8d9] relative overflow-hidden pt-32 px-[40px] md:px-[80px]">
-          <div className="mx-auto max-w-[1400px] grid lg:grid-cols-[1fr_1fr] gap-10 items-center">
-            <div className="flex flex-col z-10">
-              <p className="font-['inter'] text-[14px] font-bold uppercase tracking-widest text-text-lime">
+        <section className="bg-background-base-lime-light mt-[96px] py-30 overflow-hidden">
+          <div className="flex flex-col xl:flex-row px-10 md:px-20 items-stretch gap-30">
+            
+            <div className="flex flex-col z-10 gap-12 w-full xl:w-[703px] xl:h-[552px] shrink-0 justify-center">
+              <p className="font-['inter'] text-xl font-semibold uppercase text-text-lime">
                 ABOUT THE FORUM
               </p>
-              <h1 className="mt-6 text-[48px] md:text-[64px] lg:text-[76px] font-bold leading-[1] text-text-black tracking-tight">
+              <p className="text-5xl md:text-7xl xl:text-8xl font-semibold leading-tight xl:leading-[90px] text-text-black tracking-tight">
                 {ABOUT_DATA.title}
-              </h1>
-              <p className="mt-8 max-w-[500px] font-['inter'] text-[18px] text-text-grey-dark leading-[1.5]">
+              </p>
+              <p className="font-['inter'] text-xl text-text-grey-dark leading-relaxed xl:leading-[1]">
                 {ABOUT_DATA.description}
               </p>
             </div>
-            <div className="relative h-[400px] md:h-[500px] lg:h-[600px] w-full rounded-tl-[80px] overflow-hidden">
-              <Image
-                src={ABOUT_DATA.image}
-                alt="Forum discussion"
-                fill
-                className="object-cover"
-                priority
-              />
+
+            <div className="relative h-[400px] md:h-[500px] -mr-10 md:-mr-20 block xl:hidden">
+              <div className="relative w-full h-full rounded-tl-[80px] overflow-hidden">
+                <Image
+                  src={ABOUT_DATA.image}
+                  alt="Forum discussion"
+                  fill
+                  className="object-cover"
+                  priority
+                />
+              </div>
             </div>
+
+            <div className="relative flex-1 -mr-10 md:-mr-20 hidden xl:block">
+              <div className="relative w-full h-full rounded-tl-[80px] overflow-hidden">
+                <Image
+                  src={ABOUT_DATA.image}
+                  alt="Forum discussion"
+                  fill
+                  className="object-cover"
+                  priority
+                />
+              </div>
+            </div>
+
           </div>
         </section>
 
-        <section className="bg-white py-24 px-[40px] md:px-[80px]">
+        <section className="bg-text-white-broken px-20 py-30">
           <div className="mx-auto max-w-[1400px] grid lg:grid-cols-2 gap-16 lg:gap-24">
-            <div>
-              <p className="font-['inter'] text-[14px] font-bold uppercase tracking-widest text-text-lime">
+            <div className="flex flex-col gap-6">
+              <p className="font-['inter'] font-xl font-semibold uppercase text-text-lime">
                 MISSION & OBJECTIVES
               </p>
-              <h2 className="mt-4 text-[36px] md:text-[48px] font-bold leading-[1.1] text-text-black">
+              <h2 className="text-[36px] md:text-[48px] font-bold leading-[1.1] text-text-black">
                 Bridging science and policy for biodiversity action
               </h2>
-              <p className="mt-6 font-['inter'] text-[18px] text-text-grey-dark leading-[1.6]">
+              <p className="font-['inter'] text-[18px] text-text-grey-dark leading-[1.6]">
                 Whether you&apos;re interested in partnerships, have questions
                 about the forum, or want to contribute to biodiversity
                 science, we&apos;d love to hear from you. have questions about
                 the forum, or want to contribute to biodiversity science,
                 we&apos;d love to hear from you.
               </p>
-              <a href="#" className="mt-8 inline-flex items-center gap-2 font-['inter'] text-[15px] font-semibold text-text-green hover:underline">
+              <a href="#" className="inline-flex items-center gap-2 font-['inter'] text-[15px] font-semibold text-text-green hover:underline">
                 Read full mission statement <span>→</span>
               </a>
             </div>
 
-            <div className="space-y-8 flex flex-col justify-center">
+            <div className="flex flex-col gap-8 md:max-w-[503px]">
               {missionObjectives.map((item, i) => (
                 <div key={i} className="flex gap-4">
-                  <div className="mt-1 flex-shrink-0 text-text-green">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
-                      <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
-                    </svg>
+                  <div className="flex flex-shrink-0 text-text-green items-center pb-[1.5rem]">
+                    <Image
+                      src="/book.svg"
+                      alt="Icon Book"
+                      width={24}
+                      height={24}
+                      style={{ width: "24px", height: "auto" }}
+                    />
                   </div>
                   <div>
-                    <h3 className="font-['inter'] text-[18px] font-semibold text-text-black">{item.title}</h3>
-                    <p className="mt-1 font-['inter'] text-[15px] text-text-grey-dark leading-[1.5]">{item.desc}</p>
+                    <h3 className="font-['inter'] text-xl font-semibold text-text-black">{item.title}</h3>
+                    <p className="font-['inter'] text-base text-text-grey-dark">{item.desc}</p>
                   </div>
                 </div>
               ))}
@@ -113,7 +133,7 @@ export default function About() {
             </div>
 
             <div className="relative">
-              <div className="absolute left-1/2 top-0 bottom-0 w-[2px] bg-text-green -translate-x-1/2" />
+              <div className="absolute left-1/2 top-0 bottom-0 w-[2px] bg-text-grey-light -translate-x-1/2" />
               {milestones.map((milestone, i) => (
                 <div key={i} className={`relative flex items-center mb-16 last:mb-0 ${milestone.right ? "justify-end" : "justify-start"}`}>
                   <div className={`w-1/2 ${milestone.right ? "pl-12" : "pr-12 text-right"}`}>
@@ -122,33 +142,33 @@ export default function About() {
                     <p className="font-['inter'] text-base text-text-green">Initial proposal for a regional biodiversity science<br/>platform by ACB</p>
                   </div>
 
-                  <div className="absolute left-1/2 w-4 h-4 bg-text-green rounded-full -translate-x-1/2 border-2 border-[#EDF2EA]" />
+                  <div className="absolute left-1/2 w-4 h-4 bg-text-green rounded-full -translate-x-1/2" />
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        <section className="bg-white py-24 px-[40px] md:px-[80px]">
-          <div className="mx-auto max-w-[1400px]">
-            <div className="flex flex-col md:flex-row md:items-end justify-between mb-16">
-              <div>
+        <section className="bg-text-white-broken py-16 px-4 sm:px-6 md:px-10 lg:px-[80px] md:py-24">
+          <div className="flex flex-col mx-auto max-w-[1400px] gap-8 md:gap-10">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 md:gap-8">
+              <div className="flex flex-col gap-4 md:gap-6">
                 <p className="font-['inter'] text-[14px] font-bold uppercase tracking-widest text-text-lime">
                   SCIENTIFIC COMMITTEE
                 </p>
-                <h2 className="mt-2 text-[48px] font-bold text-text-black">
+                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-text-black leading-tight">
                   Meet our Experts
                 </h2>
               </div>
-              <a href="#" className="mt-4 md:mt-0 inline-flex items-center gap-2 font-['inter'] text-[15px] font-semibold text-text-green hover:underline">
+              <a href="#" className="mt-2 md:mt-0 self-start md:self-auto inline-flex items-center gap-2 font-['inter'] text-[15px] font-semibold text-text-green hover:underline">
                 Read full mission statement <span>→</span>
               </a>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-10">
               {experts.map((expert, i) => (
-                <div key={i} className="flex flex-col sm:flex-row gap-6 bg-[#FaFaFa] rounded-2xl p-4 items-center sm:items-start">
-                  <div className="relative w-[200px] h-[200px] md:w-[240px] md:h-[240px] flex-shrink-0">
+                <div key={i} className="flex flex-col xl:flex-row gap-5 rounded-2xl p-4 sm:p-5 items-center xl:items-start text-center xl:text-left">
+                  <div className="relative w-full max-w-[220px] aspect-square flex-shrink-0 mx-auto xl:mx-0">
                     <Image
                       src={expert.img}
                       alt={expert.name}
@@ -156,13 +176,13 @@ export default function About() {
                       className="object-cover rounded-xl"
                     />
                   </div>
-                  <div className="flex flex-col justify-center h-full sm:pt-4 p-4 sm:p-0">
+                  <div className="flex flex-col justify-center h-full p-2 xl:p-0 w-full min-w-0">
                     <h3 className="text-[24px] font-bold text-text-black">{expert.name}</h3>
                     <p className="font-['inter'] text-[14px] font-semibold text-[#0A77FF] mb-4">{expert.role}</p>
                     <p className="font-['inter'] text-[15px] text-text-grey-dark mb-6 leading-[1.6]">
                       {expert.desc}
                     </p>
-                    <div className="flex gap-4 items-center">
+                    <div className="flex gap-4 items-center justify-center xl:justify-start">
                       <a href="#" className="w-5 h-5 flex items-center justify-center text-text-black">
                         <Image src="/x.svg" alt="Icon X" width={20} height={20} />
                       </a>
