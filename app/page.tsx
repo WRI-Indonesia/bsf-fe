@@ -119,10 +119,10 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="grid w-full grid-cols-2 gap-3">
-                  <button className="h-[36px] flex items-center justify-center rounded-lg border border-outline-green bg-white px-4 py-[10px] text-[15px] font-semibold text-text-green transition-colors hover:bg-gray-50">
+                  <button className="font-[inter] h-[36px] flex items-center justify-center rounded-lg border border-outline-green bg-white px-4 py-[10px] text-sm font-semibold text-text-green transition-colors hover:bg-gray-50">
                     <Link href="/publications">Explore Publications</Link>
                   </button>
-                  <button className="h-[36px] flex items-center justify-center gap-2 rounded-lg bg-[#1f4a31] px-4 py-[10px] text-[15px] font-semibold text-white transition-colors hover:bg-[#163824]">
+                  <button className="font-[inter] h-[36px] flex items-center justify-center gap-2 rounded-lg bg-[#1f4a31] px-4 py-[10px] text-sm font-semibold text-white transition-colors hover:bg-[#163824]">
                     Register Now
                     <Image
                       src="/arrow_right.svg"
@@ -137,7 +137,7 @@ export default function Home() {
             </div>
           </div>
         </section>
-        <section className="bg-[#101612] px-[40px] md:px-[80px] py-[100px] text-white">
+        <section className="bg-[#101612] px-20 py-30 text-white">
           <div className="mx-auto grid w-full gap-16 lg:grid-cols-[1fr_1.1fr] ">
             <div className="flex flex-col w-full lg:max-w-[636px]">
               <p className="font-['inter'] text-[20px] font-semibold uppercase tracking-wider text-text-lime">
@@ -211,23 +211,23 @@ export default function Home() {
           </div>
         </section>
         <section className="bg-[#e4ebd8] px-20 py-30">
-          <div className="mx-auto grid w-full gap-16 lg:grid-cols-[1.2fr_0.8fr] lg:max-w-[1400px]">
-            <div className="flex flex-col justify-center md:max-w-[669px] gap-6">
+          <div className="mx-auto grid w-full gap-10 lg:max-w-[1280px] lg:grid-cols-[minmax(0,1fr)_360px] xl:grid-cols-[minmax(0,1fr)_420px]">
+            <div className="flex flex-col justify-center gap-6 md:max-w-[669px]">
               <p className="font-['inter'] text-xl font-semibold uppercase text-text-lime">
                 UPCOMING FORUM
               </p>
               <div className="flex flex-col gap-8">
-                <span className="h-fit text-[2.5rem] font-semibold tracking-[0] leading-[100%] text-text-black">
+                <span className="h-fit text-[2rem] font-semibold leading-[1] tracking-[0] text-text-black sm:text-[2.25rem] lg:text-[2.5rem]">
                   ASEAN Biodiversity Science Forum 2026
                 </span>
-                <p className="font-['inter'] text-xl tracking-[0] leading-[120%] text-[#697d70]">
+                <p className="font-[inter] text-lg leading-[1.3] tracking-[0] text-[#697d70] sm:text-xl">
                   Join leading scientists, policy experts, and conservation
                   practitioners for five days of keynotes, sessions, and
                   collaborative workshops on the future of biodiversity in
                   Southeast Asia.
                 </p>
                 <div className="flex flex-wrap gap-5">
-                  <div className="h-fit flex items-center gap-3 rounded-[12px] border border-outline-green-light bg-[#c3d4be] p-4">
+                  <div className="flex h-fit w-full items-center gap-3 rounded-[12px] border border-outline-green-light bg-[#c3d4be] p-4 sm:w-auto">
                     <Image
                       src="/book.svg"
                       alt="Evidence-Based"
@@ -236,11 +236,11 @@ export default function Home() {
                       style={{ width: "20px", height: "18px" }}
                     />
                     <div className="flex flex-col">
-                      <span className="text-2xl font-bold text-text-green">14-19 June 2026</span>
+                      <span className="text-xl font-bold text-text-green lg:text-2xl">14-19 June 2026</span>
                       <span className="font-['inter'] font-normal text-text-green">5 Days Event</span>
                     </div>
                   </div>
-                  <div className="h-fit flex items-center gap-3 rounded-[12px] border border-outline-green-light bg-[#c3d4be] p-4">
+                  <div className="flex h-fit w-full items-center gap-3 rounded-[12px] border border-outline-green-light bg-[#c3d4be] p-4 sm:w-auto">
                     <Image
                       src="/book.svg"
                       alt="Location"
@@ -249,11 +249,11 @@ export default function Home() {
                       style={{ width: "20px", height: "18px" }}
                     />
                     <div className="flex flex-col">
-                      <span className="text-2xl font-bold text-text-green">Jakarta, Indonesia</span>
+                      <span className="text-xl font-bold text-text-green lg:text-2xl">Jakarta, Indonesia</span>
                         <span className="font-['inter'] font-normal text-text-green">ASEAN HQ</span>
                     </div>
                   </div>
-                  <div className="h-fit flex items-center gap-3 rounded-[12px] border border-outline-green-light bg-[#c3d4be] p-4">
+                  <div className="flex h-fit w-full items-center gap-3 rounded-[12px] border border-outline-green-light bg-[#c3d4be] p-4 sm:w-auto">
                     <Image
                       src="/book.svg"
                       alt="Participants"
@@ -262,13 +262,13 @@ export default function Home() {
                       style={{ width: "20px", height: "18px" }}
                     />
                     <div className="flex flex-col">
-                      <span className="text-2xl font-bold text-text-green">500+ Expected</span>
+                      <span className="text-xl font-bold text-text-green lg:text-2xl">500+ Expected</span>
                       <span className="font-['inter'] font-normal text-text-green">Participants</span>
                     </div>
                   </div>
                 </div>
-                <div className="flex gap-6">
-                  <button className="h-[36px] font-['inter'] flex items-center gap-[6px] rounded-[8px] bg-[#225139] px-[34px] py-[10px] text-sm font-semibold text-white transition-colors hover:bg-[#173e28]">
+                <div className="flex flex-col gap-3 sm:flex-row sm:gap-6">
+                  <button className="h-[36px] w-full font-['inter'] flex items-center justify-center gap-[6px] rounded-[8px] bg-[#225139] px-[34px] py-[10px] text-sm font-semibold text-white transition-colors hover:bg-[#173e28] sm:w-auto">
                     Register Now
                     <Image
                         src="/arrow_right.svg"
@@ -278,13 +278,13 @@ export default function Home() {
                         style={{ width: "10px", height: "9px" }}
                       />
                   </button>
-                  <button className="h-[36px] font-['inter'] flex items-center rounded-[8px] border border-[#225139] bg-white px-[2.5rem] py-[10px] text-sm font-semibold text-text-green transition-colors hover:bg-[#f6f9f5]">
+                  <button className="h-[36px] w-full font-['inter'] flex items-center justify-center rounded-[8px] border border-[#225139] bg-white px-[2.5rem] py-[10px] text-sm font-semibold text-text-green transition-colors hover:bg-[#f6f9f5] sm:w-auto">
                     View Program
                   </button>
                 </div>
               </div>
             </div>
-            <div className="flex flex-col justify-center lg:pl-10">
+            <div className="flex flex-col justify-center lg:pl-2 xl:pl-6">
               <p className="font-['inter'] text-base font-bold uppercase tracking-wider text-text-green">
                 KEY DATES
               </p>
@@ -305,7 +305,7 @@ export default function Home() {
                   }
                   
                   return (
-                    <div key={item.date + index} className="relative flex gap-5">
+                    <div key={item.date + index} className="relative flex gap-4">
                       <div className="relative z-10 mt-[6px] flex flex-col items-center w-[12px]">
                         <span className={`h-[10px] w-[10px] rounded-full flex-shrink-0 ${dotClass}`} />
                         {index < keyDates.length - 1 ? (
@@ -316,7 +316,7 @@ export default function Home() {
                         <p className={`font-['inter'] text-[13px] tracking-wide font-light leading-none ${textColClass}`}>
                           {item.date}
                         </p>
-                        <p className={`font-['inter'] text-base font-normal leading-none ${textSubClass}`}>
+                        <p className={`font-['inter'] text-base font-normal leading-tight ${textSubClass}`}>
                           {item.text}
                         </p>
                       </div>

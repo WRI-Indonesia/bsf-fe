@@ -79,13 +79,22 @@ export default function Header() {
         {navMenus.map((menu, idx) => (
           <div key={menu.label} className="relative">
             <button
-              className={`flex items-center gap-1 focus:outline-none ${isHome ? 'text-text-green' : 'text-text-white-broken'}`}
+              className={`flex items-center gap-2 focus:outline-none ${isHome ? 'text-text-green' : 'text-text-white-broken'}`}
               onClick={() => handleMenuClick(idx)}
               aria-expanded={openMenu === idx}
               aria-controls={`submenu-${idx}`}
             >
               {menu.label}
-              <span className="text-[10px]">▼</span>
+              {(menu.label === 'Events' || menu.label === 'Media') &&               
+                <Image
+                  src="/dropdown.svg"
+                  alt="Dropdown"
+                  width={10}
+                  height={10}
+                  className={isHome ? "" : "brightness-0 invert"}
+                />
+              }
+
             </button>
             {openMenu === idx && (
               <div
