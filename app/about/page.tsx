@@ -36,7 +36,7 @@ export default function About() {
     <div className="min-h-screen bg-white">
       <Header />
       <main className="w-full">
-        <section className="bg-background-base-lime-light mt-[96px] py-30 overflow-hidden">
+        <section className="bg-background-base-lime-light mt-[98px] py-30 overflow-hidden">
           <div className="flex flex-col xl:flex-row px-10 md:px-20 items-stretch gap-30">
             
             <div className="flex flex-col z-10 gap-12 w-full xl:w-[703px] xl:h-[552px] shrink-0 justify-center">
