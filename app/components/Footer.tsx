@@ -45,10 +45,10 @@ export default function Footer() {
               Events
             </Link>
             <div className="flex flex-col gap-5 font-['inter'] text-base text-[#d8ddd4] lg:text-xl">
-              <Link href="/events" className="block hover:text-white">
+              <Link href="/events#upcoming_forum" className="block hover:text-white">
                 Upcoming Forum
               </Link>
-              <Link href="/events#past" className="block hover:text-white">
+              <Link href="/events#past_events" className="block hover:text-white">
                 Past Events
               </Link>
             </div>

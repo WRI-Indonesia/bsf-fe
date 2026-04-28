@@ -64,7 +64,7 @@ export default function Events() {
       <main className="w-full">
         <section className="bg-background-base-dark relative overflow-hidden pt-32 px-[40px] md:px-[80px]">
           <div className="mx-auto max-w-[1400px] grid lg:grid-cols-[1fr_1fr] gap-10 items-center">
-            <div className="flex flex-col z-10 text-white">
+            <div className="flex flex-col z-10 text-white" id="upcoming_forum">
               <p className="font-['inter'] text-[14px] font-bold uppercase tracking-widest text-[#857C00]">
                 UPCOMING FORUM
               </p>
@@ -256,7 +256,7 @@ export default function Events() {
             <p className="font-['inter'] text-[14px] font-bold uppercase tracking-widest text-[#857C00]">
               ARCHIVE
             </p>
-            <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
+            <div className="flex flex-col md:flex-row md:items-end justify-between mb-12" id="past_events">
               <h2 className="mt-2 text-[42px] md:text-[48px] font-bold text-text-black">
                 Past Events
               </h2>

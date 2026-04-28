@@ -3,25 +3,19 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 const navMenus = [
   {
     label: "About",
-    href: "/about",
-    submenu: [
-      { label: "About the forum", href: "/about" },
-      { label: "Mission & Objectives", href: "/about#mission" },
-      { label: "Scientific Committee", href: "/about#committee" },
-    ],
+    href: "/about"
   },
   {
     label: "Events",
     href: "/events",
     submenu: [
-      { label: "Upcoming forum", href: "/events" },
-      { label: "Participate", href: "/events#participate" },
-      { label: "Past Events", href: "/events#past" },
+      { label: "Upcoming forum", href: "/events#upcoming_forum" },
+      { label: "Past Events", href: "/events#past_events" },
     ],
   },
   {
@@ -40,10 +34,7 @@ const navMenus = [
     label: "Media",
     href: "/media",
     submenu: [
-      { label: "Featured Media", href: "/media" },
-      { label: "News & Announcements", href: "/media#news" },
       { label: "Press Releases", href: "/media#press" },
-      { label: "Photos & Videos", href: "/media#photos" },
       { label: "Media Kit", href: "/media#kit" },
     ],
   },
@@ -51,10 +42,25 @@ const navMenus = [
 
 export default function Header() {
   const pathname = usePathname();
+  const router = useRouter();
   const isHome = pathname === '/';
   const [openMenu, setOpenMenu] = useState<number | null>(null);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
-  const handleMenuClick = (idx: number) => {
+  const hasSubmenu = (submenu?: { label: string; href: string }[]) => Boolean(submenu?.length);
+  const handleMenuClick = (
+    menu: { href: string; submenu?: { label: string; href: string }[] },
+    idx: number,
+    isMobile = false
+  ) => {
+    if (!hasSubmenu(menu.submenu)) {
+      setOpenMenu(null);
+      if (isMobile) {
+        setMobileNavOpen(false);
+      }
+      router.push(menu.href);
+      return;
+    }
+
     setOpenMenu(openMenu === idx ? null : idx);
   };
   return (
@@ -79,10 +85,10 @@ export default function Header() {
         {navMenus.map((menu, idx) => (
           <div key={menu.label} className="relative">
             <button
-              className={`flex items-center gap-2 focus:outline-none ${isHome ? 'text-text-green' : 'text-text-white-broken'}`}
-              onClick={() => handleMenuClick(idx)}
-              aria-expanded={openMenu === idx}
-              aria-controls={`submenu-${idx}`}
+              className={`flex items-center gap-2 focus:outline-none cursor-pointer ${isHome ? 'text-text-green' : 'text-text-white-broken'}`}
+              onClick={() => handleMenuClick(menu, idx)}
+              aria-expanded={hasSubmenu(menu.submenu) ? openMenu === idx : undefined}
+              aria-controls={hasSubmenu(menu.submenu) ? `submenu-${idx}` : undefined}
             >
               {menu.label}
               {(menu.label === 'Events' || menu.label === 'Media') &&               
@@ -96,23 +102,25 @@ export default function Header() {
               }
 
             </button>
-            {openMenu === idx && (
+            {hasSubmenu(menu.submenu) && openMenu === idx && (
               <div
                 id={`submenu-${idx}`}
                 className="absolute left-0 mt-2 w-56 rounded-md bg-white shadow-lg z-50"
               >
-                <div className="py-2">
-                  {menu.submenu.map((item) => (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      className="block px-4 py-2 text-sm text-text-black hover:bg-[#E3E7D7] hover:text-text-green"
-                      onClick={() => setOpenMenu(null)}
-                    >
-                      {item.label}
-                    </Link>
-                  ))}
-                </div>
+                { menu.submenu && 
+                  <div className="py-2">
+                    {menu.submenu?.map((item) => (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        className="block px-4 py-2 text-sm text-text-black hover:bg-[#E3E7D7] hover:text-text-green"
+                        onClick={() => setOpenMenu(null)}
+                      >
+                        {item.label}
+                      </Link>
+                    ))}
+                  </div>
+                }
               </div>
             )}
           </div>
@@ -143,16 +151,16 @@ export default function Header() {
           <div key={menu.label} className="flex flex-col">
             <button
               className="flex items-center justify-between py-2 px-2 rounded text-[#265F44] font-semibold hover:bg-[#e4ebd8] focus:outline-none"
-              onClick={() => setOpenMenu(openMenu === idx ? null : idx)}
-              aria-expanded={openMenu === idx}
-              aria-controls={`mobile-submenu-${idx}`}
+              onClick={() => handleMenuClick(menu, idx, true)}
+              aria-expanded={hasSubmenu(menu.submenu) ? openMenu === idx : undefined}
+              aria-controls={hasSubmenu(menu.submenu) ? `mobile-submenu-${idx}` : undefined}
             >
               <span>{menu.label}</span>
-              <span className="text-xs">▼</span>
+              {hasSubmenu(menu.submenu) ? <span className="text-xs">▼</span> : null}
             </button>
-            {openMenu === idx && (
+            {hasSubmenu(menu.submenu) && openMenu === idx && (
               <div id={`mobile-submenu-${idx}`} className="flex flex-col ml-4 border-l border-[#E3E7D7] pl-3 mt-1">
-                {menu.submenu.map((item) => (
+                {menu.submenu?.map((item) => (
                   <Link
                     key={item.href}
                     href={item.href}

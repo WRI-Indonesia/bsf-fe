@@ -370,9 +370,6 @@ export default function Home() {
                     <button className="flex h-[36px] flex-1 sm:flex-none sm:w-[136px] items-center justify-center gap-2 rounded-xl border border-text-green text-sm font-semibold text-text-green min-w-[120px]">
                       Download <Image src="/download.svg" alt="Download Icon" width={16} height={16} />
                     </button>
-                    <button className="flex h-[36px] flex-1 sm:flex-none sm:w-[136px] items-center justify-center gap-2 rounded-xl bg-text-green text-sm font-semibold text-white min-w-[120px]">
-                      Open <Image src="/arrow_right.svg" alt="Download Icon" width={10} height={10} style={{ height: "auto" }} />
-                    </button>
                   </div>
                 </div>
               </div>

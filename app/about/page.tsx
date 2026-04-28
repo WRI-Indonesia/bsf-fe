@@ -160,9 +160,6 @@ export default function About() {
                   Meet our Experts
                 </h2>
               </div>
-              <a href="#" className="mt-2 md:mt-0 self-start md:self-auto inline-flex items-center gap-2 font-['inter'] text-[15px] font-semibold text-text-green hover:underline">
-                Read full mission statement <span>→</span>
-              </a>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-10">
