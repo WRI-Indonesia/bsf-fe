@@ -10,8 +10,8 @@ const EVENT_DATA = {
   participants: "500+ Expected Participants",
   description: "Join leading scientists, policy experts, and conservation practitioners for five days of keynotes, sessions, and collaborative workshops on the future of biodiversity in Southeast Asia.",
   buttons: [
-    { text: "Register Now", style: "bg-[#225139]", hoverStyle: "hover:bg-[#173e28]" },
-    { text: "Submit Abstract", style: "bg-white", hoverStyle: "hover:bg-[#f6f9f5]" }
+    { text: "Register Now", style: "bg-text-green text-text-white-broken", icon: true},
+    { text: "Submit Abstract", style: "bg-text-white-broken text-text-green", icon: false},
   ],
   image: "/events/hero.png"
 };
@@ -62,59 +62,86 @@ export default function Events() {
     <div className="min-h-screen bg-white">
       <Header />
       <main className="w-full">
-        <section className="bg-background-base-dark relative overflow-hidden pt-32 px-[40px] md:px-[80px]">
-          <div className="mx-auto max-w-[1400px] grid lg:grid-cols-[1fr_1fr] gap-10 items-center">
-            <div className="flex flex-col z-10 text-white">
-              <p className="font-['inter'] text-[14px] font-bold uppercase tracking-widest text-[#857C00]">
+        <section className="bg-background-base-dark mt-[98px] py-30 overflow-hidden">
+          <div className="flex flex-col xl:flex-row px-10 md:px-20 items-stretch gap-30">
+            <div className="flex flex-col z-10 text-white w-full xl:w-[703px] xl:h-[552px] gap-12 shrink-0 justify-center" id="upcoming_forum">
+              <p className="font-['inter'] text-xl font-semibold uppercase tracking-widest text-text-lime">
                 UPCOMING FORUM
               </p>
-              <h1 className="mt-6 text-[48px] md:text-[64px] lg:text-[76px] font-bold leading-[1.1] tracking-tight">
+              <h1 className="text-5xl md:text-7xl xl:text-8xl font-semibold leading-tight xl:leading-[96px] text-text-white-broken tracking-tight">
                 {EVENT_DATA.title}
               </h1>
-              <div className="mt-8 flex flex-wrap gap-8 font-['inter'] text-[16px] text-[#AFAFAF]">
+              <div className="flex flex-wrap font-['inter'] text-[16px] justify-between text-text-grey-light">
                 <div>{EVENT_DATA.date}</div>
                 <div>{EVENT_DATA.location}</div>
                 <div>{EVENT_DATA.participants}</div>
               </div>
-              <p className="mt-8 max-w-[500px] font-['inter'] text-[18px] text-[#93a299] leading-[1.6]">
+              <p className="font-['inter'] text-xl text-text-grey-light">
                 {EVENT_DATA.description}
               </p>
-              <div className="mt-10 flex gap-4">
+              <div className="flex flex-row gap-3 max-w-[373px]">
                 {EVENT_DATA.buttons.map((button, i) => (
-                  <button key={i} className="flex items-center gap-2 rounded-[8px] bg-[#225139] px-6 py-[12px] text-[15px] font-semibold text-white transition-colors hover:bg-[#173e28]">
+                  <button key={i} className={`flex font-[inter] text-sm justify-center w-full items-center gap-[6px] ${button.style} rounded-[8px] px-[10px] py-[16px] h-[36px] font-semibold`}>
                     {button.text}
-                    <svg className="h-[18px] w-[18px]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    {button.icon &&                     
+                      <Image
+                        src="/arrow_right.svg"
+                        alt="Arrow Right"
+                        width={10}
+                        height={9}
+                        style={{ width: "10px", height: "9px" }}
+                      />
+                    }
                   </button>
                 ))}
-                <button className="rounded-[8px] bg-white px-6 py-[12px] text-[15px] font-semibold text-text-black transition-colors hover:bg-[#f6f9f5]">
-                  Submit Abstract
-                </button>
               </div>
             </div>
-            <div className="relative h-[400px] md:h-[500px] lg:h-[600px] w-full rounded-l-[80px] overflow-hidden ml-auto">
-              <Image
-                src={EVENT_DATA.image}
-                alt="Forum discussion"
-                fill
-                className="object-cover"
-                priority
-              />
-            </div>
+              <div className="relative h-[320px] md:h-[420px] -mr-10 md:-mr-20 block xl:hidden">
+                <div className="relative w-full h-full rounded-tl-[80px] overflow-hidden">
+                  <Image
+                    src={EVENT_DATA.image}
+                    alt="Forum discussion"
+                    fill
+                    className="object-cover"
+                    priority
+                  />
+                </div>
+              </div>
+
+              <div className="relative flex-1 -mr-10 md:-mr-20 hidden xl:block">
+                <div className="relative w-full h-full rounded-tl-[80px] overflow-hidden">
+                  <Image
+                    src={EVENT_DATA.image}
+                    alt="Forum discussion"
+                    fill
+                    className="object-cover"
+                    priority
+                  />
+                </div>
+              </div>
           </div>
         </section>
 
-        <section className="bg-white py-24 px-[40px] md:px-[80px]">
-          <div className="mx-auto max-w-[1400px] text-center">
-            <p className="font-['inter'] text-[14px] font-bold uppercase tracking-widest text-[#857C00]">
-              IMPORTANT DATES
-            </p>
-            <h2 className="mt-4 text-[42px] md:text-[48px] font-bold text-text-black">
-              Key dates & Deadlines
-            </h2>
-            <div className="mt-16 flex justify-center flex-wrap gap-4 lg:gap-6">
+        <section className="bg-white px-20 py-30">
+          <div className="flex flex-col max-w-[1400px] md:h-[360px] text-center items-center">
+            <div className="flex flex-col md:max-w-[572px]">
+              <p className="font-['inter'] text-xl font-semibold uppercase tracking-widest text-text-lime">
+                IMPORTANT DATES
+              </p>
+              <p className="text-[2.5rem] font-semibold text-text-black">
+                Key dates & Deadlines
+              </p>
+            </div>
+            <div className="flex justify-center flex-wrap gap-4 lg:gap-6 justify-between">
               {importantDates.map((item, i) => (
-                <div key={i} className="flex flex-col items-center justify-center p-6 lg:p-8 bg-[#Fbfbfb] rounded-[20px] border border-[#e8efe8] w-[180px] lg:w-[220px] min-h-[160px] text-center">
-                  <svg className="mb-4 text-[#265F44] w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" /><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" /></svg>
+                <div key={i} className="flex flex-col items-center justify-center text-center p-6 rounded-3xl border-x-(color: outline-grey-light) gap-3 bg-background-base-grey-light">
+                  <Image
+                        src="/book.svg"
+                        alt="Important Date"
+                        width={20}
+                        height={20}
+                        style={{ width: "20px", height: "20px" }}
+                      />
                   <p className="font-bold text-text-black text-[15px] lg:text-[16px] whitespace-pre-line leading-[1.3] mb-2">{item.date}</p>
                   <p className="font-['inter'] text-[13px] text-text-grey-dark whitespace-pre-line">{item.desc}</p>
                 </div>
@@ -256,7 +283,7 @@ export default function Events() {
             <p className="font-['inter'] text-[14px] font-bold uppercase tracking-widest text-[#857C00]">
               ARCHIVE
             </p>
-            <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
+            <div className="flex flex-col md:flex-row md:items-end justify-between mb-12" id="past_events">
               <h2 className="mt-2 text-[42px] md:text-[48px] font-bold text-text-black">
                 Past Events
               </h2>

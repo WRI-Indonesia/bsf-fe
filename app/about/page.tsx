@@ -36,7 +36,7 @@ export default function About() {
     <div className="min-h-screen bg-white">
       <Header />
       <main className="w-full">
-        <section className="bg-background-base-lime-light mt-[96px] py-30 overflow-hidden">
+        <section className="bg-background-base-lime-light mt-[98px] py-30 overflow-hidden">
           <div className="flex flex-col xl:flex-row px-10 md:px-20 items-stretch gap-30">
             
             <div className="flex flex-col z-10 gap-12 w-full xl:w-[703px] xl:h-[552px] shrink-0 justify-center">
@@ -160,9 +160,6 @@ export default function About() {
                   Meet our Experts
                 </h2>
               </div>
-              <a href="#" className="mt-2 md:mt-0 self-start md:self-auto inline-flex items-center gap-2 font-['inter'] text-[15px] font-semibold text-text-green hover:underline">
-                Read full mission statement <span>→</span>
-              </a>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-10">
