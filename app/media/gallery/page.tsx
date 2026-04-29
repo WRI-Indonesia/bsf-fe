@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
-import Header from "../../../components/Header";
-import Footer from "../../../components/Footer";
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
 
 const pastEvents = [
   {
@@ -99,85 +99,25 @@ Sekretaris Daerah Sorong Selatan Dance Nauw yang memimpin prosesi tersebut menga
 
 export default function PlaceholderPastEvents() {
   return (
-    <div className="min-h-screen bg-background-base-lime-light">
+    <div className="min-h-screen bg-text-white-broken">
       <Header />
       <main className="flex flex-col 2xl:justify-center">
-        <section className="flex flex-col mt-[98px] p-20 pt-30 gap-10 max-w-[1280px] overflow-hidden">
-          <nav aria-label="Breadcrumb" className="mt-4 mb-6 flex items-center gap-5 text-sm text-text-grey-dark">
+        <section className="flex flex-col mt-[98px] p-20 pt-30 gap-12 max-w-[1280px] overflow-hidden">
+          <nav aria-label="Breadcrumb" className="flex items-center gap-5 text-sm text-text-grey-dark">
             <Link href="/" className="font-[inter] text-text-grey-mid font-medium hover:underline leading-[22px]">Home</Link>
             <span className="text-text-grey-dark">/</span>
-            <Link href="/events" className="font-[inter] text-text-grey-mid font-medium hover:underline leading-[22px]">Events</Link>
+            <Link href="/media" className="font-[inter] text-text-grey-mid font-medium hover:underline leading-[22px]">Media</Link>
             <span className="text-text-grey-dark">/</span>
-            <Link href="/events/past_events" className="font-[inter] text-text-grey-mid font-medium hover:underline leading-[22px]">Past Events</Link>
-            <span className="text-text-grey-dark">/</span>
-            <span className="font-[inter] font-medium text-text-green leading-[22px]">Implementing the Global Biodiversity Framework</span>
+            <span className="font-[inter] font-semibold text-text-green leading-[22px]">BSF 2024 Opening Ceremony</span>
           </nav>
-          <div className="flex flex-col gap-5 lg:max-h-[800px]">
-            <p className="font-semibold text-text-black lg:text-[3.625rem] md:text-2xl">Implementing the Global Biodiversity Framework</p>
+          <div className="flex flex-col lg:max-h-[800px]">
+            <p className="font-semibold text-text-black lg:text-[3.625rem] md:text-2xl">BSF 2024 Opening Ceremony</p>
+            <p className="font-[inter] text-text-grey-mid text-lg font-normal">24 photos</p>
           </div>
         </section>
 
         <section className="flex px-20 pb-30 2xl:justify-center">
-          <div className="w-full max-w-[1280px] bg-white rounded-xl px-9 py-8">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              <main className="lg:col-span-2">
-                <div className="flex flex-col gap-6 bg-white rounded-2xl">
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="flex items-center gap-6 text-sm text-text-grey-dark">
-                      <div className="flex items-center gap-2">
-                        <span className="font-[inter] font-semibold text-text-grey-mid">24 Jan - 2024</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Image src="/location.png" alt="Location" width={16} height={16} />
-                        <span className="font-[inter] font-semibold text-text-grey-mid">Bangkok, Thailand</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Image src="/participants.svg" alt="Participants" width={16} height={16} />
-                        <span className="font-[inter] font-semibold text-text-grey-mid">450 participants</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="relative w-full h-[420px] rounded-2xl overflow-hidden">
-                    <Image src={pastEvents[0].image} alt={pastEvents[0].title} fill className="object-cover" />
-                  </div>
-
-                  <div className="text-text-grey-dark whitespace-pre-line font-[inter] text-text-grey-mid text-justify">
-                    {articleText.replace(/\\n/g, '\n')}
-                  </div>
-                </div>
-              </main>
-
-              <aside className="lg:col-span-1">
-                <div className="flex flex-col bg-white rounded-2xl p-6 gap-2 border">
-                  <h3 className="font-[inter] font-semibold text-lg text-text-main">Related Events</h3>
-                  <div className="flex flex-col gap-4">
-                    {pastEvents.slice(0,3).map((event, i) => (
-                      <div key={i} className="flex flex-col gap-4">
-                      <Link href="#" key={i} className="flex items-stretch gap-4">
-                        <div className="flex w-[160px] h-[120px] rounded-lg overflow-hidden flex-shrink-0">
-                          <Image src={event.image} alt={event.title} width={160} height={110} className="object-cover" />
-                        </div>
-                        <div className="flex flex-col text-sm gap-2 justify-around">
-                          <div className="flex flex-col text-sm">
-                            <p className="font-[inter] font-semibold text-[#325B53] leading-[100%]">{event.title}</p>
-                          </div>
-                          <div className="flex flex-col text-sm">
-                            <p className="font-[inter] text-text-grey-mid text-sm">{event.date}</p>
-                            <p className="font-[inter] text-text-grey-mid text-sm">{event.location}</p>
-                          </div>
-                        </div>
-                      </Link>
-                      {i < 2 && (
-                        <div className="h-[1px] w-full bg-outline-grey-light" />
-                      )}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </aside>
-            </div>
-          </div>
+          <Image src="/media/opening.png" alt="gallery" width={0} height={0} sizes="100vw" className="w-full h-auto object-cover" />
         </section>
 
       </main>

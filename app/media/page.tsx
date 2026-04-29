@@ -2,22 +2,77 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Image from "next/image";
 
-const galleryItems = Array.from({ length: 6 }).map((_, index) => ({
-  title: "BSF 2024 Opening Ceremony",
-  count: "24 Photos",
-  id: index + 1,
-}));
+const galleryItems = [
+  {
+    title: "BSF 2024 Opening Ceremony",
+    count: "24 Photos",
+    id: 1,
+    image: "/media/gallery.png"
+  },
+  {
+    title: "BSF 2024 Opening Ceremony",
+    count: "24 Photos",
+    id: 2,
+    image: "/media/gallery.png"
+  },
+  {
+    title: "BSF 2024 Opening Ceremony",
+    count: "24 Photos",
+    id: 3,
+    image: "/media/gallery_2.png"
+  },
+  {
+    title: "BSF 2024 Opening Ceremony",
+    count: "24 Photos",
+    id: 4,
+    image: "/media/gallery_2.png"
+  },
+  {
+    title: "BSF 2024 Opening Ceremony",
+    count: "24 Photos",
+    id: 5,
+    image: "/media/gallery_3.png"
+  },
+  {
+    title: "BSF 2024 Opening Ceremony",
+    count: "24 Photos",
+    id: 6,
+    image: "/media/gallery_3.png"
+  },
+  {
+    title: "BSF 2024 Opening Ceremony",
+    count: "24 Photos",
+    id: 7,
+    image: "/media/gallery.png"
+  },
+  {
+    title: "BSF 2024 Opening Ceremony",
+    count: "24 Photos",
+    id: 8,
+    image: "/media/gallery_2.png"
+  },
+  {
+    title: "BSF 2024 Opening Ceremony",
+    count: "24 Photos",
+    id: 9,
+    image: "/media/gallery_3.png"
+  },
+];
 
 const pressReleases = [
   {
-    date: "28 February 2025",
+    date: "24 January 2024",
     title:
-      "Harnessing ecosystems for climate adaption, disaster risk reduction, and sustainable livelihoods",
+      "Harnessing ecosystems for climate adaptation, disaster risk reduction, and sustainable livelihoods",
+    image: "/media/business.png",
+    source: "/media/cnn_logo.png",
   },
   {
-    date: "03 February 2025",
+    date: "07 March 2024",
     title:
-      "Harnessing ecosystems for climate adaption, disaster risk reduction, and sustainable livelihoods",
+      "Science for Biodiversity Action in ASEAN and collaboration",
+    image: "/media/business.png",
+    source: "/media/cnn_logo.png",
   },
 ];
 
@@ -33,33 +88,34 @@ export default function MediaPage() {
     <div className="min-h-screen bg-white">
       <Header />
       <main className="w-full">
-        <section id="photos" className="bg-[#f5f5f5] px-[40px] pb-16 pt-[145px] md:px-[80px] md:pb-20">
-          <div className="mx-auto max-w-[1400px]">
-            <p className="font-['inter'] text-xl font-semibold uppercase tracking-widest text-text-lime">
-              Gallery
-            </p>
-            <h1 className="mt-4 text-[3.125rem] leading-[1] font-semibold text-text-grey-dark md:text-8xl">
-              Photos &amp; Videos
-            </h1>
+        <section id="photos" className="bg-text-white-broken px-20 py-30 mt-[98px]">
+          <div className="flex flex-col gap-15 mx-auto max-w-[1400px]">
+            <div className="flex flex-col gap-12">
+              <p className="font-['inter'] text-xl font-semibold uppercase tracking-widest text-text-lime">
+                Gallery
+              </p>
+              <h1 className="text-[3.125rem] leading-[1] font-semibold text-text-grey-dark md:text-8xl">
+                Photos &amp; Videos
+              </h1>
+            </div>
 
-            <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {galleryItems.map((item) => (
                 <article
                   key={item.id}
-                  className="flex min-h-[240px] flex-col items-center justify-center rounded-[24px] border border-outline-grey-light bg-[#f7f7f7] px-6 text-center"
+                  className="flex flex-col rounded-[16px] overflow-hidden"
                 >
-                  <Image
-                        src="/book.svg"
-                        alt="Address"
-                        width={22}
-                        height={22}
-                        style={{ width: "22px", height: "22px" }}
-                        className="brightness-0 invert"
-                      />
-                  <p className="mt-2 font-['inter'] text-[19px] font-semibold text-text-black">
-                    {item.title}
-                  </p>
-                  <p className="mt-1 font-['inter'] text-[16px] text-text-grey-light">{item.count}</p>
+                  <div className="grid gap-3 p-4">
+                    <div className="col-span-2">
+                      <div className="relative w-full h-[180px] md:h-[220px] rounded-[12px] overflow-hidden">
+                        <Image src={item.image} alt={item.title} fill className="object-cover" />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="px-4 pb-6 text-center">
+                    <p className="mt-2 font-['inter'] text-[16px] font-semibold text-text-black">{item.title}</p>
+                    <p className="mt-1 font-['inter'] text-[13px] text-text-grey-light">{item.count}</p>
+                  </div>
                 </article>
               ))}
             </div>
@@ -68,24 +124,33 @@ export default function MediaPage() {
 
         <section id="news" className="bg-background-base-green-light px-20 py-30">
           <div className="flex max-w-[1280px] gap-20">
-            <div id="press" className="max-w-[600px]">
+            <div id="press" className="flex flex-col gap-6 max-w-[600px]">
               <p className="font-['inter'] text-xl font-semibold uppercase tracking-widest text-text-lime">
                 Press
               </p>
-              <h2 className="mt-3 text-[2rem] font-bold leading-[1] text-text-black md:text-[2.5rem]">
+              <h2 className="text-[2rem] font-bold leading-[1] text-text-black md:text-[2.5rem]">
                 Press Releases
               </h2>
 
-              <div className="mt-8 space-y-3">
+              <div className="mt-8 space-y-6">
                 {pressReleases.map((release, index) => (
                   <article
                     key={index}
-                    className="rounded-[16px] bg-white p-[24px] shadow-[0_0_0_1px_rgba(17,26,19,0.04)]"
+                    className="flex gap-6 items-center bg-white rounded-[20px] p-3 shadow-sm"
                   >
-                    <p className="font-['inter'] text-base text-text-grey-dark">{release.date}</p>
-                    <p className="mt-2 font-['inter'] text-text-lg font-semibold leading-[1] tracking-[0] text-text-black">
-                      {release.title}
-                    </p>
+                    <div className="w-[220px] h-[140px] rounded-[12px] overflow-hidden relative flex-shrink-0">
+                      <Image src={release.image} alt={release.title} fill className="object-cover" />
+                    </div>
+                    <div className="flex flex-col gap-3">
+                      <div className="flex items-center gap-3">
+                        <Image src={release.source} alt="source" width={28} height={28} />
+                        <span className="text-sm text-text-grey-dark">CNN Indonesia</span>
+                      </div>
+                      <h3 className="text-2xl font-semibold text-text-grey-dark leading-[100%]">
+                        {release.title}
+                      </h3>
+                      <p className="text-text-green font-semibold">{release.date}</p>
+                    </div>
                   </article>
                 ))}
               </div>
@@ -103,7 +168,7 @@ export default function MediaPage() {
               <p className="font-['inter'] text-xl font-semibold uppercase tracking-widest text-text-lime">
                 Resources
               </p>
-              <h2 className="mt-3 text-[2rem] font-bold leading-[1] text-text-black md:text-[2.5rem]">
+              <h2 className="text-[2rem] font-bold leading-[1] text-text-black md:text-[2.5rem]">
                 Media Kit
               </h2>
               <p className="mt-4 font-['inter'] text-base leading-[1.5] text-text-grey-dark">

@@ -15,7 +15,7 @@ const navMenus = [
     href: "/events",
     submenu: [
       { label: "Upcoming forum", href: "/events#upcoming_forum" },
-      { label: "Past Events", href: "/events#past_events" },
+      { label: "Past Events", href: "/events/past_events" },
     ],
   },
   {
@@ -104,12 +104,12 @@ export default function Header() {
                 className="absolute left-0 mt-2 w-56 rounded-md bg-white shadow-lg z-50"
               >
                 { menu.submenu && 
-                  <div className="py-2">
+                  <div className="py-2 bg-[#E6E9D4] rounded-lg">
                     {menu.submenu?.map((item) => (
                       <Link
                         key={item.href}
                         href={item.href}
-                        className="block px-4 py-2 text-sm text-text-black hover:bg-[#E3E7D7] hover:text-text-green"
+                        className="block px-4 py-2 bg-[#E6E9D4] text-sm text-[#325B53] hover:bg-[#C3C6AD] hover:font-bold"
                         onClick={() => setOpenMenu(null)}
                       >
                         {item.label}

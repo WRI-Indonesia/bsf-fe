@@ -9,7 +9,7 @@ const pastEvents = [
     title: "A space for biodiversity science, collaboration, and knowledge exchange.",
     location: "Bangkok, Thailand",
     participants: "450 participants",
-    image: "/events_1.png",
+    image: "/media/business.png",
   },
   {
     date: "07 March 2024",
@@ -97,7 +97,7 @@ Sekretaris Daerah Sorong Selatan Dance Nauw yang memimpin prosesi tersebut menga
 “Pengakuan ini menunjukkan kepada masyarakat setempat dan pemerintah pusat, bahwa komitmen untuk melindungi lingkungan serta memastikan martabat dan kesejahteraan masyarakat adat berjalan beriringan,” kata Dance.\n
 “Kami berharap pengakuan ini dapat memperkuat semangat gotong royong dan kebersamaan dalam mengelola wilayah adat demi kesejahteraan bersama,” ujarnya.`;
 
-export default function PlaceholderPastEvents() {
+export default function PlaceholderPressRelease() {
   return (
     <div className="min-h-screen bg-background-base-lime-light">
       <Header />
@@ -110,10 +110,10 @@ export default function PlaceholderPastEvents() {
             <span className="text-text-grey-dark">/</span>
             <Link href="/events/past_events" className="font-[inter] text-text-grey-mid font-medium hover:underline leading-[22px]">Past Events</Link>
             <span className="text-text-grey-dark">/</span>
-            <span className="font-[inter] font-medium text-text-green leading-[22px]">Implementing the Global Biodiversity Framework</span>
+            <span className="font-[inter] font-medium text-text-green leading-[22px]">Harnessing ecosystems for climate adaption, disaster risk reduction, and sustainable livehoods</span>
           </nav>
           <div className="flex flex-col gap-5 lg:max-h-[800px]">
-            <p className="font-semibold text-text-black lg:text-[3.625rem] md:text-2xl">Implementing the Global Biodiversity Framework</p>
+            <p className="font-semibold text-text-black lg:text-[3.625rem] md:text-2xl">Harnessing ecosystems for climate adaption, disaster risk reduction, and sustainable livehoods</p>
           </div>
         </section>
 
@@ -150,7 +150,7 @@ export default function PlaceholderPastEvents() {
 
               <aside className="lg:col-span-1">
                 <div className="flex flex-col bg-white rounded-2xl p-6 gap-2 border">
-                  <h3 className="font-[inter] font-semibold text-lg text-text-main">Related Events</h3>
+                  <h3 className="font-[inter] font-semibold text-lg text-text-main">Related Press Release</h3>
                   <div className="flex flex-col gap-4">
                     {pastEvents.slice(0,3).map((event, i) => (
                       <div key={i} className="flex flex-col gap-4">
