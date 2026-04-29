@@ -33,6 +33,60 @@ const thematicAreas = [
   { title: "Marine & Coastal Biodiversity" },
 ];
 
+const sessionThemes = [
+  { title: "Nature Based Solutions" },
+  { title: "Marine & Coastal Biodiversity" },
+  { title: "Nature Based Solutions" },
+  { title: "Marine & Coastal Biodiversity" },
+  { title: "Nature Based Solutions" },
+  { title: "Marine & Coastal Biodiversity" },
+];
+
+const pastEvents = [
+  {
+    date: "24 January 2024",
+    title: "A space for biodiversity science, collaboration, and knowledge exchange.",
+    location: "Bangkok, Thailand",
+    participants: "450 participants",
+    image: "/events_1.png",
+  },
+  {
+    date: "07 March 2024",
+    title: "Biodiversity in a Post-Pandemic World, and knowledge exchange.",
+    location: "Manila, Philippines",
+    participants: "289 participants",
+    image: "/events_2.png",
+  },
+  {
+    date: "07 March 2024",
+    title: "Biodiversity in a Post-Pandemic World, and knowledge exchange.",
+    location: "Manila, Philippines",
+    participants: "289 participants",
+    image: "/events_2.png",
+  },
+  {
+    date: "18 November 2023",
+    title: "Science for Biodiversity Action in ASEAN and collaboration",
+    location: "Virtual",
+    participants: "520 participants",
+    image: "/events_3.png",
+  },
+  {
+    date: "18 November 2023",
+    title: "Science for Biodiversity Action in ASEAN and collaboration",
+    location: "Virtual",
+    participants: "520 participants",
+    image: "/events_3.png",
+  },
+  {
+    date: "24 January 2024",
+    title: "Biodiversity in a Post-Pandemic World, and knowledge exchange.",
+    location: "Bangkok, Thailand",
+    participants: "450 participants",
+    image: "/events_1.png",
+  },
+];
+
 const keynoteSpeakers = [
   { name: "Lisa Clarc", role: "UI/UX Designer", img: "/events/speaker_1.png", desc: "Lisa's proactive support and problem-solving abilities make her an invaluable advocate for our customers." },
   { name: "Olivia Manson", role: "Cloud Architect", img: "/events/speaker_2.png", desc: "With a deep understanding of user behavior and industry best practices, she crafts engaging experiences that seamlessly blend form and function." },
@@ -44,16 +98,16 @@ const registrationOptions = [
   {
     title: "Registration",
     desc: "Harnessing ecosystems for climate adaption, disaster risk reduction, and sustainable livelihoods Harnessing ecosystems for climate adaption, disaster risk reduction, and sustainable",
-    iconBg: "bg-[#e5ebe4]",
     iconColor: "text-[#5b7a63]",
-    icon: <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8" stroke="white" strokeWidth="2"/></svg>,
+    icon: "document_green.png",
+    submitText: "Register"
   },
   {
     title: "Abstract Submission",
     desc: "Harnessing ecosystems for climate adaption, disaster risk reduction, and sustainable livelihoods Harnessing ecosystems for climate adaption, disaster risk reduction, and sustainable",
-    iconBg: "bg-[#fcf5e2]",
     iconColor: "text-[#ecca59]",
-    icon: <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><path d="M14 2v6h6" stroke="white" strokeWidth="2"/></svg>,
+    icon: "document_yellow.png",
+    submitText: "Submit Abstract"
   },
 ];
 
@@ -122,8 +176,8 @@ export default function Events() {
           </div>
         </section>
 
-        <section className="bg-white px-20 py-30">
-          <div className="flex flex-col max-w-[1400px] md:h-[360px] text-center items-center">
+        <section className="flex justify-center bg-white px-6 py-16 md:px-20 md:py-30">
+          <div className="flex flex-col max-w-[1400px] text-center items-center gap-10 w-full">
             <div className="flex flex-col md:max-w-[572px]">
               <p className="font-['inter'] text-xl font-semibold uppercase tracking-widest text-text-lime">
                 IMPORTANT DATES
@@ -132,36 +186,40 @@ export default function Events() {
                 Key dates & Deadlines
               </p>
             </div>
-            <div className="flex justify-center flex-wrap gap-4 lg:gap-6 justify-between">
+            <div className="w-full grid gap-6 sm:grid-cols-2 lg:grid-cols-5 2xl:grid-cols-5">
               {importantDates.map((item, i) => (
-                <div key={i} className="flex flex-col items-center justify-center text-center p-6 rounded-3xl border-x-(color: outline-grey-light) gap-3 bg-background-base-grey-light">
+                <div key={i} className="flex flex-col items-center justify-center text-center p-6 rounded-3xl border border-outline-grey-light gap-3 bg-background-base-grey-light">
                   <Image
                         src="/book.svg"
                         alt="Important Date"
                         width={20}
-                        height={20}
-                        style={{ width: "20px", height: "20px" }}
+                        height={38}
+                        style={{ width: "24px", height: "38px" }}
                       />
-                  <p className="font-bold text-text-black text-[15px] lg:text-[16px] whitespace-pre-line leading-[1.3] mb-2">{item.date}</p>
-                  <p className="font-['inter'] text-[13px] text-text-grey-dark whitespace-pre-line">{item.desc}</p>
+                  <div className="flex flex-col gap-3">
+                    <p className="font-semibold text-lg text-text-black">{item.date}</p>
+                    <p className="font-['inter'] text-base font-normal leading-[100%] text-text-grey-dark whitespace-pre-line">{item.desc}</p>
+                  </div>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        <section className="bg-[#eef1e6] py-24 px-[40px] md:px-[80px]">
-          <div className="mx-auto max-w-[1400px]">
-            <p className="font-['inter'] text-[14px] font-bold uppercase tracking-widest text-[#857C00]">
-              PROGRAMME
-            </p>
-            <h2 className="mt-2 text-[42px] md:text-[48px] font-bold text-text-black mb-12">
-              Thematic Areas
-            </h2>
+        <section className="flex bg-background-base-lime-light px-20 py-30 2xl:justify-center">
+          <div className="flex flex-col max-w-[1400px] gap-20 2xl:items-center">
+            <div className="flex flex-col 2xl:items-center">
+              <p className="font-['inter'] text-xl font-semibold uppercase tracking-widest text-text-lime">
+                Programme
+              </p>
+              <p className="text-[2.5rem] font-semibold text-text-black">
+                Thematic Areas
+              </p>
+            </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {thematicAreas.map((item, i) => (
                 <div key={i} className="bg-white p-8 rounded-[20px]">
-                  <h3 className="font-bold text-text-black text-[20px] mb-4">{item.title}</h3>
+                  <h3 className="font-bold text-text-black text-[20px]">{item.title}</h3>
                   <p className="font-['inter'] text-text-grey-dark text-[15px] leading-[1.6]">
                     Harnessing ecosystems for climate adaption, disaster risk reduction, and sustainable livelihoods
                   </p>
@@ -171,14 +229,16 @@ export default function Events() {
           </div>
         </section>
 
-        <section className="bg-[white] py-24 px-[40px] md:px-[80px]">
-          <div className="mx-auto max-w-[1400px]">
-            <p className="font-['inter'] text-[14px] font-bold uppercase tracking-widest text-[#857C00]">
-              KEYNOTE SPEAKERS
-            </p>
-            <h2 className="mt-2 text-[42px] md:text-[48px] font-bold text-text-black mb-12">
-              Featured Speakers
-            </h2>
+        <section className="flex bg-text-white-broken px-20 py-30 2xl:justify-center">
+          <div className="flex flex-col max-w-[1400px] gap-10 2xl:items-center">
+            <div className="flex flex-col 2xl:items-center gap-6">
+              <p className="font-['inter'] text-xl font-semibold uppercase tracking-widest text-text-lime">
+                Keynote Speakers
+              </p>
+              <p className="text-[2.5rem] font-semibold text-text-black">
+                Featured Speakers
+              </p>
+            </div>
 
             <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
               {keynoteSpeakers.map((expert, i) => (
@@ -191,12 +251,16 @@ export default function Events() {
                       className="object-cover rounded-xl"
                     />
                   </div>
-                  <div className="flex flex-col justify-center h-full sm:pt-4 p-4 sm:p-0">
-                    <h3 className="text-[24px] font-bold text-text-black">{expert.name}</h3>
-                    <p className="font-['inter'] text-[14px] font-semibold text-[#0A77FF] mb-4">{expert.role}</p>
-                    <p className="font-['inter'] text-[15px] text-[#515151] mb-6 leading-[1.6]">
-                      {expert.desc}
-                    </p>
+                  <div className="flex flex-col justify-center h-full gap-8">
+                    <div className="flex flex-col gap-4">
+                      <div className="flex flex-col">
+                        <p className="font-['Plus_Jakarta_Sans'] text-2xl font-bold text-text-black">{expert.name}</p>
+                        <p className="font-['inter'] text-text-icons-light-primary">{expert.role}</p>
+                      </div>
+                      <p className="font-['inter'] text-text-grey-mid">
+                        {expert.desc}
+                      </p>
+                    </div>
                     <div className="flex gap-4 items-center">
                       <Link href="#" className="w-5 h-5 flex items-center justify-center text-text-black">
                         <Image src="/x.svg" alt="Icon X" width={20} height={20} />
@@ -218,26 +282,21 @@ export default function Events() {
           </div>
         </section>
 
-        <section className="bg-[#cdd7c8] py-24 px-[40px] md:px-[80px]">
-          <div className="mx-auto max-w-[1400px]">
-            <p className="font-['inter'] text-[14px] font-bold uppercase tracking-widest text-[#857C00]">
-              SESSION
-            </p>
-            <h2 className="mt-2 text-[42px] md:text-[48px] font-bold text-text-black mb-12 uppercase">
-              SESSIONS
-            </h2>
+        <section className="flex bg-background-base-green-light px-20 py-30 2xl:justify-center">
+          <div className="flex flex-col max-w-[1400px] gap-20 2xl:items-center">
+            <div className="flex flex-col 2xl:items-center">
+              <p className="font-['inter'] text-xl font-semibold uppercase tracking-widest text-text-lime">
+                Session
+              </p>
+              <p className="text-[2.5rem] font-semibold text-text-black uppercase">
+                Sessions
+              </p>
+            </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {[
-                { title: "Nature Based Solutions" },
-                { title: "Marine & Coastal Biodiversity" },
-                { title: "Nature Based Solutions" },
-                { title: "Marine & Coastal Biodiversity" },
-                { title: "Nature Based Solutions" },
-                { title: "Marine & Coastal Biodiversity" }
-              ].map((item, i) => (
-                <div key={i} className="bg-white p-8 rounded-[20px]">
-                  <h3 className="font-bold text-text-black text-[20px] mb-4">{item.title}</h3>
-                  <p className="font-['inter'] text-text-grey-dark text-[15px] leading-[1.6]">
+              {sessionThemes.map((item, i) => (
+                <div key={i} className="flex flex-col bg-white p-6 gap-3 rounded-[20px]">
+                  <h3 className="font-[inter] font-semibold text-text-black text-base">{item.title}</h3>
+                  <p className="font-[inter] text-text-grey-dark text-base">
                     Harnessing ecosystems for climate adaption, disaster risk reduction, and sustainable livelihoods
                   </p>
                 </div>
@@ -246,66 +305,91 @@ export default function Events() {
           </div>
         </section>
 
-        <section className="bg-[#9bb29c] py-24 px-[40px] md:px-[80px]">
-          <div className="mx-auto max-w-[1400px]">
-            <div className="mb-12">
-              <p className="font-['inter'] text-[14px] font-bold uppercase tracking-widest text-[#265F44]">
-                PARTICIPATE
+        <section className="flex bg-background-base-green-mid px-20 py-30 2xl:justify-center">
+          <div className="flex flex-col max-w-[1400px] gap-20 2xl:items-center">
+            <div className="flex flex-col 2xl:items-center">
+              <p className="font-['inter'] text-xl font-semibold uppercase tracking-widest text-text-green">
+                Participate
               </p>
-              <h2 className="mt-2 text-[42px] md:text-[48px] font-bold text-text-black uppercase">
-                REGISTRATION
-              </h2>
+              <p className="text-[2.5rem] font-semibold text-text-black uppercase">
+                Registration
+              </p>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-8">
+            <div className="grid gap-6 md:grid-cols-2">
               {registrationOptions.map((item, i) => (
-                <div key={i} className="bg-white p-8 rounded-[20px] flex flex-col md:flex-row gap-6 items-start">
-                  <div className={"w-14 h-14 rounded-xl flex items-center justify-center flex-shrink-0 " + item.iconBg + " " + item.iconColor}>
-                    {item.icon}
+                <div key={i} className="bg-white p-6 rounded-[16px] flex flex-col sm:flex-row gap-6 items-center">
+                  <div className="flex flex-row gap-5 items-start flex-1">
+                    <div className={"flex min-h-[52px] min-w-[52px] items-center justify-center rounded-2xl"}>
+                      <Image
+                        src={`/${item.icon}`}
+                        alt="Document"
+                        width={50}
+                        height={50}
+                        style={{ width: "50px", height: "50px" }}
+                      />
+                    </div>
+                    <div className="flex flex-col gap-3">
+                      <p className="font-semibold text-text-grey-dark text-[1.6rem] leading-[1.1] tracking-[0]">{item.title}</p>
+                      <p className="font-['inter'] text-text-grey-dark text-base">
+                        {item.desc}
+                      </p>
+                    </div>
                   </div>
-                  <div className="flex-1 flex flex-col text-left">
-                    <h3 className="font-bold text-text-black text-[24px] lg:text-[28px] mb-4">{item.title}</h3>
-                    <p className="font-['inter'] text-text-grey-dark text-[15px] leading-[1.6]">
-                      {item.desc}
-                    </p>
-                    <button className="mt-6 ml-auto rounded-[8px] bg-[#225139] px-8 py-[10px] text-[14px] font-semibold text-white transition-colors hover:bg-[#173e28]">
-                      See More
-                    </button>
-                  </div>
+                  <button className="font-[inter] sm:ml-auto h-[36px] px-6 bg-text-green text-text-white-broken rounded-xl text-sm font-semibold flex items-center justify-center self-end">
+                    {item.submitText}
+                  </button>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        <section className="bg-[#fbfbfb] py-24 px-[40px] md:px-[80px]">
-          <div className="mx-auto max-w-[1400px]">
-            <p className="font-['inter'] text-[14px] font-bold uppercase tracking-widest text-[#857C00]">
-              ARCHIVE
-            </p>
-            <div className="flex flex-col md:flex-row md:items-end justify-between mb-12" id="past_events">
-              <h2 className="mt-2 text-[42px] md:text-[48px] font-bold text-text-black">
-                Past Events
-              </h2>
-              <Link href="#" className="mt-4 md:mt-0 flex items-center gap-2 font-['inter'] text-[16px] font-semibold text-[#1f4a31] hover:underline">
-                View all past events <span>→</span>
-              </Link>
+
+        <section className="flex bg-text-white-broken px-20 py-30 2xl:justify-center">
+          <div className="flex flex-col max-w-[1400px] gap-20">
+            <div className="flex flex-col">
+              <p className="font-['inter'] text-xl font-semibold uppercase tracking-widest text-text-lime">
+                Archive
+              </p>
+              <div className="flex flex-col md:flex-row md:items-end justify-between" id="past_events">
+                <h2 className="text-[42px] md:text-[48px] font-bold text-text-black">
+                  Past Events
+                </h2>
+                <Link href="#" className="flex items-center gap-2 font-['inter'] text-[16px] font-semibold text-[#1f4a31] hover:underline">
+                  View all past events <span>→</span>
+                </Link>
+              </div>
             </div>
 
-            <div className="flex flex-col">
-              {[
-                { year: "2023", title: "Implementing the Global Biodiversity Framework", location: "Bangkok, Thailand", participants: "450 participants" },
-                { year: "2021", title: "Biodiversity in a Post-Pandemic World", location: "Virtual", participants: "520 participants" },
-                { year: "2019", title: "Science for Biodiversity Action in ASEAN", location: "Manila, Philippines", participants: "289 participants" }
-              ].map((event, i) => (
-                <div key={i} className="flex flex-col sm:flex-row sm:items-center py-6 md:py-8 border-b border-[#e2e8d9] last:border-0 group cursor-pointer gap-4">
-                  <div className="flex-1">
-                    <p className="font-['inter'] text-[14px] font-bold text-[#1f4a31] mb-2">{event.year}</p>
-                    <h3 className="font-['inter'] text-[20px] md:text-[24px] font-normal text-text-black mb-2">{event.title}</h3>
-                    <p className="font-['inter'] text-[16px] text-text-grey-dark">{event.location} . {event.participants}</p>
+            <div className="grid gap-[48px] md:grid-cols-1 md:gap-y-[60px] lg:grid-cols-2 lg:gap-x-[60px] lg:gap-y-[72px]">
+              {pastEvents.map((event, i) => (
+                <div key={i} className="grid gap-4 md:grid-cols-[220px_1fr] md:gap-6 items-start lg:grid-cols-[190px_1fr]">
+                  <div className="relative h-[190px] w-full overflow-hidden rounded-2xl md:h-[150px] md:w-[220px] lg:h-[190px] lg:w-[190px]">
+                    <Image
+                      src={event.image}
+                      alt={event.title}
+                      fill
+                      className="object-cover"
+                    />
                   </div>
-                  <div className="text-text-grey-dark group-hover:text-[#1f4a31] transition-colors ml-auto sm:ml-0">
-                    <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                  <div className="flex flex-col gap-3 lg:h-full lg:max-h-[190px] lg:justify-between">
+                    <p className="font-[inter] font-semibold text-text-green">
+                      {event.date}
+                    </p>
+                    <h3 className="lg:text-xl xl:text-[1.75rem]/[100%] font-semibold text-text-grey-dark">
+                      {event.title}
+                    </h3>
+                    <div className="flex flex-col text-text-grey-dark">
+                      <div className="flex items-center gap-2">
+                        <Image src="/globe.svg" alt="Location" width={16} height={16} />
+                        <p className="font-['inter'] text-[14px]">{event.location}</p>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Image src="/participants.svg" alt="Participants" width={16} height={16} />
+                        <p className="font-['inter'] text-[14px]">{event.participants}</p>
+                      </div>
+                    </div>
                   </div>
                 </div>
               ))}

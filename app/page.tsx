@@ -211,7 +211,7 @@ export default function Home() {
           </div>
         </section>
         <section className="bg-[#e4ebd8] px-20 py-30">
-          <div className="grid w-full gap-10 lg:max-w-[1280px] lg:grid-cols-[minmax(0,1fr)_360px] xl:grid-cols-[minmax(0,1fr)_420px]">
+          <div className="grid w-full gap-10 2xl:max-w-none lg:max-w-[1280px] lg:grid-cols-[minmax(0,1fr)_360px] xl:grid-cols-[minmax(0,1fr)_420px]">
             <div className="flex flex-col justify-center gap-6 md:max-w-[669px]">
               <p className="font-['inter'] text-xl font-semibold uppercase text-text-lime">
                 UPCOMING FORUM

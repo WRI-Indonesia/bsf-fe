@@ -65,7 +65,7 @@ export default function Header() {
   };
   return (
     <header className={`${!isHome ? 'bg-background-base-dark' : ''} absolute top-0 z-20 mx-auto flex w-full items-center justify-between px-[20px] md:px-[40px] py-[11px]`}>
-      <div className="flex items-center min-w-[48px] md:min-w-[56px] lg:min-w-[73px]">
+      <div className="flex gap-2 items-center min-w-[48px] md:min-w-[56px] lg:min-w-[73px]">
         <Image
           src="/bsf_logo.png"
           alt="BSF logo"
@@ -75,6 +75,10 @@ export default function Header() {
           priority
           className="w-12 h-12 md:w-[56px] md:h-[56px] lg:w-[73px] lg:h-[73px]"
         />
+        <div className="flex flex-col font-semibold text-xl leading-tight">
+          <p>Biodiversity</p>
+          <p>Science Forum</p>
+        </div>
       </div>
       <nav className="font-['inter'] hidden min-[940px]:flex items-center gap-20 text-base font-medium ml-auto mr-10">
         <div className="relative">
