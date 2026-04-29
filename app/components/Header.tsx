@@ -21,14 +21,6 @@ const navMenus = [
   {
     label: "Publications",
     href: "/publications",
-    submenu: [
-      { label: "Featured Publications", href: "/publications" },
-      { label: "Proceedings", href: "/publications#proceedings" },
-      { label: "Policy Briefs", href: "/publications#policy-briefs" },
-      { label: "Reports", href: "/publications#reports" },
-      { label: "Scientific Articles", href: "/publications#articles" },
-      { label: "Presentations & Slides", href: "/publications#presentations" },
-    ],
   },
   {
     label: "Media",

@@ -90,7 +90,7 @@ const pastEvents = [
   },
 ];
 
-export default function Events() {
+export default function PastEvents() {
   return (
     <div className="min-h-screen bg-white">
       <Header />
