@@ -1,7 +1,9 @@
 import Image from "next/image";
 import Footer from "./components/Footer";
 import Link from 'next/link';
+import { getPayload } from 'payload';
 import Header from './components/Header';
+import config from '../../payload.config';
 
 const aboutItems = [
   {
@@ -38,8 +40,6 @@ const publications = [
                     Invasive Species Control in SEA Proceedings of \
                     the 5th ASEAN Biodiversity Conference",
     tag: "Policy brief",
-    tagBg: "bg-background-light-primary-second",
-    tagText: "text-text-icons-light-primary",
   },
   {
     title: "Guide to Invasive Species Control in SEA",
@@ -48,8 +48,6 @@ const publications = [
                   Invasive Species Control in SEA Proceedings of the 5th \
                   ASEAN Biodiversity Conference",
     tag: "Proceedings",
-    tagBg: "bg-background-light-success-second",
-    tagText: "text-text-icons-light-success",
   },
   {
     title: "State of Coral Reefs in the Coral Triangle",
@@ -58,8 +56,6 @@ const publications = [
               Invasive Species Control in SEA Proceedings of the 5th \
               ASEAN Biodiversity Conference",
     tag: "Publications",
-    tagBg: "bg-background-light-warning-second",
-    tagText: "text-text-icons-light-warning",
   },
   {
     title: "Proceedings of Mangrove Forests Conservation",
@@ -68,12 +64,57 @@ const publications = [
               Invasive Species Control in SEA Proceedings of the 5th \
               ASEAN Biodiversity Conference",
     tag: "Technical Outputs",
-    tagBg: "bg-background-light-danger-second",
-    tagText: "text-text-icons-light-danger",
   },
 ];
 
-export default function Home() {
+const publicationTags: Record<string, { bg: string; text: string }> = {
+  "Policy brief": {
+    bg: "bg-background-light-primary-second",
+    text: "text-text-icons-light-primary",
+  },
+  Proceedings: {
+    bg: "bg-background-light-success-second",
+    text: "text-text-icons-light-success",
+  },
+  Publications: {
+    bg: "bg-background-light-warning-second",
+    text: "text-text-icons-light-warning",
+  },
+  "Technical Outputs": {
+    bg: "bg-background-light-danger-second",
+    text: "text-text-icons-light-danger",
+  },
+}
+
+type pastPublication = {
+  id?: string;
+  title: string;
+  description: string;
+  tag: string;
+  meta: string;
+} & Record<string, unknown>;
+
+
+async function getPublications() {
+  try {
+    const payload = await getPayload({ config });
+
+    const result = await payload.find({
+      collection: 'latest_publications',
+      limit: 10,
+    });
+
+    return result.docs || [];
+  } catch (error) {
+    console.error("Error fetching publications:", error);
+    return [];
+  }
+}
+
+
+export default async function Home() {
+  const pastPublications = await getPublications();
+
   return (
     <>
       <Header />
@@ -342,38 +383,41 @@ export default function Home() {
             </Link>
           </div>
           <div className="mx-auto mt-8 w-full space-y-4">
-            {publications.map((item) => (
-              <div
-                key={item.title}
-                className="flex flex-col justify-between gap-4 rounded-2xl border border-[#e2e8e2] bg-[#fcfdfb] px-5 py-4"
-              >
-                <div className="space-y-2">
-                  <p className="text-[24px] font-semibold text-text-black">
-                    {item.title}
-                  </p>
-                  <p className="font-['inter'] text-[16px] leading-[24px] tracking-[0px] text-text-grey-mid">
-                    {item.description}
-                  </p>
-                  <p className="font-['inter'] text-[16px] text-text-grey-light">
-                    ACB/NRI, 15 Mar 2024, 15MB
-                  </p>
-                </div>
-                <div className="mt-1 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                  <div className="flex items-center gap-3">
-                    <span
-                      className={`font-['inter'] font-medium border rounded-md px-3 py-1 text-[14px] font-semibold ${item.tagBg} ${item.tagText}`}
-                    >
-                      {item.tag}
-                    </span>
+            {(pastPublications as unknown as pastPublication[]).map((publication: pastPublication) => {
+              return (
+                <div
+                  key={publication.title}
+                  className="flex flex-col justify-between gap-4 rounded-2xl border border-[#e2e8e2] bg-[#fcfdfb] px-5 py-4"
+                >
+                  <div className="space-y-2">
+                    <p className="text-[24px] font-semibold text-text-black">
+                      {publication.title}
+                    </p>
+                    <p className="font-['inter'] text-[16px] leading-[24px] tracking-[0px] text-text-grey-mid">
+                      {publication.description}
+                    </p>
+                    <p className="font-['inter'] text-[16px] text-text-grey-light">
+                      {publication.meta}
+                    </p>
                   </div>
-                  <div className="flex flex-wrap items-center gap-2 sm:ml-auto">
-                    <button className="flex h-[36px] flex-1 sm:flex-none sm:w-[136px] items-center justify-center gap-2 rounded-xl border border-text-green text-sm font-semibold text-text-green min-w-[120px]">
-                      Download <Image src="/download.svg" alt="Download Icon" width={16} height={16} />
-                    </button>
+                  <div className="mt-1 flex flex-col sm:flex-row sm:publications-center justify-between gap-4">
+                    <div className="flex items-center gap-3">
+                      <span
+                        className={`font-['inter'] font-medium border rounded-md px-3 py-1 text-[14px] font-semibold ${publicationTags[publication.tag].bg} ${publicationTags[publication.tag].text}`}
+                      >
+                        {publication.tag}
+                      </span>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-2 sm:ml-auto">
+                      <Link href="/publication.pdf" target="_blank" download>
+                        <button className="flex h-[36px] flex-1 sm:flex-none sm:w-[136px] items-center justify-center gap-2 rounded-xl border border-text-green text-sm font-semibold text-text-green min-w-[120px]">
+                          Download <Image src="/download.svg" alt="Download Icon" width={16} height={16} />
+                        </button>
+                      </Link>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              )},)}
           </div>
         </section>
         <section className="bg-background-base-green-light px-20 py-30">

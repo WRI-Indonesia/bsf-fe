@@ -21,15 +21,14 @@ const latestPublications: CollectionConfig = {
     },
     {
       name: 'tag',
-      type: 'text',
-    },
-    {
-      name: 'tagBg',
-      type: 'text',
-    },
-    {
-      name: 'tagText',
-      type: 'text',
+      type: 'select',
+      required: true,
+      options: [
+        { label: 'Policy brief', value: 'Policy brief' },
+        { label: 'Proceedings', value: 'Proceedings' },
+        { label: 'Publications', value: 'Publications' },
+        { label: 'Technical Outputs', value: 'Technical Outputs' },
+      ],
     },
   ],
 };

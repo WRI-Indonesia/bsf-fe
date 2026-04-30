@@ -1,58 +1,48 @@
 import Image from "next/image";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import { getPayload } from 'payload';
+import config from '../../../payload.config';
 
-export default function Publications() {
-  const PUBLICATIONS_DATA = [
-    {
-      title: "Proceedings of the 5th ASEAN Biodiversity Conference",
-      desc: "Guide to Invasive Species Control in SEA Proceedings of the 5th ASEAN Biodiversity Conference Guide to Invasive Species Control in SEA Proceedings of the 5th ASEAN Biodiversity Conference",
-      meta: "ACB/WRI, 15 Mar 2024, 15MB",
-      tag: "Policy Brief",
-      tagBg: "bg-background-light-primary-second",
-      tagText: "text-text-icons-light-primary",
-    },
-    {
-      title: "Guide to Invasive Species Control in SEA",
-      desc: "Guide to Invasive Species Control in SEA Proceedings of the 5th ASEAN Biodiversity Conference Guide to Invasive Species Control in SEA Proceedings of the 5th ASEAN Biodiversity Conference",
-      meta: "ACB/WRI, 15 Mar 2024, 15MB",
-      tag: "Proceedings",
-      tagBg: "bg-background-light-success-second",
-      tagText: "text-text-icons-light-success",
-    },
-    {
-      title: "State of Coral Reefs in the Coral Triangle",
-      desc: "Guide to Invasive Species Control in SEA Proceedings of the 5th ASEAN Biodiversity Conference Guide to Invasive Species Control in SEA Proceedings of the 5th ASEAN Biodiversity Conference",
-      meta: "ACB/WRI, 15 Mar 2024, 15MB",
-      tag: "Publications",
-      tagBg: "bg-background-light-warning-second",
-      tagText: "text-text-icons-light-warning",
-    },
-    {
-      title: "Proceedings of Mangrove Forests Conservation",
-      desc: "Guide to Invasive Species Control in SEA Proceedings of the 5th ASEAN Biodiversity Conference Guide to Invasive Species Control in SEA Proceedings of the 5th ASEAN Biodiversity Conference",
-      meta: "ACB/WRI, 15 Mar 2024, 15MB",
-      tag: "Technical Outputs",
-      tagBg: "bg-background-light-danger-second",
-      tagText: "text-text-icons-light-danger",
-    },
-    {
-      title: "Guide to Invasive Species Control in SEA",
-      desc: "Guide to Invasive Species Control in SEA Proceedings of the 5th ASEAN Biodiversity Conference Guide to Invasive Species Control in SEA Proceedings of the 5th ASEAN Biodiversity Conference",
-      meta: "ACB/WRI, 15 Mar 2024, 15MB",
-      tag: "Proceedings",
-      tagBg: "bg-background-light-success-second",
-      tagText: "text-text-icons-light-success",
-    },
-    {
-      title: "Proceedings of the 5th ASEAN Biodiversity Conference",
-      desc: "Guide to Invasive Species Control in SEA Proceedings of the 5th ASEAN Biodiversity Conference Guide to Invasive Species Control in SEA Proceedings of the 5th ASEAN Biodiversity Conference",
-      meta: "ACB/WRI, 15 Mar 2024, 15MB",
-      tag: "Policy Brief",
-      tagBg: "bg-background-light-primary-second",
-      tagText: "text-text-icons-light-primary",
-    }
-  ];
+
+async function getPublications() {
+  try {
+    const payload = await getPayload({ config });
+
+    const result = await payload.find({
+      collection: 'latest_publications',
+      limit: 10,
+      sort: 'id',
+    });
+
+    return result.docs || [];
+  } catch (error) {
+    console.error("Error fetching publications:", error);
+    return [];
+  }
+}
+
+const publicationTags: Record<string, { bg: string; text: string }> = {
+  "Policy brief": {
+    bg: "bg-background-light-primary-second",
+    text: "text-text-icons-light-primary",
+  },
+  Proceedings: {
+    bg: "bg-background-light-success-second",
+    text: "text-text-icons-light-success",
+  },
+  Publications: {
+    bg: "bg-background-light-warning-second",
+    text: "text-text-icons-light-warning",
+  },
+  "Technical Outputs": {
+    bg: "bg-background-light-danger-second",
+    text: "text-text-icons-light-danger",
+  },
+}
+
+export default async function Publications() {
+  const PUBLICATIONS_DATA = await getPublications();
 
   const tabs = ["Proceedings", "Policy Brief", "Publications", "Technical Outputs", "Research Reports"];
 
@@ -61,6 +51,7 @@ export default function Publications() {
     { date: "25 Apr 2023", title: "Lorem ipsum dolor sit amet, consectetur adipiscing elit." },
     { date: "25 Apr 2023", title: "Lorem ipsum dolor sit amet, consectetur adipiscing elit." },
   ];
+
 
   return (
     <div className="min-h-screen bg-background-base-grey-light">
@@ -149,13 +140,13 @@ export default function Publications() {
                   >
                     <h3 className="text-[24px] font-semibold text-text-black leading-[1.25]">{pub.title}</h3>
                     <p className="font-['inter'] text-[16px] leading-[24px] tracking-[0px] text-text-grey-mid">
-                      {pub.desc}
+                      {pub.description}
                     </p>
                     <p className="font-['inter'] text-[16px] text-text-grey-light">
                       {pub.meta}
                     </p>
                     <div className="mt-1 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                      <span className={`font-['inter'] font-medium border rounded-md px-3 py-1 text-[14px] font-semibold ${pub.tagBg} ${pub.tagText}`}>
+                      <span className={`font-['inter'] font-medium border rounded-md px-3 py-1 text-[14px] font-semibold ${publicationTags[pub.tag].bg} ${publicationTags[pub.tag].text}`}>
                         {pub.tag}
                       </span>
                       <div className="flex flex-wrap items-center gap-2 sm:ml-auto">
