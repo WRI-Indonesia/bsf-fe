@@ -16,7 +16,7 @@ type pastEvent = {
   location: string;
   participants: string;
   image: pastEventImage;
-} & Record<string, any>;
+} & Record<string, unknown>;
 
 function slugify(value: string) {
   return value
@@ -84,7 +84,7 @@ export default async function PastEvents() {
                 const eventSlug = slugify(event.title || '');
                 const eventImage =
                   event.image && typeof event.image === 'object'
-                    ? `/api/media/file/${(event.image as any).filename}`
+                    ? `/api/media/file/${event.image.filename}`
                     : '/media/cafe.png';
 
                 return (

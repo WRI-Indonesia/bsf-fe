@@ -18,7 +18,7 @@ type PastEvent = {
   participants?: string;
   image?: PastEventImage | string | null;
   article?: unknown;
-} & Record<string, any>;
+} & Record<string, unknown>;
 
 function slugify(value: string) {
   return value
@@ -85,7 +85,7 @@ function extractTextFromRichText(value: unknown): string {
   }
 
   if (typeof value === "object") {
-    const node = value as Record<string, any>;
+    const node = value as Record<string, unknown>;
 
     if (typeof node.text === "string") {
       return node.text;
