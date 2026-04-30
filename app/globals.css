@@ -30,6 +30,7 @@ html {
   --color-background-base-dark: #111A13;
   --color-background-base-green: #469B25;
   --color-background-base-green-light: #C3D2C3;
+  --color-background-base-green-mid: #9BB69B;
   --color-background-base-grey-light: #F6F7F9;
   --color-background-base-lime-light: #E3E7D7;
   --color-background-light-danger-second: #FFEFEE;
@@ -38,6 +39,7 @@ html {
   --color-background-light-warning-second: #FDF6EA;
   --font-sans: var(--font-acumin);
   --font-mono: var(--font-acumin);
+  --color-text-main: #252525;
   --color-text-black: #111A13;
   --color-text-green: #265F44;
   --color-text-green-light: #42AF7B;
