@@ -27,7 +27,7 @@ const navMenus = [
     href: "/media",
     submenu: [
       { label: "Press Releases", href: "/media#press" },
-      { label: "Media Kit", href: "/media#kit" },
+      { label: "Media Kit", href: "/media/kit" },
     ],
   },
 ];
@@ -67,7 +67,7 @@ export default function Header() {
           priority
           className="w-12 h-12 md:w-[56px] md:h-[56px] lg:w-[73px] lg:h-[73px]"
         />
-        <div className="flex flex-col font-semibold text-xl leading-tight">
+        <div className={`flex flex-col font-semibold text-xl leading-tight ${isHome ? 'text-text-green' : 'text-text-white-broken'}`}>
           <p>Biodiversity</p>
           <p>Science Forum</p>
         </div>

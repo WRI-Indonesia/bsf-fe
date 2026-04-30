@@ -64,10 +64,10 @@ export default function Footer() {
                 Media
               </Link>
               <div className="flex flex-col gap-4 font-['inter'] text-sm leading-[1.15] text-[#d8ddd4] sm:gap-5 sm:text-base lg:text-xl">
-                <Link href="/media#press" className="block hover:text-white">
+                <Link href="/media/press" className="block hover:text-white">
                   Press Release
                 </Link>
-                <Link href="/media#kit" className="block hover:text-white">
+                <Link href="/media/kit" className="block hover:text-white">
                   Media Kit
                 </Link>
               </div>
