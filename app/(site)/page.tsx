@@ -5,68 +5,14 @@ import { getPayload } from 'payload';
 import Header from './components/Header';
 import config from '../../payload.config';
 import { cookies } from 'next/headers';
+import { formatDateRange, formatParticipants } from '../../lib/helpers';
 
-const aboutItems = [
-  {
-    title: "Regional Collaboration",
-    text: "Connecting biodiversity science across Southeast Asia and beyond.",
-  },
-  {
-    title: "Multi-Stakeholder",
-    text: "Bridging researchers, policy-makers,\nand practitioners.",
-  },
-  {
-    title: "Evidence-Based",
-    text: "Turning scientific knowledge into\nactionable policy insights.",
-  },
-  {
-    title: "Open Access",
-    text: "Making biodiversity research freely\naccessible to all",
-  },
-];
-
-const keyDates = [
-  { date: "1 Mar 2026", text: "Abstract Submissions Opens" },
-  { date: "23 Mar 2026", text: "Early Bird Registration Deadline" },
-  { date: "15 Apr 2026", text: "Abstract Submissions Closes" },
-  { date: "1 Jun 2026", text: "Program Announcement" },
-  { date: "1 Jun 2026", text: "Abstract Submissions Opens" },
-];
-
-const publications = [
-  {
-    title: "Proceedings of the 5th ASEAN Biodiversity Conference",
-    description: "Guide to Invasive Species Control in SEA Proceedings \
-                    of the 5th ASEAN Biodiversity Conference Guide to  \
-                    Invasive Species Control in SEA Proceedings of \
-                    the 5th ASEAN Biodiversity Conference",
-    tag: "Policy brief",
-  },
-  {
-    title: "Guide to Invasive Species Control in SEA",
-    description: "Guide to Invasive Species Control in SEA Proceedings \
-                  of the 5th ASEAN Biodiversity Conference Guide to \
-                  Invasive Species Control in SEA Proceedings of the 5th \
-                  ASEAN Biodiversity Conference",
-    tag: "Proceedings",
-  },
-  {
-    title: "State of Coral Reefs in the Coral Triangle",
-    description: "Guide to Invasive Species Control in SEA Proceedings \
-              of the 5th ASEAN Biodiversity Conference Guide to \
-              Invasive Species Control in SEA Proceedings of the 5th \
-              ASEAN Biodiversity Conference",
-    tag: "Publications",
-  },
-  {
-    title: "Proceedings of Mangrove Forests Conservation",
-    description: "Guide to Invasive Species Control in SEA Proceedings \
-              of the 5th ASEAN Biodiversity Conference Guide to \
-              Invasive Species Control in SEA Proceedings of the 5th \
-              ASEAN Biodiversity Conference",
-    tag: "Technical Outputs",
-  },
-];
+const iconMap: Record<string, string> = {
+  globe: '/globe.svg',
+  stakeholder: '/stakeholder.svg',
+  book: '/book.svg',
+  bulb: '/bulb.svg',
+};
 
 const publicationTags: Record<string, { bg: string; text: string }> = {
   "Policy brief": {
@@ -95,6 +41,13 @@ type pastPublication = {
   meta: string;
 } & Record<string, unknown>;
 
+type HomepageBox = {
+  id?: string;
+  icon: 'globe' | 'stakeholder' | 'book' | 'bulb';
+  title: string;
+  description: string;
+};
+
 
 async function getPublications(locale: string = 'en') {
   try {
@@ -122,11 +75,11 @@ async function getForum(locale: string = 'en') {
       collection: 'events',
       limit: 10,
       where: {
-        date: {
+        start_date: {
           greater_than: new Date(),
         },
       },
-      sort: 'date',
+      sort: 'start_date',
       locale: locale as 'en' | 'id',
     });
 
@@ -137,6 +90,23 @@ async function getForum(locale: string = 'en') {
   }
 }
 
+async function getHomepageContent(locale: string = 'en') {
+  try {
+    const payload = await getPayload({ config });
+
+    const result = await payload.findGlobal({
+      slug: 'homepage_content',
+      locale: locale as 'en' | 'id',
+      depth: 1,
+    });
+
+    return result;
+  } catch (error) {
+    console.error("Error fetching homepage content:", error);
+    return null;
+  }
+}
+
 
 export default async function Home() {
   const cookieStore = await cookies();
@@ -144,6 +114,28 @@ export default async function Home() {
   
   const pastPublications = await getPublications(locale);
   const upcomingForums = await getForum(locale);
+  const homepageContent = await getHomepageContent(locale);
+
+  const aboutBoxes = (homepageContent?.about_section?.boxes as HomepageBox[]) || [];
+  const aboutLabel = (homepageContent?.about_section as Record<string, unknown>)?.label as string;
+  const aboutTitle = (homepageContent?.about_section as Record<string, unknown>)?.title as string;
+  const aboutDescription = (homepageContent?.about_section as Record<string, unknown>)?.description as string;
+
+  const heroEvent = (homepageContent?.hero_section as Record<string, unknown>)?.featured_event as Record<string, unknown> | undefined;
+  const upcomingForumEvent = (homepageContent?.upcoming_forum_section as Record<string, unknown>)?.featured_event as Record<string, unknown> | undefined;
+
+  const heroSection = homepageContent?.hero_section as Record<string, unknown> | undefined;
+  const heroRegisterCta = heroSection?.register_cta as string || 'Register Now';
+  const heroExploreCta = heroSection?.explore_cta as string || 'Explore Publications';
+
+  const upcomingForumSection = homepageContent?.upcoming_forum_section as Record<string, unknown> | undefined;
+  const upcomingRegisterCta = upcomingForumSection?.register_cta as string || 'Register Now';
+  const upcomingViewProgramCta = upcomingForumSection?.view_program_cta as string || 'View Program';
+
+  const contactLabel = (homepageContent?.contact_section as Record<string, unknown>)?.label as string || 'Contact Us';
+  const contactTitle = (homepageContent?.contact_section as Record<string, unknown>)?.title as string || 'Get in touch with the BSF team';
+  const contactDescription = (homepageContent?.contact_section as Record<string, unknown>)?.description as string || "Whether you're interested in partnerships, have questions about the forum, or want to contribute to biodiversity science, we'd love to hear from you.";
+  const contactItems = ((homepageContent?.contact_section as Record<string, unknown>)?.contact_items as Array<{ id?: string; label: string; value: string }>) || [];
 
   return (
     <>
@@ -175,26 +167,24 @@ export default async function Home() {
                   Upcoming Forum
                 </p>
                 <h3 className="text-[22px] md:text-[32px] lg:text-[38px] font-bold leading-[1.1] tracking-tight text-text-green">
-                  Connecting Biodiversity Science,
-                  Policy, and Action
+                  {heroEvent?.title as string || "Connecting Biodiversity Science, Policy, and Action"}
                 </h3>
                 <div className="flex w-full flex-col sm:flex-row items-center justify-center gap-2 sm:gap-6 rounded-lg bg-background-base-green/20 px-2 sm:px-4 py-2 text-text-green">
                   <div className="flex items-baseline gap-2 whitespace-nowrap">
-                    <span className="text-lg md:text-2xl font-bold leading-none tracking-normal text-text-green">14-19</span>
-                    <span className="font-['inter'] text-xs md:text-base font-normal leading-none tracking-normal text-text-green">June 2026</span>
+                    <span className="text-lg md:text-2xl font-bold leading-none tracking-normal text-text-green">{formatDateRange(heroEvent?.start_date as string, heroEvent?.end_date as string) || "14-19"}</span>
                   </div>
                   <div className="hidden sm:block h-7 w-[1.5px] h-[37px] bg-[#668270] shrink-0" />
                   <div className="flex items-baseline gap-2 whitespace-nowrap">
-                    <span className="text-lg md:text-2xl font-bold leading-none tracking-normal text-text-green">500+</span>
+                    <span className="text-lg md:text-2xl font-bold leading-none tracking-normal text-text-green">{formatParticipants(heroEvent?.participants) || "500+"}</span>
                     <span className="font-['inter'] text-xs md:text-base font-normal leading-none tracking-normal text-text-green">Participants</span>
                   </div>
                 </div>
                 <div className="grid w-full grid-cols-2 gap-3">
                   <button className="font-[inter] h-[36px] flex items-center justify-center rounded-lg border border-outline-green bg-white px-4 py-[10px] text-sm font-semibold text-text-green transition-colors hover:bg-gray-50">
-                    <Link href="/publications">Explore Publications</Link>
+                    <Link href="/publications">{heroExploreCta}</Link>
                   </button>
                   <button className="font-[inter] h-[36px] flex items-center justify-center gap-2 rounded-lg bg-[#1f4a31] px-4 py-[10px] text-sm font-semibold text-white transition-colors hover:bg-[#163824]">
-                    Register Now
+                    {heroRegisterCta}
                     <Image
                       src="/arrow_right.svg"
                       alt="Arrow Right"
@@ -212,70 +202,35 @@ export default async function Home() {
           <div className="mx-auto grid w-full gap-16 lg:grid-cols-[1fr_1.1fr] ">
             <div className="flex flex-col w-full lg:max-w-[636px]">
               <p className="font-['inter'] text-[20px] font-semibold uppercase tracking-wider text-text-lime">
-                ABOUT THE FORUM
+                {aboutLabel}
               </p>
               <div>
                 <h2 className="mt-10 text-[32px] sm:text-[40px] font-semibold leading-[1.2] text-white">
-                  A space for biodiversity science,
-                  <br className="lg:block" />
-                  collaboration, and knowledge exchange.
+                  {aboutTitle}
                 </h2>
                 <p className="mt-2 font-['inter'] font-normal text-[18px] sm:text-[20px] leading-[1.6] text-[#93a299]">
-                  The Biodiversity Science Forum brings together researches,
-                  practitioners, institutions, and decision-makers to strengthen
-                  dialogue, biodiversity conservation across the ASEAN region
+                  {aboutDescription}
                 </p>
               </div>
             </div>
             <div className="grid gap-5 sm:grid-cols-2">
-              {aboutItems.map((item) => (
+              {aboutBoxes.map((box) => (
                 <div
-                  key={item.title}
+                  key={box.id || box.title}
                   className="rounded-[16px] min-h-[121px] flex flex-col justify-center bg-[#3f4a41] p-[24px]"
                 >
                   <div className="flex items-center gap-3">
-                    {item.title === "Regional Collaboration" && (
-                      <Image
-                        src="/globe.svg"
-                        alt="Globe"
-                        width={22}
-                        height={22}
-                        style={{ width: "22px", height: "22px" }}
-                        className="brightness-0 invert"
-                      />
-                    )}
-                    {item.title === "Multi-Stakeholder" && (
-                      <Image
-                        src="/stakeholder.svg"
-                        alt="Multi-Stakeholder"
-                        width={22}
-                        height={22}
-                        style={{ width: "22px", height: "22px" }}
-                        className="brightness-0 invert"
-                      />
-                    )}
-                    {item.title === "Evidence-Based" && (
-                      <Image
-                        src="/book.svg"
-                        alt="Evidence-Based"
-                        width={22}
-                        height={22}
-                        style={{ width: "22px", height: "22px" }}
-                        className="brightness-0 invert"
-                      />
-                    )}
-                    {item.title === "Open Access" && (
-                      <Image
-                        src="/bulb.svg"
-                        alt="Open Access"
-                        width={22}
-                        height={22}
-                        style={{ width: "22px", height: "22px" }}
-                        className="brightness-0 invert"
-                      />                    )}
-                    <h3 className="text-[18px] font-semibold text-white">{item.title}</h3>
+                    <Image
+                      src={iconMap[box.icon] || '/globe.svg'}
+                      alt={box.title}
+                      width={22}
+                      height={22}
+                      style={{ width: "22px", height: "22px" }}
+                      className="brightness-0 invert"
+                    />
+                    <h3 className="text-[18px] font-semibold text-white">{box.title}</h3>
                   </div>
-                  <p className="font-['inter'] mt-2 whitespace-pre-line text-[13px] font-normal leading-[1.6] text-[#AFAFAF]">{item.text}</p>
+                  <p className="font-['inter'] mt-2 whitespace-pre-line text-[13px] font-normal leading-[1.6] text-[#AFAFAF]">{box.description}</p>
                 </div>
               ))}
             </div>
@@ -283,20 +238,20 @@ export default async function Home() {
         </section>
         <section className="bg-[#e4ebd8] px-20 py-30">
           <div className="grid w-full gap-10 2xl:max-w-none lg:max-w-[1280px] lg:grid-cols-[minmax(0,1fr)_360px] xl:grid-cols-[minmax(0,1fr)_420px]">
-            <div className="flex flex-col justify-center gap-6 md:max-w-[669px]">
+            <div className="flex flex-col justify-center gap-6">
               <p className="font-['inter'] text-xl font-semibold uppercase text-text-lime">
                 UPCOMING FORUM
               </p>
               <div className="flex flex-col gap-8">
                 
                 <span className="h-fit text-[2rem] font-semibold leading-[1] tracking-[0] text-text-black sm:text-[2.25rem] lg:text-[2.5rem]">
-                  {upcomingForums[0]?.title || "Implementing the Global Biodiversity Framework"}
+                  {upcomingForumEvent?.title as string || "Implementing the Global Biodiversity Framework"}
                 </span>
                 <p className="font-[inter] text-lg leading-[1.3] tracking-[0] text-[#697d70] sm:text-xl">
-                  {upcomingForums[0]?.description || "The 6th ASEAN Biodiversity Science Forum will focus on the implementation of the Global Biodiversity Framework, fostering collaboration and knowledge exchange to drive biodiversity conservation efforts across the ASEAN region."}
+                  {upcomingForumEvent?.description as string || "The 6th ASEAN Biodiversity Science Forum will focus on the implementation of the Global Biodiversity Framework, fostering collaboration and knowledge exchange to drive biodiversity conservation efforts across the ASEAN region."}
                 </p>
                 <div className="flex flex-wrap gap-5">
-                  <div className="flex h-full w-full items-center gap-3 rounded-[12px] border border-outline-green-light bg-[#c3d4be] p-4 sm:w-auto">
+                  <div className="flex w-full items-center gap-3 rounded-[12px] border border-outline-green-light bg-[#c3d4be] p-4 sm:w-auto">
                     <Image
                       src="/book.svg"
                       alt="Evidence-Based"
@@ -305,14 +260,10 @@ export default async function Home() {
                       style={{ width: "20px", height: "18px" }}
                     />
                     <div className="flex flex-col">
-                      <span className="text-xl font-bold text-text-green lg:text-2xl">{upcomingForums[0]?.date ? new Date(upcomingForums[0].date).toLocaleDateString('en-GB', {
-                          day: '2-digit',
-                          month: 'long',
-                          year: 'numeric',
-                        }) : "10-12 November 2026"}</span>
+                      <span className="text-xl font-bold text-text-green lg:text-2xl">{formatDateRange(upcomingForumEvent?.start_date as string, upcomingForumEvent?.end_date as string) || "10-12 November 2026"}</span>
                     </div>
                   </div>
-                  <div className="flex h-full w-full items-center gap-3 rounded-[12px] border border-outline-green-light bg-[#c3d4be] p-4 sm:w-auto">
+                  <div className="flex w-full items-center gap-3 rounded-[12px] border border-outline-green-light bg-[#c3d4be] p-4 sm:w-auto">
                     <Image
                       src="/book.svg"
                       alt="Location"
@@ -321,10 +272,10 @@ export default async function Home() {
                       style={{ width: "20px", height: "18px" }}
                     />
                     <div className="flex flex-col">
-                      <span className="text-xl font-bold text-text-green lg:text-2xl">Jakarta, Indonesia</span>
+                      <span className="text-xl font-bold text-text-green lg:text-2xl">{upcomingForumEvent?.location as string || "Jakarta, Indonesia"}</span>
                     </div>
                   </div>
-                  <div className="flex h-fit w-full items-center gap-3 rounded-[12px] border border-outline-green-light bg-[#c3d4be] p-4 sm:w-auto">
+                  <div className="flex w-full items-center gap-3 rounded-[12px] border border-outline-green-light bg-[#c3d4be] p-4 sm:w-auto">
                     <Image
                       src="/book.svg"
                       alt="Participants"
@@ -333,14 +284,14 @@ export default async function Home() {
                       style={{ width: "20px", height: "18px" }}
                     />
                     <div className="flex flex-col">
-                      <span className="text-xl font-bold text-text-green lg:text-2xl">500+ Expected</span>
+                      <span className="text-xl font-bold text-text-green lg:text-2xl">{formatParticipants(upcomingForumEvent?.participants) || "500+"} Expected</span>
                       <span className="font-['inter'] font-normal text-text-green">Participants</span>
                     </div>
                   </div>
                 </div>
                 <div className="flex flex-col gap-3 sm:flex-row sm:gap-6">
                   <button className="h-[36px] w-full font-['inter'] flex items-center justify-center gap-[6px] rounded-[8px] bg-[#225139] px-[34px] py-[10px] text-sm font-semibold text-white transition-colors hover:bg-[#173e28] sm:w-auto">
-                    Register Now
+                    {upcomingRegisterCta}
                     <Image
                         src="/arrow_right.svg"
                         alt="Arrow Right"
@@ -350,7 +301,7 @@ export default async function Home() {
                       />
                   </button>
                   <button className="h-[36px] w-full font-['inter'] flex items-center justify-center rounded-[8px] border border-[#225139] bg-white px-[2.5rem] py-[10px] text-sm font-semibold text-text-green transition-colors hover:bg-[#f6f9f5] sm:w-auto">
-                    View Program
+                    {upcomingViewProgramCta}
                   </button>
                 </div>
               </div>
@@ -364,13 +315,7 @@ export default async function Home() {
                   let textColClass = "text-[#173e28]";
                   let textSubClass = "text-[#486e57]";
                   let dotClass = "bg-text-green";
-                  const date = item.date
-                    ? new Date(item.date).toLocaleDateString('en-GB', {
-                        day: '2-digit',
-                        month: 'long',
-                        year: 'numeric',
-                      })
-                    : ''
+                  const date = formatDateRange(item.start_date as string, item.end_date as string)
                   
                   if (index === 1) {
                     textColClass = "text-[#44a877]";
@@ -383,10 +328,10 @@ export default async function Home() {
                   }
                   
                   return (
-                    <div key={(item.date ?? '') + index} className="relative flex gap-4">
+                    <div key={(item.start_date ?? '') + index} className="relative flex gap-4">
                       <div className="relative z-10 mt-[6px] flex flex-col items-center w-[12px]">
                         <span className={`h-[10px] w-[10px] rounded-full flex-shrink-0 ${dotClass}`} />
-                        {index < keyDates.length - 1 ? (
+                        {index < upcomingForums.length - 1 ? (
                           <span className="absolute top-[10px] h-[calc(100%+1.5rem)] w-[1.5px] bg-[#c3cdbe]" />
                         ) : null}
                       </div>
@@ -434,7 +379,11 @@ export default async function Home() {
                       {publication.description}
                     </p>
                     <p className="font-['inter'] text-[16px] text-text-grey-light">
-                      {publication.meta}
+                      {publication.date ? new Date(publication.date).toLocaleDateString('en-GB', {
+                        day: '2-digit',
+                        month: 'short',
+                        year: 'numeric',
+                      }) : publication.source}
                     </p>
                   </div>
                   <div className="mt-1 flex flex-col sm:flex-row sm:publications-center justify-between gap-4">
@@ -461,56 +410,30 @@ export default async function Home() {
           <div className="mx-auto grid w-full gap-[48px] lg:grid-cols-2 xl:grid-cols-[572px_1fr]">
             <div>
               <p className="font-['inter'] text-xl font-semibold uppercase text-text-lime">
-                Contact Us
+                {contactLabel}
               </p>
               <h2 className="mt-4 text-[2.5rem] font-semibold text-text-black">
-                Get in touch with the BSF team
+                {contactTitle}
               </h2>
               <p className="font-['inter'] mt-4 text-xl text-text-grey-mid">
-                Whether you&apos;re interested in partnerships, have questions about 
-                the forum, or want to contribute to biodiversity science, we&apos;d 
-                love to hear from you.
+                {contactDescription}
               </p>
               <div className="mt-10 flex flex-col gap-8 text-text-green">
-                <div className="flex items-center gap-4">
-                  <Image
-                        src="/book.svg"
-                        alt="Email"
-                        width={22}
-                        height={22}
-                        style={{ width: "22px", height: "22px" }}
-                      />
-                  <div>
-                    <p className="font-['inter'] text-lg font-semibold leading-6">Email</p>
-                    <p className="font-['inter'] text-base">contact@bsf-asean.org</p>
+                {contactItems.map((item) => (
+                  <div key={item.id || item.label} className="flex items-center gap-4">
+                    <Image
+                      src="/book.svg"
+                      alt={item.label}
+                      width={22}
+                      height={22}
+                      style={{ width: "22px", height: "22px" }}
+                    />
+                    <div>
+                      <p className="font-['inter'] text-lg font-semibold leading-6">{item.label}</p>
+                      <p className="font-['inter'] text-base whitespace-pre-line">{item.value}</p>
+                    </div>
                   </div>
-                </div>
-                <div className="flex items-center gap-4">
-                  <Image
-                        src="/book.svg"
-                        alt="Address"
-                        width={22}
-                        height={22}
-                        style={{ width: "22px", height: "22px" }}
-                      />
-                  <div>
-                    <p className="font-['inter'] text-lg font-semibold leading-6">Address</p>
-                    <p className="font-['inter'] text-base">ASEAN Centre for Biodiversity<br />Los Banos, Laguna, Philippines</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-4">
-                  <Image
-                        src="/book.svg"
-                        alt="Phone"
-                        width={22}
-                        height={22}
-                        style={{ width: "22px", height: "22px" }}
-                      />
-                  <div>
-                    <p className="font-['inter'] text-lg font-semibold leading-6">Phone</p>
-                    <p className="font-['inter'] text-base">+62 (049) 536-2865</p>
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
             <div className="flex flex-col justify-space-between w-full rounded-2xl font-['Plus_Jakarta_Sans']">

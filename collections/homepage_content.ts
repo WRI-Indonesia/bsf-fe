@@ -1,6 +1,6 @@
-import type { CollectionConfig } from 'payload';
+import type { GlobalConfig } from 'payload';
 
-const homepageContent: CollectionConfig = {
+const homepageContent: GlobalConfig = {
   slug: 'homepage_content',
   access: {
     read: () => true,
@@ -69,6 +69,44 @@ const homepageContent: CollectionConfig = {
           defaultValue: 'The Biodiversity Science Forum brings together researches, practitioners, institutions, and decision-makers to strengthen dialogue, biodiversity conservation across the ASEAN region',
           localized: true,
         },
+        {
+          name: 'boxes',
+          type: 'array',
+          label: 'Feature Boxes',
+          labels: {
+            singular: 'Box',
+            plural: 'Boxes',
+          },
+          fields: [
+            {
+              name: 'icon',
+              type: 'select',
+              label: 'Icon',
+              required: true,
+              options: [
+                { label: 'Globe', value: 'globe' },
+                { label: 'Stakeholder', value: 'stakeholder' },
+                { label: 'Book', value: 'book' },
+                { label: 'Bulb', value: 'bulb' },
+              ],
+              defaultValue: 'globe',
+            },
+            {
+              name: 'title',
+              type: 'text',
+              label: 'Title',
+              required: true,
+              localized: true,
+            },
+            {
+              name: 'description',
+              type: 'textarea',
+              label: 'Description',
+              required: true,
+              localized: true,
+            },
+          ],
+        },
       ],
     },
   {
@@ -81,6 +119,20 @@ const homepageContent: CollectionConfig = {
         type: 'relationship',
         relationTo: 'events',
         label: 'Upcoming Forum Event',
+      },
+      {
+        name: 'register_cta',
+        type: 'text',
+        label: 'Register CTA Text',
+        defaultValue: 'Register Now',
+        localized: true,
+      },
+      {
+        name: 'view_program_cta',
+        type: 'text',
+        label: 'View Program CTA Text',
+        defaultValue: 'View Program',
+        localized: true,
       },
     ]
     },
@@ -140,20 +192,29 @@ const homepageContent: CollectionConfig = {
           localized: true,
         },
         {
-          name: 'email',
-          type: 'text',
-          defaultValue: 'contact@bsf-asean.org',
-        },
-        {
-          name: 'address',
-          type: 'textarea',
-          defaultValue: 'ASEAN Centre for Biodiversity\nLos Banos, Laguna, Philippines',
-          localized: true,
-        },
-        {
-          name: 'phone',
-          type: 'text',
-          defaultValue: '+62 (049) 536-2865',
+          name: 'contact_items',
+          type: 'array',
+          label: 'Contact Items',
+          labels: {
+            singular: 'Contact Item',
+            plural: 'Contact Items',
+          },
+          fields: [
+            {
+              name: 'label',
+              type: 'text',
+              label: 'Label',
+              required: true,
+              localized: true,
+            },
+            {
+              name: 'value',
+              type: 'textarea',
+              label: 'Value',
+              required: true,
+              localized: true,
+            },
+          ],
         },
         {
           name: 'form_name_placeholder',

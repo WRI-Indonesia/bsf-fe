@@ -18,11 +18,18 @@ const latestPublications: CollectionConfig = {
     {
       name: 'description',
       type: 'textarea',
+      required: true,
       localized: true,
     },
     {
-      name: 'meta',
+      name: 'source',
       type: 'text',
+      required: true,
+    },
+    {
+      name: 'date',
+      type: 'date',
+      required: true,
     },
     {
       name: 'tag',

@@ -10,8 +10,16 @@ const events: CollectionConfig = {
   },
   fields: [
     {
-      name: 'date',
+      name: 'start_date',
       type: 'date',
+      required: true,
+      label: 'Start Date',
+    },
+    {
+      name: 'end_date',
+      type: 'date',
+      required: true,
+      label: 'End Date',
     },
     {
       name: 'title',
@@ -42,7 +50,18 @@ const events: CollectionConfig = {
       name: 'description',
       type: 'text',
       localized: true,
-    }
+    },
+    {
+      name: 'show_on_homepage',
+      type: 'checkbox',
+      label: 'Show on Homepage',
+      defaultValue: false,
+    },
+    {
+      name: 'key_date',
+      type: 'date',
+      label: 'Key Date',
+    },
   ],
 }
 

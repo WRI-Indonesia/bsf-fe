@@ -147,7 +147,11 @@ export default async function Publications() {
                       {pub.description}
                     </p>
                     <p className="font-['inter'] text-[16px] text-text-grey-light">
-                      {pub.meta}
+                      {pub.source}                       {pub.date ? new Date(pub.date).toLocaleDateString('en-GB', {
+                        day: '2-digit',
+                        month: 'short',
+                        year: 'numeric',
+                      }) : pub.source} 15MB
                     </p>
                     <div className="mt-1 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                       <span className={`font-['inter'] font-medium border rounded-md px-3 py-1 text-[14px] font-semibold ${publicationTags[pub.tag].bg} ${publicationTags[pub.tag].text}`}>

@@ -16,7 +16,8 @@ export default buildConfig({
   }),
   editor: lexicalEditor({}),
   serverURL: process.env.PAYLOAD_PUBLIC_SERVER_URL || 'http://localhost:3000',
-  collections: [latestPublications, events, media, homepageContent],
+  collections: [latestPublications, events, media],
+  globals: [homepageContent],
   localization: {
     locales: ['en', 'id'],
     defaultLocale: 'en',

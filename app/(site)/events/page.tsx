@@ -360,7 +360,7 @@ export default async function Events() {
                 <h2 className="text-[42px] md:text-[48px] font-bold text-text-black">
                   Past Events
                 </h2>
-                <Link href="#" className="flex items-center gap-2 font-['inter'] text-[16px] font-semibold text-[#1f4a31] hover:underline">
+                <Link href="/events/past_events" className="flex items-center gap-2 font-['inter'] text-[16px] font-semibold text-[#1f4a31] hover:underline">
                   View all past events <span>→</span>
                 </Link>
               </div>

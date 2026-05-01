@@ -36,12 +36,12 @@ async function getPastEvents(locale: string = 'en') {
     const result = await payload.find({
       collection: 'events',
       where: {
-        date: {
+        start_date: {
           less_than: now.toISOString(),
         },
       },
       limit: 10,
-      sort: '-date',
+      sort: '-start_date',
       locale: locale as 'en' | 'id',
     });
 
@@ -107,11 +107,7 @@ export default async function PastEvents() {
                     </div>
                     <div className="flex flex-col gap-3 lg:h-full lg:max-h-[190px] lg:justify-between">
                       <p className="font-[inter] font-semibold text-text-green">
-                        {new Date(event.date).toLocaleDateString('en-GB', {
-                          day: '2-digit',
-                          month: 'long',
-                          year: 'numeric',
-                        })}
+                        {formatDateRange(event.start_date, event.end_date)}
                       </p>
                       <h3 className="lg:text-xl xl:text-[1.75rem]/[100%] font-semibold text-text-grey-dark">
                         {event.title}
@@ -123,7 +119,7 @@ export default async function PastEvents() {
                         </div>
                         <div className="flex items-center gap-2">
                           <Image src="/participants.svg" alt="Participants" width={16} height={16} />
-                          <span className="font-[inter] font-semibold text-text-grey-mid">{event.participants}</span>
+                          <span className="font-[inter] font-semibold text-text-grey-mid">{formatParticipants(event.participants)}</span>
                         </div>
                       </div>
                     </div>

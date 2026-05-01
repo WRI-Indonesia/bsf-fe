@@ -30,40 +30,6 @@ function slugify(value: string) {
     .replace(/^-+|-+$/g, "");
 }
 
-function formatDetailDate(value?: string) {
-  if (!value) {
-    return "";
-  }
-
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) {
-    return value;
-  }
-
-  const day = date.toLocaleDateString("en-GB", { day: "2-digit" });
-  const month = date.toLocaleDateString("en-GB", { month: "short" });
-  const year = date.getFullYear();
-
-  return `${day} ${month} - ${year}`;
-}
-
-function formatListDate(value?: string) {
-  if (!value) {
-    return "";
-  }
-
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) {
-    return value;
-  }
-
-  return date.toLocaleDateString("en-GB", {
-    day: "2-digit",
-    month: "long",
-    year: "numeric",
-  });
-}
-
 function getImageSrc(image?: PastEvent["image"]) {
   if (image && typeof image === "object" && "filename" in image) {
     return `/api/media/file/${image.filename}`;
@@ -120,12 +86,12 @@ async function getPastEventDetail(slug: string, locale: string = 'en') {
   const listResult = await payload.find({
     collection: "events",
     where: {
-      date: {
+      start_date: {
         less_than: now.toISOString(),
       },
     },
     limit: 50,
-    sort: "-date",
+    sort: "-start_date",
     depth: 1,
     locale: locale as 'en' | 'id',
   });
@@ -170,7 +136,7 @@ export default async function PastEventDetail({
   }
 
   const articleText = extractTextFromRichText(event.article).trim();
-  const detailDate = formatDetailDate(event.date);
+  const detailDate = formatDateRange(event.start_date, event.end_date);
   const eventImage = getImageSrc(event.image);
   const related = relatedEvents.slice(0, 3);
   const eventTitle = event.title || "";
@@ -210,7 +176,7 @@ export default async function PastEventDetail({
                       </div>
                       <div className="flex items-center gap-2">
                         <Image src="/participants.svg" alt="Participants" width={16} height={16} />
-                        <span className="font-[inter] font-semibold text-text-grey-mid">{event.participants}</span>
+                        <span className="font-[inter] font-semibold text-text-grey-mid">{formatParticipants(event.participants)}</span>
                       </div>
                     </div>
                   </div>
@@ -249,7 +215,7 @@ export default async function PastEventDetail({
                               <p className="font-[inter] font-semibold text-[#325B53] leading-[100%]">{relatedEvent.title}</p>
                             </div>
                             <div className="flex flex-col text-sm">
-                              <p className="font-[inter] text-text-grey-mid text-sm">{formatListDate(relatedEvent.date)}</p>
+                              <p className="font-[inter] text-text-grey-mid text-sm">{formatDateRange(relatedEvent.start_date, relatedEvent.end_date)}</p>
                               <p className="font-[inter] text-text-grey-mid text-sm">{relatedEvent.location}</p>
                             </div>
                           </div>
