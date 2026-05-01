@@ -5,6 +5,9 @@ const events: CollectionConfig = {
   access: {
     read: () => true,
   },
+  admin: {
+    useAsTitle: 'title',
+  },
   fields: [
     {
       name: 'date',
@@ -14,10 +17,12 @@ const events: CollectionConfig = {
       name: 'title',
       type: 'text',
       required: true,
+      localized: true,
     },
     {
       name: 'location',
       type: 'text',
+      localized: true,
     },
     {
       name: 'participants',
@@ -31,8 +36,14 @@ const events: CollectionConfig = {
     {
       name: 'article',
       type: 'richText',
+      localized: true,
     },
+    {
+      name: 'description',
+      type: 'text',
+      localized: true,
+    }
   ],
-};
+}
 
 export default events;

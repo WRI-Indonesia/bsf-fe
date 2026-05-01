@@ -25,20 +25,35 @@ const navMenus = [
   {
     label: "Media",
     href: "/media",
-    submenu: [
-      { label: "Press Releases", href: "/media#press" },
-      { label: "Media Kit", href: "/media/kit" },
-    ],
   },
 ];
 
-export default function Header() {
+const locales = [
+  { code: 'en', label: 'EN', flag: 'https://flagcdn.com/w20/us.png' },
+  { code: 'id', label: 'ID', flag: 'https://flagcdn.com/w20/id.png' },
+];
+
+export default function Header({ locale = 'en' }: { locale?: string }) {
   const pathname = usePathname();
   const router = useRouter();
   const isHome = pathname === '/';
   const [openMenu, setOpenMenu] = useState<number | null>(null);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [langOpen, setLangOpen] = useState(false);
   const hasSubmenu = (submenu?: { label: string; href: string }[]) => Boolean(submenu?.length);
+
+  const currentLocale = locales.find(l => l.code === locale) || locales[0];
+
+  const switchLanguage = async (langCode: string) => {
+    setLangOpen(false);
+    await fetch('/api/locale', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ locale: langCode }),
+    });
+    router.refresh();
+  };
+
   const handleMenuClick = (
     menu: { href: string; submenu?: { label: string; href: string }[] },
     idx: number,
@@ -87,7 +102,7 @@ export default function Header() {
               aria-controls={hasSubmenu(menu.submenu) ? `submenu-${idx}` : undefined}
             >
               {menu.label}
-              {(menu.label === 'Events' || menu.label === 'Media') &&               
+              {(menu.label === 'Events') &&               
                 <Image
                   src="/dropdown.svg"
                   alt="Dropdown"
@@ -172,22 +187,46 @@ export default function Header() {
         ))}
       </nav>
 
-      <div className="flex items-center gap-3 flex-shrink-0 flex-grow-0">
+      <div className="relative flex items-center gap-3 flex-shrink-0 flex-grow-0">
         <button
           className="flex items-center gap-1 rounded-full border border-[#b7c5b3] bg-white px-3 py-1 text-xs font-semibold text-[#1f3b2c] min-w-0 max-w-[80px] md:max-w-[110px] overflow-x-auto truncate whitespace-nowrap"
           style={{ maxWidth: "110px" }}
+          onClick={() => setLangOpen(!langOpen)}
         >
           <Image
-            src="https://flagcdn.com/w20/us.png"
-            alt="US Flag"
+            src={currentLocale.flag}
+            alt={currentLocale.label}
             className="w-4 h-auto sm:w-5 flex-shrink-0"
             width={20}
             height={20}
             priority
           />
-          <span className="xs:inline truncate">EN</span>
+          <span className="xs:inline truncate">{currentLocale.label}</span>
           <span className="text-[10px] text-text-green sm:text-xs flex-shrink-0">▼</span>
         </button>
+
+        {langOpen && (
+          <div className="absolute right-0 top-full mt-2 w-32 rounded-md bg-white shadow-lg z-50">
+            <div className="py-1">
+              {locales.map((loc) => (
+                <button
+                  key={loc.code}
+                  className={`flex items-center gap-2 w-full px-4 py-2 text-sm hover:bg-[#E6E9D4] ${locale === loc.code ? 'font-bold text-[#265F44]' : 'text-[#325B53]'}`}
+                  onClick={() => switchLanguage(loc.code)}
+                >
+                  <Image
+                    src={loc.flag}
+                    alt={loc.label}
+                    width={20}
+                    height={20}
+                    className="w-5 h-auto"
+                  />
+                  {loc.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </header>
   );

@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import { cookies } from 'next/headers';
 
 const EVENT_DATA = {
   title: "4th Biodiversity Science Forum 2026",
@@ -111,10 +112,13 @@ const registrationOptions = [
   },
 ];
 
-export default function Events() {
+export default async function Events() {
+  const cookieStore = await cookies();
+  const locale = cookieStore.get('locale')?.value || 'en';
+
   return (
     <div className="min-h-screen bg-white">
-      <Header />
+      <Header locale={locale} />
       <main className="w-full">
         <section className="bg-background-base-dark mt-[98px] py-30 overflow-hidden">
           <div className="flex flex-col xl:flex-row px-10 md:px-20 items-stretch gap-30">

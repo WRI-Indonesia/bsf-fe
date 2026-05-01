@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Header from "../../../components/Header";
 import Footer from "../../../components/Footer";
+import { cookies } from 'next/headers';
 
 const pastEvents = [
   {
@@ -97,10 +98,13 @@ Sekretaris Daerah Sorong Selatan Dance Nauw yang memimpin prosesi tersebut menga
 “Pengakuan ini menunjukkan kepada masyarakat setempat dan pemerintah pusat, bahwa komitmen untuk melindungi lingkungan serta memastikan martabat dan kesejahteraan masyarakat adat berjalan beriringan,” kata Dance.\n
 “Kami berharap pengakuan ini dapat memperkuat semangat gotong royong dan kebersamaan dalam mengelola wilayah adat demi kesejahteraan bersama,” ujarnya.`;
 
-export default function PlaceholderPressRelease() {
+export default async function PlaceholderPressRelease() {
+  const cookieStore = await cookies();
+  const locale = cookieStore.get('locale')?.value || 'en';
+
   return (
     <div className="min-h-screen bg-background-base-lime-light">
-      <Header />
+      <Header locale={locale} />
       <main className="flex flex-col 2xl:justify-center">
         <section className="flex flex-col mt-[98px] p-20 pt-30 gap-10 max-w-[1280px] overflow-hidden">
           <nav aria-label="Breadcrumb" className="mt-4 mb-6 flex items-center gap-5 text-sm text-text-grey-dark">

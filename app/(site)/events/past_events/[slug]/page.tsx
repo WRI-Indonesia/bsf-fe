@@ -5,6 +5,7 @@ import Header from "../../../components/Header";
 import Footer from "../../../components/Footer";
 import { getPayload } from "payload";
 import config from "../../../../../payload.config";
+import { cookies } from 'next/headers';
 
 type PastEventImage = {
   filename: string;
@@ -72,6 +73,7 @@ function getImageSrc(image?: PastEvent["image"]) {
 }
 
 function extractTextFromRichText(value: unknown): string {
+  console.log(value)
   if (!value) {
     return "";
   }
@@ -111,7 +113,7 @@ function extractTextFromRichText(value: unknown): string {
   return "";
 }
 
-async function getPastEventDetail(slug: string) {
+async function getPastEventDetail(slug: string, locale: string = 'en') {
   const payload = await getPayload({ config });
   const now = new Date();
 
@@ -125,6 +127,7 @@ async function getPastEventDetail(slug: string) {
     limit: 50,
     sort: "-date",
     depth: 1,
+    locale: locale as 'en' | 'id',
   });
 
   const pastEvents = (listResult.docs || []) as PastEvent[];
@@ -143,6 +146,7 @@ async function getPastEventDetail(slug: string) {
     collection: "events",
     id: matchedEvent.id,
     depth: 1,
+    locale: locale as 'en' | 'id',
   })) as PastEvent | null;
 
   return {
@@ -157,7 +161,9 @@ export default async function PastEventDetail({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const { event, relatedEvents } = await getPastEventDetail(slug);
+  const cookieStore = await cookies();
+  const locale = cookieStore.get('locale')?.value || 'en';
+  const { event, relatedEvents } = await getPastEventDetail(slug, locale);
 
   if (!event) {
     notFound();
@@ -171,7 +177,7 @@ export default async function PastEventDetail({
 
   return (
     <div className="min-h-screen bg-background-base-lime-light">
-      <Header />
+      <Header locale={locale} />
       <main className="flex flex-col 2xl:justify-center gap-10">
         <section className="flex flex-col mt-[98px] px-20 pt-30 gap-10 max-w-[1280px] overflow-hidden">
           <nav aria-label="Breadcrumb" className="mt-4 mb-6 flex items-center gap-5 text-sm text-text-grey-dark">

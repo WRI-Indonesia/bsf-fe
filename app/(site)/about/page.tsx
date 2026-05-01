@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import { cookies } from 'next/headers';
 
 const ABOUT_DATA = {
   title: "Advancing biodiversity science through regional collaboration",
@@ -31,10 +32,13 @@ const experts = [
   { name: "Morgan John", role: "CEO", img: "/about/expert_4.png", desc: "With his expertise in digital marketing channels and data analytics, Michael consistently helps our SaaS company succeed." },
 ];
 
-export default function About() {
+export default async function About() {
+  const cookieStore = await cookies();
+  const locale = cookieStore.get('locale')?.value || 'en';
+
   return (
     <div className="min-h-screen bg-white">
-      <Header />
+      <Header locale={locale} />
       <main className="w-full">
         <section className="bg-background-base-lime-light mt-[98px] py-30 overflow-hidden">
           <div className="flex flex-col xl:flex-row px-10 md:px-20 items-stretch gap-30">

@@ -3,9 +3,10 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { getPayload } from 'payload';
 import config from '../../../payload.config';
+import { cookies } from 'next/headers';
 
 
-async function getPublications() {
+async function getPublications(locale: string = 'en') {
   try {
     const payload = await getPayload({ config });
 
@@ -13,6 +14,7 @@ async function getPublications() {
       collection: 'latest_publications',
       limit: 10,
       sort: 'id',
+      locale: locale as 'en' | 'id',
     });
 
     return result.docs || [];
@@ -42,7 +44,9 @@ const publicationTags: Record<string, { bg: string; text: string }> = {
 }
 
 export default async function Publications() {
-  const PUBLICATIONS_DATA = await getPublications();
+  const cookieStore = await cookies();
+  const locale = cookieStore.get('locale')?.value || 'en';
+  const PUBLICATIONS_DATA = await getPublications(locale);
 
   const tabs = ["Proceedings", "Policy Brief", "Publications", "Technical Outputs", "Research Reports"];
 
@@ -55,7 +59,7 @@ export default async function Publications() {
 
   return (
     <div className="min-h-screen bg-background-base-grey-light">
-      <Header />
+      <Header locale={locale} />
 
       <main className="w-full relative z-0">
         <section className="bg-background-base-lime-light mt-[98px] px-20 py-30">

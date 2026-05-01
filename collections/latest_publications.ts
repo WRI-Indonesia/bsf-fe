@@ -5,15 +5,20 @@ const latestPublications: CollectionConfig = {
   access: {
     read: () => true,
   },
+  admin: {
+    useAsTitle: 'title',
+  },
   fields: [
     {
       name: 'title',
       type: 'text',
       required: true,
+      localized: true,
     },
     {
       name: 'description',
       type: 'textarea',
+      localized: true,
     },
     {
       name: 'meta',
@@ -31,6 +36,6 @@ const latestPublications: CollectionConfig = {
       ],
     },
   ],
-};
+}
 
-export default latestPublications;
+export  default  latestPublications ;

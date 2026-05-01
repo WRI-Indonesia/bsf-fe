@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { getPayload } from 'payload';
 import Header from './components/Header';
 import config from '../../payload.config';
+import { cookies } from 'next/headers';
 
 const aboutItems = [
   {
@@ -95,13 +96,15 @@ type pastPublication = {
 } & Record<string, unknown>;
 
 
-async function getPublications() {
+async function getPublications(locale: string = 'en') {
   try {
     const payload = await getPayload({ config });
 
     const result = await payload.find({
       collection: 'latest_publications',
       limit: 10,
+      sort: 'id',
+      locale: locale as 'en' | 'id',
     });
 
     return result.docs || [];
@@ -111,13 +114,40 @@ async function getPublications() {
   }
 }
 
+async function getForum(locale: string = 'en') {
+  try {
+    const payload = await getPayload({ config });
+
+    const result = await payload.find({
+      collection: 'events',
+      limit: 10,
+      where: {
+        date: {
+          greater_than: new Date(),
+        },
+      },
+      sort: 'date',
+      locale: locale as 'en' | 'id',
+    });
+
+    return result.docs || [];
+  } catch (error) {
+    console.error("Error fetching forum events:", error);
+    return [];
+  }
+}
+
 
 export default async function Home() {
-  const pastPublications = await getPublications();
+  const cookieStore = await cookies();
+  const locale = cookieStore.get('locale')?.value || 'en';
+  
+  const pastPublications = await getPublications(locale);
+  const upcomingForums = await getForum(locale);
 
   return (
     <>
-      <Header />
+      <Header locale={locale} />
       <main className="w-full">
         <section
           className="relative overflow-hidden"
@@ -258,17 +288,15 @@ export default async function Home() {
                 UPCOMING FORUM
               </p>
               <div className="flex flex-col gap-8">
+                
                 <span className="h-fit text-[2rem] font-semibold leading-[1] tracking-[0] text-text-black sm:text-[2.25rem] lg:text-[2.5rem]">
-                  ASEAN Biodiversity Science Forum 2026
+                  {upcomingForums[0]?.title || "Implementing the Global Biodiversity Framework"}
                 </span>
                 <p className="font-[inter] text-lg leading-[1.3] tracking-[0] text-[#697d70] sm:text-xl">
-                  Join leading scientists, policy experts, and conservation
-                  practitioners for five days of keynotes, sessions, and
-                  collaborative workshops on the future of biodiversity in
-                  Southeast Asia.
+                  {upcomingForums[0]?.description || "The 6th ASEAN Biodiversity Science Forum will focus on the implementation of the Global Biodiversity Framework, fostering collaboration and knowledge exchange to drive biodiversity conservation efforts across the ASEAN region."}
                 </p>
                 <div className="flex flex-wrap gap-5">
-                  <div className="flex h-fit w-full items-center gap-3 rounded-[12px] border border-outline-green-light bg-[#c3d4be] p-4 sm:w-auto">
+                  <div className="flex h-full w-full items-center gap-3 rounded-[12px] border border-outline-green-light bg-[#c3d4be] p-4 sm:w-auto">
                     <Image
                       src="/book.svg"
                       alt="Evidence-Based"
@@ -277,11 +305,14 @@ export default async function Home() {
                       style={{ width: "20px", height: "18px" }}
                     />
                     <div className="flex flex-col">
-                      <span className="text-xl font-bold text-text-green lg:text-2xl">14-19 June 2026</span>
-                      <span className="font-['inter'] font-normal text-text-green">5 Days Event</span>
+                      <span className="text-xl font-bold text-text-green lg:text-2xl">{upcomingForums[0]?.date ? new Date(upcomingForums[0].date).toLocaleDateString('en-GB', {
+                          day: '2-digit',
+                          month: 'long',
+                          year: 'numeric',
+                        }) : "10-12 November 2026"}</span>
                     </div>
                   </div>
-                  <div className="flex h-fit w-full items-center gap-3 rounded-[12px] border border-outline-green-light bg-[#c3d4be] p-4 sm:w-auto">
+                  <div className="flex h-full w-full items-center gap-3 rounded-[12px] border border-outline-green-light bg-[#c3d4be] p-4 sm:w-auto">
                     <Image
                       src="/book.svg"
                       alt="Location"
@@ -291,7 +322,6 @@ export default async function Home() {
                     />
                     <div className="flex flex-col">
                       <span className="text-xl font-bold text-text-green lg:text-2xl">Jakarta, Indonesia</span>
-                        <span className="font-['inter'] font-normal text-text-green">ASEAN HQ</span>
                     </div>
                   </div>
                   <div className="flex h-fit w-full items-center gap-3 rounded-[12px] border border-outline-green-light bg-[#c3d4be] p-4 sm:w-auto">
@@ -330,10 +360,17 @@ export default async function Home() {
                 KEY DATES
               </p>
               <div className="mt-6 space-y-6">
-                {keyDates.map((item, index) => {
+                {upcomingForums.map((item, index) => {
                   let textColClass = "text-[#173e28]";
                   let textSubClass = "text-[#486e57]";
                   let dotClass = "bg-text-green";
+                  const date = item.date
+                    ? new Date(item.date).toLocaleDateString('en-GB', {
+                        day: '2-digit',
+                        month: 'long',
+                        year: 'numeric',
+                      })
+                    : ''
                   
                   if (index === 1) {
                     textColClass = "text-[#44a877]";
@@ -346,7 +383,7 @@ export default async function Home() {
                   }
                   
                   return (
-                    <div key={item.date + index} className="relative flex gap-4">
+                    <div key={(item.date ?? '') + index} className="relative flex gap-4">
                       <div className="relative z-10 mt-[6px] flex flex-col items-center w-[12px]">
                         <span className={`h-[10px] w-[10px] rounded-full flex-shrink-0 ${dotClass}`} />
                         {index < keyDates.length - 1 ? (
@@ -355,10 +392,10 @@ export default async function Home() {
                       </div>
                       <div className="relative -top-[1px] flex flex-col gap-1">
                         <p className={`font-['inter'] text-[13px] tracking-wide font-light leading-none ${textColClass}`}>
-                          {item.date}
+                          {date}
                         </p>
                         <p className={`font-['inter'] text-base font-normal leading-tight ${textSubClass}`}>
-                          {item.text}
+                          {item.title}
                         </p>
                       </div>
                     </div>
@@ -386,7 +423,7 @@ export default async function Home() {
             {(pastPublications as unknown as pastPublication[]).map((publication: pastPublication) => {
               return (
                 <div
-                  key={publication.title}
+                  key={publication.id}
                   className="flex flex-col justify-between gap-4 rounded-2xl border border-[#e2e8e2] bg-[#fcfdfb] px-5 py-4"
                 >
                   <div className="space-y-2">

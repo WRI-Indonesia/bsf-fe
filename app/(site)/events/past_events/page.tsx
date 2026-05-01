@@ -4,6 +4,7 @@ import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import { getPayload } from 'payload';
 import config from '../../../../payload.config';
+import { cookies } from 'next/headers';
 
 type pastEventImage = {
   filename: string;
@@ -27,7 +28,7 @@ function slugify(value: string) {
     .replace(/^-+|-+$/g, '');
 }
 
-async function getPastEvents() {
+async function getPastEvents(locale: string = 'en') {
   try {
     const payload = await getPayload({ config });
     const now = new Date();
@@ -41,6 +42,7 @@ async function getPastEvents() {
       },
       limit: 10,
       sort: '-date',
+      locale: locale as 'en' | 'id',
     });
 
     console.log(result.docs)
@@ -53,11 +55,13 @@ async function getPastEvents() {
 
 
 export default async function PastEvents() {
-  const pastEvents = await getPastEvents();
+  const cookieStore = await cookies();
+  const locale = cookieStore.get('locale')?.value || 'en';
+  const pastEvents = await getPastEvents(locale);
 
   return (
     <div className="min-h-screen bg-background-base-lime-light">
-      <Header />
+      <Header locale={locale} />
       <main className="w-full flex flex-col 2xl:justify-center">
         <section className="flex flex-col mt-[98px] p-20 pt-30 gap-10 max-w-[1280px] mx-auto overflow-hidden">
           <nav aria-label="Breadcrumb" className="mt-4 mb-6 flex items-center gap-5 text-sm text-text-grey-dark">
