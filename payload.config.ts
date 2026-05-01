@@ -5,6 +5,7 @@ import latestPublications from './collections/latest_publications';
 import events from './collections/events';
 import media from './collections/media';
 import homepageContent from './collections/homepage_content';
+import aboutContent from './collections/about_content';
 
 export default buildConfig({
   secret: process.env.PAYLOAD_SECRET || 'SECRET_KEY',
@@ -17,7 +18,7 @@ export default buildConfig({
   editor: lexicalEditor({}),
   serverURL: process.env.PAYLOAD_PUBLIC_SERVER_URL || 'http://localhost:3000',
   collections: [latestPublications, events, media],
-  globals: [homepageContent],
+  globals: [homepageContent, aboutContent],
   localization: {
     locales: ['en', 'id'],
     defaultLocale: 'en',
