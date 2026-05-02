@@ -4,10 +4,13 @@ import { lexicalEditor } from '@payloadcms/richtext-lexical';
 import latestPublications from './collections/latest_publications';
 import events from './collections/events';
 import media from './collections/media';
+import albumMedia from './collections/album_media';
+import pressMedia from './collections/press_media';
 import homepageContent from './collections/homepage_content';
 import aboutContent from './collections/about_content';
 import eventsContent from './collections/events_content';
 import publicationsContent from './collections/publications_content';
+import mediaContent from './collections/media_content';
 
 export default buildConfig({
   secret: process.env.PAYLOAD_SECRET || 'SECRET_KEY',
@@ -19,8 +22,8 @@ export default buildConfig({
   }),
   editor: lexicalEditor({}),
   serverURL: process.env.PAYLOAD_PUBLIC_SERVER_URL || 'http://localhost:3000',
-  collections: [latestPublications, events, media],
-  globals: [homepageContent, aboutContent, eventsContent, publicationsContent],
+  collections: [latestPublications, events, media, albumMedia, pressMedia],
+  globals: [homepageContent, aboutContent, eventsContent, publicationsContent, mediaContent],
   localization: {
     locales: ['en', 'id'],
     defaultLocale: 'en',

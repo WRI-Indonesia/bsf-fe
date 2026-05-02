@@ -76,7 +76,7 @@ const aboutContent: GlobalConfig = {
           name: 'read_more_text',
           type: 'text',
           label: 'Read More Text',
-          defaultValue: 'Read full mission statement →',
+          defaultValue: 'Read full mission statement',
           localized: true,
         },
         {

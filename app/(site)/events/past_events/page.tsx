@@ -122,13 +122,13 @@ export default async function PastEvents() {
                       <p className="font-[inter] font-semibold text-text-green">
                         {formatDateRange(event.start_date, event.end_date)}
                       </p>
-                      <h3 className="lg:text-xl xl:text-[1.75rem]/[100%] font-semibold text-text-grey-dark">
+                      <h3 className="lg:text-xl xl:text-[1.75rem]/[100%] font-semibold text-text-grey-dark line-clamp-2">
                         {event.title}
                       </h3>
                       <div className="flex flex-col text-text-grey-dark">
                         <div className="flex items-center gap-2">
                           <Image src="/location.png" alt="Location" width={16} height={16} />
-                          <span className="font-[inter] font-semibold text-text-grey-mid">{event.location}</span>
+                          <span className="font-[inter] font-semibold text-text-grey-mid truncate">{event.location}</span>
                         </div>
                         <div className="flex items-center gap-2">
                           <Image src="/participants.svg" alt="Participants" width={16} height={16} />

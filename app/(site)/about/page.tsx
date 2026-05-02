@@ -79,7 +79,7 @@ export default async function About() {
   const missionLabel = getSectionField(missionSection, 'label', 'MISSION & OBJECTIVES');
   const missionTitle = getSectionField(missionSection, 'title', 'Bridging science and policy for biodiversity action');
   const missionDescription = getSectionField(missionSection, 'description', '');
-  const missionReadMore = getSectionField(missionSection, 'read_more_text', 'Read full mission statement →');
+  const missionReadMore = getSectionField(missionSection, 'read_more_text', 'Read full mission statement');
   const objectives = getSectionArray<Objective>(missionSection, 'objectives');
 
   const milestonesSection = aboutContent?.milestones_section as Record<string, unknown> | undefined;

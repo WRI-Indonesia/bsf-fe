@@ -469,13 +469,13 @@ export default async function Events() {
                       <p className="font-[inter] font-semibold text-text-green">
                         {eventDate}
                       </p>
-                      <h3 className="lg:text-xl xl:text-[1.75rem]/[100%] font-semibold text-text-grey-dark">
+                      <h3 className="lg:text-xl xl:text-[1.75rem]/[100%] font-semibold text-text-grey-dark line-clamp-2">
                         {event.title as string}
                       </h3>
                       <div className="flex flex-col text-text-grey-dark">
                         <div className="flex items-center gap-2">
                           <Image alt="Location" src="/globe.svg" width={16} height={16} />
-                          <p className="font-['inter'] text-[14px]">{event.location as string}</p>
+                          <p className="font-['inter'] text-[14px] truncate">{event.location as string}</p>
                         </div>
                         <div className="flex items-center gap-2">
                           <Image alt="Participants" src="/participants.svg" width={16} height={16} />
