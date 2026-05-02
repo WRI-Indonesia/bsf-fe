@@ -22,46 +22,32 @@ const latestPublications: CollectionConfig = {
   },
   hooks: {
     beforeChange: [
-      ({ data, req }) => {
+      async ({ data, req, operation }) => {
         if (data?.file) {
-          // When a file is uploaded directly via the API
-          const mimeType = data.file.mimeType;
-          data.file_type = getFileTypeFromMime(mimeType);
-        } else if (data?.file && typeof data.file === 'number') {
-          // If file is an existing media ID, we need to look it up
-          // This will be handled by the afterRead or we can fetch it
+          let mimeType: string | undefined | null = null;
+
+          if (typeof data.file === 'object' && data.file !== null) {
+            const fileData = data.file as Record<string, unknown>;
+            mimeType = fileData.mimeType as string | undefined;
+          } else if (typeof data.file === 'number' && req.payload) {
+            try {
+              const mediaDoc = await req.payload.findByID({
+                collection: 'media',
+                id: data.file,
+              });
+              mimeType = mediaDoc?.mimeType as string | undefined;
+            } catch (e) {
+            }
+          }
+
+          if (mimeType) {
+            data.file_type = getFileTypeFromMime(mimeType);
+          }
         }
         return data;
       },
     ],
-    afterChange: [
-      async ({ doc, req }) => {
-        // If the file is a media relation (ID), fetch its mime type
-        if (doc.file && typeof doc.file === 'number' && req.payload) {
-          try {
-            const mediaDoc = await req.payload.findByID({
-              collection: 'media',
-              id: doc.file,
-            });
-            if (mediaDoc?.mimeType) {
-              const fileType = getFileTypeFromMime(mediaDoc.mimeType);
-              if (fileType !== doc.file_type) {
-                await req.payload.update({
-                  collection: 'latest_publications',
-                  id: doc.id,
-                  data: {
-                    file_type: fileType,
-                  },
-                });
-              }
-            }
-          } catch (e) {
-            // Silently fail - file type will remain as-is
-          }
-        }
-        return doc;
-      },
-    ],
+    afterChange: [],
   },
   fields: [
     {
