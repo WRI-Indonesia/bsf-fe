@@ -58,9 +58,24 @@ const events: CollectionConfig = {
       defaultValue: false,
     },
     {
-      name: 'key_date',
-      type: 'date',
-      label: 'Key Date',
+      name: 'key_dates',
+      type: 'array',
+      label: 'Key Dates',
+      fields: [
+        {
+          name: 'date',
+          type: 'date',
+          required: true,
+          label: 'Date',
+        },
+        {
+          name: 'label',
+          type: 'text',
+          required: true,
+          label: 'Label',
+          localized: true,
+        },
+      ],
     },
   ],
 }

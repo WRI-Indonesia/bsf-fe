@@ -71,11 +71,15 @@ async function getKeyDates(locale: string = 'en') {
       collection: 'events',
       limit: 10,
       where: {
-        key_date: {
-          not_equals: null,
-        },
+        and: [
+          {
+            key_dates: {
+              exists: true,
+            },
+          },
+        ],
       },
-      sort: 'key_date',
+      sort: 'key_dates.date',
       locale: locale as 'en' | 'id',
     });
     return result.docs || [];
@@ -101,7 +105,7 @@ async function getPastEvents(locale: string = 'en') {
             },
           },
           {
-            key_date: {
+            key_dates: {
               exists: false,
             },
           },
@@ -253,27 +257,30 @@ export default async function Events() {
               </p>
             </div>
             <div className="w-full grid gap-6 sm:grid-cols-2 lg:grid-cols-5 2xl:grid-cols-5">
-              {keyDates.map((item, i) => {
-                const keyDate = item.key_date ? new Date(item.key_date as string).toLocaleDateString('en-GB', {
-                  day: '2-digit',
-                  month: 'long',
-                  year: 'numeric',
-                }) : '';
-                return (
-                  <div key={item.id || i} className="flex flex-col items-center justify-center text-center p-6 rounded-3xl border border-outline-grey-light gap-3 bg-background-base-grey-light">
-                    <Image
-                      src="/book.svg"
-                      alt="Important Date"
-                      width={24}
-                      height={38}
-                      style={{ width: "24px", height: "38px" }}
-                    />
-                    <div className="flex flex-col gap-3">
-                      <p className="font-semibold text-lg text-text-black">{keyDate}</p>
-                      <p className="font-['inter'] text-base font-normal leading-[100%] text-text-grey-dark">{item.title as string}</p>
+              {keyDates.flatMap((item) => {
+                const keyDatesArray = (item.key_dates as Array<{ date: string; label: string }>) || [];
+                return keyDatesArray.map((kd, i) => {
+                  const formattedDate = kd.date ? new Date(kd.date).toLocaleDateString('en-GB', {
+                    day: '2-digit',
+                    month: 'long',
+                    year: 'numeric',
+                  }) : '';
+                  return (
+                    <div key={`${item.id}-${i}`} className="flex flex-col items-center justify-center text-center p-6 rounded-3xl border border-outline-grey-light gap-3 bg-background-base-grey-light">
+                      <Image
+                        src="/book.svg"
+                        alt="Important Date"
+                        width={24}
+                        height={38}
+                        style={{ width: "24px", height: "38px" }}
+                      />
+                      <div className="flex flex-col gap-3">
+                        <p className="font-semibold text-lg text-text-black">{formattedDate}</p>
+                        <p className="font-['inter'] text-base font-normal leading-[100%] text-text-grey-dark">{kd.label}</p>
+                      </div>
                     </div>
-                  </div>
                 );
+                });
               })}
             </div>
           </div>

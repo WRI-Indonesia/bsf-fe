@@ -74,9 +74,34 @@ async function getForum(locale: string = 'en') {
   try {
     const payload = await getPayload({ config });
 
+    const featuredResult = await payload.find({
+      collection: 'events',
+      limit: 1,
+      where: {
+        and: [
+          {
+            start_date: {
+              greater_than: new Date(),
+            },
+          },
+          {
+            show_on_homepage: {
+              equals: true,
+            },
+          },
+        ],
+      },
+      sort: 'start_date',
+      locale: locale as 'en' | 'id',
+    });
+
+    if (featuredResult.docs.length > 0) {
+      return featuredResult.docs;
+    }
+
     const result = await payload.find({
       collection: 'events',
-      limit: 10,
+      limit: 1,
       where: {
         start_date: {
           greater_than: new Date(),

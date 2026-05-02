@@ -204,7 +204,13 @@ export interface Event {
   } | null;
   description?: string | null;
   show_on_homepage?: boolean | null;
-  key_date?: string | null;
+  key_dates?:
+    | {
+        date: string;
+        label: string;
+        id?: string | null;
+      }[]
+    | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -410,7 +416,13 @@ export interface EventsSelect<T extends boolean = true> {
   article?: T;
   description?: T;
   show_on_homepage?: T;
-  key_date?: T;
+  key_dates?:
+    | T
+    | {
+        date?: T;
+        label?: T;
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }
