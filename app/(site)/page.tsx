@@ -363,20 +363,18 @@ export default async function Home() {
                     let dotClass = "bg-text-green";
                     
                     if (isPast) {
-                      textColClass = "text-[#a4aba1]";
-                      textSubClass = "text-[#a4aba1]";
-                      dotClass = "bg-text-grey-light";
+                      textColClass = "text-text-green";
+                      textSubClass = "text-text-green";
+                      dotClass = "bg-text-green";
                     } else if (isToday) {
-                      textColClass = "text-[#44a877]";
-                      textSubClass = "text-[#44a877]";
+                      textColClass = "text-text-green-light";
+                      textSubClass = "text-text-green-light";
                       dotClass = "bg-text-green ring-[3px] ring-text-green-light ring-offset-[#e4ebd8]";
+                    } else if (isFuture) {
+                      textColClass = "text-text-grey-light";
+                      textSubClass = "text-text-grey-light";
+                      dotClass = "bg-text-grey-light";
                     }
-                    
-                    const formattedDate = kd.date ? new Date(kd.date).toLocaleDateString('en-GB', {
-                      day: '2-digit',
-                      month: 'long',
-                      year: 'numeric',
-                    }) : '';
                     
                     return (
                       <div key={index} className="relative flex gap-4">
