@@ -70,6 +70,8 @@ export interface Config {
     latest_publications: LatestPublication;
     events: Event;
     media: Media;
+    album_media: AlbumMedia;
+    press_media: PressMedia;
     'payload-kv': PayloadKv;
     users: User;
     'payload-locked-documents': PayloadLockedDocument;
@@ -81,6 +83,8 @@ export interface Config {
     latest_publications: LatestPublicationsSelect<false> | LatestPublicationsSelect<true>;
     events: EventsSelect<false> | EventsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    album_media: AlbumMediaSelect<false> | AlbumMediaSelect<true>;
+    press_media: PressMediaSelect<false> | PressMediaSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -90,10 +94,22 @@ export interface Config {
   db: {
     defaultIDType: number;
   };
-  fallbackLocale: null;
-  globals: {};
-  globalsSelect: {};
-  locale: null;
+  fallbackLocale: ('false' | 'none' | 'null') | false | null | ('en' | 'id') | ('en' | 'id')[];
+  globals: {
+    homepage_content: HomepageContent;
+    about_content: AboutContent;
+    events_content: EventsContent;
+    publications_content: PublicationsContent;
+    media_content: MediaContent;
+  };
+  globalsSelect: {
+    homepage_content: HomepageContentSelect<false> | HomepageContentSelect<true>;
+    about_content: AboutContentSelect<false> | AboutContentSelect<true>;
+    events_content: EventsContentSelect<false> | EventsContentSelect<true>;
+    publications_content: PublicationsContentSelect<false> | PublicationsContentSelect<true>;
+    media_content: MediaContentSelect<false> | MediaContentSelect<true>;
+  };
+  locale: 'en' | 'id';
   widgets: {
     collections: CollectionsWidget;
   };
@@ -128,40 +144,15 @@ export interface UserAuthOperations {
 export interface LatestPublication {
   id: number;
   title: string;
-  description?: string | null;
-  meta?: string | null;
+  description: string;
+  source: string;
+  date: string;
   tag: 'Policy brief' | 'Proceedings' | 'Publications' | 'Technical Outputs';
-  file_type?: string | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "events".
- */
-export interface Event {
-  id: number;
-  date?: string | null;
-  title: string;
-  location?: string | null;
-  participants?: string | null;
-  image?: (number | null) | Media;
-  article?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  description?: string | null;
+  file: number | Media;
+  /**
+   * Automatically detected from the uploaded file
+   */
+  file_type: string;
   updatedAt: string;
   createdAt: string;
 }
@@ -183,6 +174,97 @@ export interface Media {
   height?: number | null;
   focalX?: number | null;
   focalY?: number | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "events".
+ */
+export interface Event {
+  id: number;
+  start_date: string;
+  end_date: string;
+  title: string;
+  location?: string | null;
+  participants?: string | null;
+  image?: (number | null) | Media;
+  article?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  description?: string | null;
+  show_on_homepage?: boolean | null;
+  key_date?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "album_media".
+ */
+export interface AlbumMedia {
+  id: number;
+  title: string;
+  /**
+   * This image will be used as the album thumbnail.
+   */
+  cover_image: number | Media;
+  media_items?:
+    | {
+        type: 'photo' | 'video';
+        /**
+         * Upload a photo or video file.
+         */
+        file: number | Media;
+        caption?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "press_media".
+ */
+export interface PressMedia {
+  id: number;
+  image: number | Media;
+  source_logo: number | Media;
+  source_name: string;
+  title: string;
+  date: string;
+  content?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Select related press releases to display in the sidebar.
+   */
+  related_press?: (number | PressMedia)[] | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -246,6 +328,14 @@ export interface PayloadLockedDocument {
         value: number | Media;
       } | null)
     | ({
+        relationTo: 'album_media';
+        value: number | AlbumMedia;
+      } | null)
+    | ({
+        relationTo: 'press_media';
+        value: number | PressMedia;
+      } | null)
+    | ({
         relationTo: 'users';
         value: number | User;
       } | null);
@@ -298,8 +388,10 @@ export interface PayloadMigration {
 export interface LatestPublicationsSelect<T extends boolean = true> {
   title?: T;
   description?: T;
-  meta?: T;
+  source?: T;
+  date?: T;
   tag?: T;
+  file?: T;
   file_type?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -309,13 +401,16 @@ export interface LatestPublicationsSelect<T extends boolean = true> {
  * via the `definition` "events_select".
  */
 export interface EventsSelect<T extends boolean = true> {
-  date?: T;
+  start_date?: T;
+  end_date?: T;
   title?: T;
   location?: T;
   participants?: T;
   image?: T;
   article?: T;
   description?: T;
+  show_on_homepage?: T;
+  key_date?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -336,6 +431,39 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "album_media_select".
+ */
+export interface AlbumMediaSelect<T extends boolean = true> {
+  title?: T;
+  cover_image?: T;
+  media_items?:
+    | T
+    | {
+        type?: T;
+        file?: T;
+        caption?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "press_media_select".
+ */
+export interface PressMediaSelect<T extends boolean = true> {
+  image?: T;
+  source_logo?: T;
+  source_name?: T;
+  title?: T;
+  date?: T;
+  content?: T;
+  related_press?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -398,6 +526,620 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "homepage_content".
+ */
+export interface HomepageContent {
+  id: number;
+  hero_section?: {
+    /**
+     * Select an event to display in the hero section
+     */
+    featured_event?: (number | null) | Event;
+    subtitle?: string | null;
+    register_cta?: string | null;
+    explore_cta?: string | null;
+  };
+  about_section?: {
+    label?: string | null;
+    title?: string | null;
+    description?: string | null;
+    boxes?:
+      | {
+          icon: 'globe' | 'stakeholder' | 'book' | 'bulb';
+          title: string;
+          description: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  upcoming_forum_section?: {
+    featured_event?: (number | null) | Event;
+    register_cta?: string | null;
+    view_program_cta?: string | null;
+  };
+  publications_section?: {
+    label?: string | null;
+    title?: string | null;
+    view_all_text?: string | null;
+    download_cta?: string | null;
+  };
+  contact_section?: {
+    label?: string | null;
+    title?: string | null;
+    description?: string | null;
+    contact_items?:
+      | {
+          label: string;
+          value: string;
+          id?: string | null;
+        }[]
+      | null;
+    form_name_placeholder?: string | null;
+    form_email_placeholder?: string | null;
+    form_subject_placeholder?: string | null;
+    form_message_placeholder?: string | null;
+    form_privacy_text?: string | null;
+    form_submit_cta?: string | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "about_content".
+ */
+export interface AboutContent {
+  id: number;
+  hero_section?: {
+    label?: string | null;
+    title?: string | null;
+    description?: string | null;
+    /**
+     * Recommended size: 703x552px or similar aspect ratio. Image will be cropped to fill the container.
+     */
+    image?: (number | null) | Media;
+  };
+  mission_section?: {
+    label?: string | null;
+    title?: string | null;
+    description?: string | null;
+    read_more_text?: string | null;
+    objectives?:
+      | {
+          title: string;
+          description: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  milestones_section?: {
+    label?: string | null;
+    title?: string | null;
+    milestones?:
+      | {
+          year: string;
+          title: string;
+          description?: string | null;
+          align_right?: boolean | null;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  experts_section?: {
+    label?: string | null;
+    title?: string | null;
+    experts?:
+      | {
+          name: string;
+          role: string;
+          /**
+           * Recommended: square image, e.g. 220x220px
+           */
+          image?: (number | null) | Media;
+          description: string;
+          social_links?: {
+            /**
+             * Leave empty to hide the icon
+             */
+            x?: string | null;
+            /**
+             * Leave empty to hide the icon
+             */
+            facebook?: string | null;
+            /**
+             * Leave empty to hide the icon
+             */
+            linkedin?: string | null;
+            /**
+             * Leave empty to hide the icon
+             */
+            telegram?: string | null;
+          };
+          id?: string | null;
+        }[]
+      | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "events_content".
+ */
+export interface EventsContent {
+  id: number;
+  hero_section?: {
+    /**
+     * Select an event to display in the hero section
+     */
+    featured_event?: (number | null) | Event;
+    label?: string | null;
+    /**
+     * Upload a custom image. If empty, will use the featured event image.
+     */
+    image?: (number | null) | Media;
+    buttons?:
+      | {
+          text: string;
+          style: 'primary' | 'secondary';
+          show_arrow?: boolean | null;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  key_dates_section?: {
+    label?: string | null;
+    title?: string | null;
+  };
+  thematic_areas_section?: {
+    label?: string | null;
+    title?: string | null;
+    items?:
+      | {
+          title: string;
+          description: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  speakers_section?: {
+    label?: string | null;
+    title?: string | null;
+    speakers?:
+      | {
+          name: string;
+          role: string;
+          image?: (number | null) | Media;
+          description: string;
+          social_links?: {
+            x?: string | null;
+            linkedin?: string | null;
+            facebook?: string | null;
+            telegram?: string | null;
+          };
+          id?: string | null;
+        }[]
+      | null;
+  };
+  sessions_section?: {
+    label?: string | null;
+    title?: string | null;
+    items?:
+      | {
+          title: string;
+          description: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  registration_section: {
+    label?: string | null;
+    title?: string | null;
+    left_box: {
+      icon?: ('document_green.png' | 'document_yellow.png') | null;
+      title: string;
+      description: string;
+      button_text: string;
+    };
+    right_box: {
+      icon?: ('document_green.png' | 'document_yellow.png') | null;
+      title: string;
+      description: string;
+      button_text: string;
+    };
+  };
+  past_events_section?: {
+    label?: string | null;
+    title?: string | null;
+    view_all_text?: string | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "publications_content".
+ */
+export interface PublicationsContent {
+  id: number;
+  hero_section?: {
+    label?: string | null;
+    title?: string | null;
+    description?: string | null;
+  };
+  filters_section?: {
+    all_label?: string | null;
+    file_type_label?: string | null;
+    publication_year_label?: string | null;
+  };
+  pagination_section?: {
+    prev_label?: string | null;
+    next_label?: string | null;
+  };
+  download_button_label?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media_content".
+ */
+export interface MediaContent {
+  id: number;
+  photos_section?: {
+    label?: string | null;
+    title?: string | null;
+    /**
+     * Select up to 9 albums to display on the media page.
+     */
+    albums?: (number | AlbumMedia)[] | null;
+    view_all_text?: string | null;
+    view_all_link?: string | null;
+  };
+  press_section?: {
+    label?: string | null;
+    title?: string | null;
+    press_releases?: (number | PressMedia)[] | null;
+    view_all_text?: string | null;
+    view_all_link?: string | null;
+  };
+  media_kit_section?: {
+    label?: string | null;
+    title?: string | null;
+    resources?:
+      | {
+          image: number | Media;
+          title: string;
+          type: string;
+          size: string;
+          file?: (number | null) | Media;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "homepage_content_select".
+ */
+export interface HomepageContentSelect<T extends boolean = true> {
+  hero_section?:
+    | T
+    | {
+        featured_event?: T;
+        subtitle?: T;
+        register_cta?: T;
+        explore_cta?: T;
+      };
+  about_section?:
+    | T
+    | {
+        label?: T;
+        title?: T;
+        description?: T;
+        boxes?:
+          | T
+          | {
+              icon?: T;
+              title?: T;
+              description?: T;
+              id?: T;
+            };
+      };
+  upcoming_forum_section?:
+    | T
+    | {
+        featured_event?: T;
+        register_cta?: T;
+        view_program_cta?: T;
+      };
+  publications_section?:
+    | T
+    | {
+        label?: T;
+        title?: T;
+        view_all_text?: T;
+        download_cta?: T;
+      };
+  contact_section?:
+    | T
+    | {
+        label?: T;
+        title?: T;
+        description?: T;
+        contact_items?:
+          | T
+          | {
+              label?: T;
+              value?: T;
+              id?: T;
+            };
+        form_name_placeholder?: T;
+        form_email_placeholder?: T;
+        form_subject_placeholder?: T;
+        form_message_placeholder?: T;
+        form_privacy_text?: T;
+        form_submit_cta?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "about_content_select".
+ */
+export interface AboutContentSelect<T extends boolean = true> {
+  hero_section?:
+    | T
+    | {
+        label?: T;
+        title?: T;
+        description?: T;
+        image?: T;
+      };
+  mission_section?:
+    | T
+    | {
+        label?: T;
+        title?: T;
+        description?: T;
+        read_more_text?: T;
+        objectives?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+              id?: T;
+            };
+      };
+  milestones_section?:
+    | T
+    | {
+        label?: T;
+        title?: T;
+        milestones?:
+          | T
+          | {
+              year?: T;
+              title?: T;
+              description?: T;
+              align_right?: T;
+              id?: T;
+            };
+      };
+  experts_section?:
+    | T
+    | {
+        label?: T;
+        title?: T;
+        experts?:
+          | T
+          | {
+              name?: T;
+              role?: T;
+              image?: T;
+              description?: T;
+              social_links?:
+                | T
+                | {
+                    x?: T;
+                    facebook?: T;
+                    linkedin?: T;
+                    telegram?: T;
+                  };
+              id?: T;
+            };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "events_content_select".
+ */
+export interface EventsContentSelect<T extends boolean = true> {
+  hero_section?:
+    | T
+    | {
+        featured_event?: T;
+        label?: T;
+        image?: T;
+        buttons?:
+          | T
+          | {
+              text?: T;
+              style?: T;
+              show_arrow?: T;
+              id?: T;
+            };
+      };
+  key_dates_section?:
+    | T
+    | {
+        label?: T;
+        title?: T;
+      };
+  thematic_areas_section?:
+    | T
+    | {
+        label?: T;
+        title?: T;
+        items?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+              id?: T;
+            };
+      };
+  speakers_section?:
+    | T
+    | {
+        label?: T;
+        title?: T;
+        speakers?:
+          | T
+          | {
+              name?: T;
+              role?: T;
+              image?: T;
+              description?: T;
+              social_links?:
+                | T
+                | {
+                    x?: T;
+                    linkedin?: T;
+                    facebook?: T;
+                    telegram?: T;
+                  };
+              id?: T;
+            };
+      };
+  sessions_section?:
+    | T
+    | {
+        label?: T;
+        title?: T;
+        items?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+              id?: T;
+            };
+      };
+  registration_section?:
+    | T
+    | {
+        label?: T;
+        title?: T;
+        left_box?:
+          | T
+          | {
+              icon?: T;
+              title?: T;
+              description?: T;
+              button_text?: T;
+            };
+        right_box?:
+          | T
+          | {
+              icon?: T;
+              title?: T;
+              description?: T;
+              button_text?: T;
+            };
+      };
+  past_events_section?:
+    | T
+    | {
+        label?: T;
+        title?: T;
+        view_all_text?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "publications_content_select".
+ */
+export interface PublicationsContentSelect<T extends boolean = true> {
+  hero_section?:
+    | T
+    | {
+        label?: T;
+        title?: T;
+        description?: T;
+      };
+  filters_section?:
+    | T
+    | {
+        all_label?: T;
+        file_type_label?: T;
+        publication_year_label?: T;
+      };
+  pagination_section?:
+    | T
+    | {
+        prev_label?: T;
+        next_label?: T;
+      };
+  download_button_label?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media_content_select".
+ */
+export interface MediaContentSelect<T extends boolean = true> {
+  photos_section?:
+    | T
+    | {
+        label?: T;
+        title?: T;
+        albums?: T;
+        view_all_text?: T;
+        view_all_link?: T;
+      };
+  press_section?:
+    | T
+    | {
+        label?: T;
+        title?: T;
+        press_releases?: T;
+        view_all_text?: T;
+        view_all_link?: T;
+      };
+  media_kit_section?:
+    | T
+    | {
+        label?: T;
+        title?: T;
+        resources?:
+          | T
+          | {
+              image?: T;
+              title?: T;
+              type?: T;
+              size?: T;
+              file?: T;
+              id?: T;
+            };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
