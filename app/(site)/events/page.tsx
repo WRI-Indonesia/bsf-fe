@@ -3,118 +3,180 @@ import Link from "next/link";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { cookies } from 'next/headers';
+import { getPayload } from 'payload';
+import config from '../../../payload.config';
+import { formatDateRange } from '../../../lib/helpers';
 
-const EVENT_DATA = {
-  title: "4th Biodiversity Science Forum 2026",
-  date: "10-12 November 2026",
-  location: "Singapore",
-  participants: "500+ Expected Participants",
-  description: "Join leading scientists, policy experts, and conservation practitioners for five days of keynotes, sessions, and collaborative workshops on the future of biodiversity in Southeast Asia.",
-  buttons: [
-    { text: "Register Now", style: "bg-text-green text-text-white-broken", icon: true},
-    { text: "Submit Abstract", style: "bg-text-white-broken text-text-green", icon: false},
-  ],
-  image: "/events/hero.png"
+type SocialLinks = {
+  x?: string;
+  facebook?: string;
+  linkedin?: string;
+  telegram?: string;
 };
 
-const importantDates = [
-  { date: "1 June 2026", desc: "Abstract Submission\nOpens" },
-  { date: "15 August 2026", desc: "Abstract Deadline" },
-  { date: "1 September 2026", desc: "Abstract Submission\nOpens" },
-  { date: "15 October 2026", desc: "Abstract Submission\nOpens" },
-  { date: "10-12 November\n2026", desc: "Abstract Submission" },
-];
+type Speaker = {
+  id?: string;
+  name: string;
+  role: string;
+  image?: { url?: string };
+  description: string;
+  social_links?: SocialLinks;
+};
 
-const thematicAreas = [
-  { title: "Nature Based Solutions" },
-  { title: "Marine & Coastal Biodiversity" },
-  { title: "Nature Based Solutions" },
-  { title: "Marine & Coastal Biodiversity" },
-  { title: "Nature Based Solutions" },
-  { title: "Marine & Coastal Biodiversity" },
-];
+type ThematicItem = {
+  id?: string;
+  title: string;
+  description: string;
+};
 
-const sessionThemes = [
-  { title: "Nature Based Solutions" },
-  { title: "Marine & Coastal Biodiversity" },
-  { title: "Nature Based Solutions" },
-  { title: "Marine & Coastal Biodiversity" },
-  { title: "Nature Based Solutions" },
-  { title: "Marine & Coastal Biodiversity" },
-];
+type ButtonItem = {
+  id?: string;
+  text: string;
+  style: 'primary' | 'secondary';
+  show_arrow?: boolean;
+};
 
-const pastEvents = [
-  {
-    date: "24 January 2024",
-    title: "A space for biodiversity science, collaboration, and knowledge exchange.",
-    location: "Bangkok, Thailand",
-    participants: "450 participants",
-    image: "/events_1.png",
-  },
-  {
-    date: "07 March 2024",
-    title: "Biodiversity in a Post-Pandemic World, and knowledge exchange.",
-    location: "Manila, Philippines",
-    participants: "289 participants",
-    image: "/events_2.png",
-  },
-  {
-    date: "07 March 2024",
-    title: "Biodiversity in a Post-Pandemic World, and knowledge exchange.",
-    location: "Manila, Philippines",
-    participants: "289 participants",
-    image: "/events_2.png",
-  },
-  {
-    date: "18 November 2023",
-    title: "Science for Biodiversity Action in ASEAN and collaboration",
-    location: "Virtual",
-    participants: "520 participants",
-    image: "/events_3.png",
-  },
-  {
-    date: "18 November 2023",
-    title: "Science for Biodiversity Action in ASEAN and collaboration",
-    location: "Virtual",
-    participants: "520 participants",
-    image: "/events_3.png",
-  },
-  {
-    date: "24 January 2024",
-    title: "Biodiversity in a Post-Pandemic World, and knowledge exchange.",
-    location: "Bangkok, Thailand",
-    participants: "450 participants",
-    image: "/events_1.png",
-  },
-];
+function getSectionField(section: Record<string, unknown> | undefined, field: string, defaultValue: string): string {
+  return (section?.[field] as string) || defaultValue;
+}
 
-const keynoteSpeakers = [
-  { name: "Lisa Clarc", role: "UI/UX Designer", img: "/events/speaker_1.png", desc: "Lisa's proactive support and problem-solving abilities make her an invaluable advocate for our customers." },
-  { name: "Olivia Manson", role: "Cloud Architect", img: "/events/speaker_2.png", desc: "With a deep understanding of user behavior and industry best practices, she crafts engaging experiences that seamlessly blend form and function." },
-  { name: "Andrew Drue", role: "Project Manager", img: "/events/speaker_3.png", desc: "An ambitious and exquisite personality that always strives to exceed expectations. Always there when someone is in need." },
-  { name: "Morgan John", role: "CEO", img: "/events/speaker_4.png", desc: "With his expertise in digital marketing channels and data analytics, Michael consistently helps our SaaS company succeed." },
-];
+function getSectionArray<T>(section: Record<string, unknown> | undefined, field: string): T[] {
+  return (section?.[field] as T[]) || [];
+}
 
-const registrationOptions = [
-  {
-    title: "Registration",
-    desc: "Harnessing ecosystems for climate adaption, disaster risk reduction, and sustainable livelihoods Harnessing ecosystems for climate adaption, disaster risk reduction, and sustainable",
-    iconColor: "text-[#5b7a63]",
-    icon: "document_green.png",
-    submitText: "Register"
-  },
-  {
-    title: "Abstract Submission",
-    desc: "Harnessing ecosystems for climate adaption, disaster risk reduction, and sustainable livelihoods Harnessing ecosystems for climate adaption, disaster risk reduction, and sustainable",
-    iconColor: "text-[#ecca59]",
-    icon: "document_yellow.png",
-    submitText: "Submit Abstract"
-  },
-];
+function getUploadUrl(section: Record<string, unknown> | undefined, field: string, fallback: string): string {
+  const upload = section?.[field] as Record<string, unknown> | undefined;
+  return (upload?.url as string) || fallback;
+}
+
+async function getEventsContent(locale: string = 'en') {
+  try {
+    const payload = await getPayload({ config });
+    const result = await payload.findGlobal({
+      slug: 'events_content',
+      locale: locale as 'en' | 'id',
+      depth: 2,
+    });
+    return result;
+  } catch (error) {
+    console.error("Error fetching events content:", error);
+    return null;
+  }
+}
+
+async function getKeyDates(locale: string = 'en') {
+  try {
+    const payload = await getPayload({ config });
+    const result = await payload.find({
+      collection: 'events',
+      limit: 10,
+      where: {
+        key_date: {
+          not_equals: null,
+        },
+      },
+      sort: 'key_date',
+      locale: locale as 'en' | 'id',
+    });
+    return result.docs || [];
+  } catch (error) {
+    console.error("Error fetching key dates:", error);
+    return [];
+  }
+}
+
+async function getPastEvents(locale: string = 'en') {
+  try {
+    const payload = await getPayload({ config });
+    const now = new Date();
+
+    const result = await payload.find({
+      collection: 'events',
+      limit: 10,
+      where: {
+        and: [
+          {
+            end_date: {
+              less_than: now.toISOString(),
+            },
+          },
+          {
+            key_date: {
+              exists: false,
+            },
+          },
+        ],
+      },
+      sort: '-start_date',
+      locale: locale as 'en' | 'id',
+    });
+    return result.docs || [];
+  } catch (error) {
+    console.error("Error fetching past events:", error);
+    return [];
+  }
+}
 
 export default async function Events() {
   const cookieStore = await cookies();
   const locale = cookieStore.get('locale')?.value || 'en';
+
+  const eventsContent = await getEventsContent(locale);
+  const keyDates = await getKeyDates(locale);
+  const pastEvents = await getPastEvents(locale);
+
+  // Hero section
+  const heroSection = eventsContent?.hero_section as Record<string, unknown> | undefined;
+  const heroLabel = getSectionField(heroSection, 'label', 'UPCOMING FORUM');
+  const heroEvent = heroSection?.featured_event as Record<string, unknown> | undefined;
+  const heroTitle = heroEvent?.title as string || '4th Biodiversity Science Forum 2026';
+  const heroDate = formatDateRange(heroEvent?.start_date as string, heroEvent?.end_date as string) || '10-12 November 2026';
+  const heroLocation = heroEvent?.location as string || 'Singapore';
+  const heroParticipants = heroEvent?.participants as string || '500+ Expected Participants';
+  const heroDescription = heroEvent?.description as string || 'Join leading scientists, policy experts, and conservation practitioners for five days of keynotes, sessions, and collaborative workshops on the future of biodiversity in Southeast Asia.';
+  const heroImage = getUploadUrl(heroSection, 'image', (heroEvent?.image as Record<string, unknown>)?.url as string || '/events/hero.png');
+  const heroButtons = getSectionArray<ButtonItem>(heroSection, 'buttons');
+
+  // Key dates section
+  const keyDatesSection = eventsContent?.key_dates_section as Record<string, unknown> | undefined;
+  const keyDatesLabel = getSectionField(keyDatesSection, 'label', 'IMPORTANT DATES');
+  const keyDatesTitle = getSectionField(keyDatesSection, 'title', 'Key dates & Deadlines');
+
+  // Thematic areas section
+  const thematicSection = eventsContent?.thematic_areas_section as Record<string, unknown> | undefined;
+  const thematicLabel = getSectionField(thematicSection, 'label', 'Programme');
+  const thematicTitle = getSectionField(thematicSection, 'title', 'Thematic Areas');
+  const thematicItems = getSectionArray<ThematicItem>(thematicSection, 'items');
+
+  // Speakers section
+  const speakersSection = eventsContent?.speakers_section as Record<string, unknown> | undefined;
+  const speakersLabel = getSectionField(speakersSection, 'label', 'Keynote Speakers');
+  const speakersTitle = getSectionField(speakersSection, 'title', 'Featured Speakers');
+  const speakers = getSectionArray<Speaker>(speakersSection, 'speakers');
+
+  // Sessions section
+  const sessionsSection = eventsContent?.sessions_section as Record<string, unknown> | undefined;
+  const sessionsLabel = getSectionField(sessionsSection, 'label', 'Session');
+  const sessionsTitle = getSectionField(sessionsSection, 'title', 'Sessions');
+  const sessionItems = getSectionArray<ThematicItem>(sessionsSection, 'items');
+
+  // Registration section
+  const registrationSection = eventsContent?.registration_section as Record<string, unknown> | undefined;
+  const registrationLabel = getSectionField(registrationSection, 'label', 'Participate');
+  const registrationTitle = getSectionField(registrationSection, 'title', 'Registration');
+  const leftBox = registrationSection?.left_box as Record<string, unknown> | undefined;
+  const rightBox = registrationSection?.right_box as Record<string, unknown> | undefined;
+
+  // Past events section
+  const pastEventsSection = eventsContent?.past_events_section as Record<string, unknown> | undefined;
+  const pastEventsLabel = getSectionField(pastEventsSection, 'label', 'Archive');
+  const pastEventsTitle = getSectionField(pastEventsSection, 'title', 'Past Events');
+  const pastEventsViewAll = getSectionField(pastEventsSection, 'view_all_text', 'View all past events →');
+
+  const buttonStyles: Record<string, string> = {
+    primary: 'bg-text-green text-text-white-broken',
+    secondary: 'bg-text-white-broken text-text-green',
+  };
 
   return (
     <div className="min-h-screen bg-white">
@@ -124,24 +186,24 @@ export default async function Events() {
           <div className="flex flex-col xl:flex-row px-10 md:px-20 items-stretch gap-30">
             <div className="flex flex-col z-10 text-white w-full xl:w-[703px] xl:h-[552px] gap-12 shrink-0 justify-center" id="upcoming_forum">
               <p className="font-['inter'] text-xl font-semibold uppercase tracking-widest text-text-lime">
-                UPCOMING FORUM
+                {heroLabel}
               </p>
               <h1 className="text-5xl md:text-7xl xl:text-8xl font-semibold leading-tight xl:leading-[96px] text-text-white-broken tracking-tight">
-                {EVENT_DATA.title}
+                {heroTitle}
               </h1>
               <div className="flex flex-wrap font-['inter'] text-[16px] justify-between text-text-grey-light">
-                <div>{EVENT_DATA.date}</div>
-                <div>{EVENT_DATA.location}</div>
-                <div>{EVENT_DATA.participants}</div>
+                <div>{heroDate}</div>
+                <div>{heroLocation}</div>
+                <div>{heroParticipants}</div>
               </div>
               <p className="font-['inter'] text-xl text-text-grey-light">
-                {EVENT_DATA.description}
+                {heroDescription}
               </p>
               <div className="flex flex-row gap-3 max-w-[373px]">
-                {EVENT_DATA.buttons.map((button, i) => (
-                  <button key={i} className={`flex font-[inter] text-sm justify-center w-full items-center gap-[6px] ${button.style} rounded-[8px] px-[10px] py-[16px] h-[36px] font-semibold`}>
+                {heroButtons.map((button, i) => (
+                  <button key={button.id || i} className={`flex font-[inter] text-sm justify-center w-full items-center gap-[6px] ${buttonStyles[button.style] || buttonStyles.primary} rounded-[8px] px-[10px] py-[16px] h-[36px] font-semibold`}>
                     {button.text}
-                    {button.icon &&                     
+                    {button.show_arrow &&                     
                       <Image
                         src="/arrow_right.svg"
                         alt="Arrow Right"
@@ -157,7 +219,7 @@ export default async function Events() {
               <div className="relative h-[320px] md:h-[420px] -mr-10 md:-mr-20 block xl:hidden">
                 <div className="relative w-full h-full rounded-tl-[80px] overflow-hidden">
                   <Image
-                    src={EVENT_DATA.image}
+                    src={heroImage}
                     alt="Forum discussion"
                     fill
                     className="object-cover"
@@ -169,7 +231,7 @@ export default async function Events() {
               <div className="relative flex-1 -mr-10 md:-mr-20 hidden xl:block">
                 <div className="relative w-full h-full rounded-tl-[80px] overflow-hidden">
                   <Image
-                    src={EVENT_DATA.image}
+                    src={heroImage}
                     alt="Forum discussion"
                     fill
                     className="object-cover"
@@ -184,167 +246,190 @@ export default async function Events() {
           <div className="flex flex-col max-w-[1400px] text-center items-center gap-10 w-full">
             <div className="flex flex-col md:max-w-[572px]">
               <p className="font-['inter'] text-xl font-semibold uppercase tracking-widest text-text-lime">
-                IMPORTANT DATES
+                {keyDatesLabel}
               </p>
               <p className="text-[2.5rem] font-semibold text-text-black">
-                Key dates & Deadlines
+                {keyDatesTitle}
               </p>
             </div>
             <div className="w-full grid gap-6 sm:grid-cols-2 lg:grid-cols-5 2xl:grid-cols-5">
-              {importantDates.map((item, i) => (
-                <div key={i} className="flex flex-col items-center justify-center text-center p-6 rounded-3xl border border-outline-grey-light gap-3 bg-background-base-grey-light">
-                  <Image
-                        src="/book.svg"
-                        alt="Important Date"
-                        width={20}
-                        height={38}
-                        style={{ width: "24px", height: "38px" }}
-                      />
-                  <div className="flex flex-col gap-3">
-                    <p className="font-semibold text-lg text-text-black">{item.date}</p>
-                    <p className="font-['inter'] text-base font-normal leading-[100%] text-text-grey-dark whitespace-pre-line">{item.desc}</p>
+              {keyDates.map((item, i) => {
+                const keyDate = item.key_date ? new Date(item.key_date as string).toLocaleDateString('en-GB', {
+                  day: '2-digit',
+                  month: 'long',
+                  year: 'numeric',
+                }) : '';
+                return (
+                  <div key={item.id || i} className="flex flex-col items-center justify-center text-center p-6 rounded-3xl border border-outline-grey-light gap-3 bg-background-base-grey-light">
+                    <Image
+                      src="/book.svg"
+                      alt="Important Date"
+                      width={24}
+                      height={38}
+                      style={{ width: "24px", height: "38px" }}
+                    />
+                    <div className="flex flex-col gap-3">
+                      <p className="font-semibold text-lg text-text-black">{keyDate}</p>
+                      <p className="font-['inter'] text-base font-normal leading-[100%] text-text-grey-dark">{item.title as string}</p>
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </section>
 
+        {thematicItems.length > 0 && (
         <section className="flex bg-background-base-lime-light px-20 py-30 2xl:justify-center">
           <div className="flex flex-col max-w-[1400px] gap-20 2xl:items-center">
             <div className="flex flex-col 2xl:items-center">
               <p className="font-['inter'] text-xl font-semibold uppercase tracking-widest text-text-lime">
-                Programme
+                {thematicLabel}
               </p>
               <p className="text-[2.5rem] font-semibold text-text-black">
-                Thematic Areas
+                {thematicTitle}
               </p>
             </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {thematicAreas.map((item, i) => (
-                <div key={i} className="bg-white p-8 rounded-[20px]">
+              {thematicItems.map((item, i) => (
+                <div key={item.id || i} className="bg-white p-8 rounded-[20px]">
                   <h3 className="font-bold text-text-black text-[20px]">{item.title}</h3>
                   <p className="font-['inter'] text-text-grey-dark text-[15px] leading-[1.6]">
-                    Harnessing ecosystems for climate adaption, disaster risk reduction, and sustainable livelihoods
+                    {item.description}
                   </p>
                 </div>
               ))}
             </div>
           </div>
         </section>
+        )}
 
+        {speakers.length > 0 && (
         <section className="flex bg-text-white-broken px-20 py-30 2xl:justify-center">
           <div className="flex flex-col max-w-[1400px] gap-10 2xl:items-center">
             <div className="flex flex-col 2xl:items-center gap-6">
               <p className="font-['inter'] text-xl font-semibold uppercase tracking-widest text-text-lime">
-                Keynote Speakers
+                {speakersLabel}
               </p>
               <p className="text-[2.5rem] font-semibold text-text-black">
-                Featured Speakers
+                {speakersTitle}
               </p>
             </div>
 
             <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
-              {keynoteSpeakers.map((expert, i) => (
-                <div key={i} className="flex flex-col sm:flex-row gap-6 bg-[#FaFaFa] rounded-2xl p-4 items-center sm:items-start">
-                  <div className="relative w-[200px] h-[200px] md:w-[240px] md:h-[240px] flex-shrink-0">
-                    <Image
-                      src={expert.img}
-                      alt={expert.name}
-                      fill
-                      className="object-cover rounded-xl"
-                    />
-                  </div>
-                  <div className="flex flex-col justify-center h-full gap-8">
-                    <div className="flex flex-col gap-4">
-                      <div className="flex flex-col">
-                        <p className="font-['Plus_Jakarta_Sans'] text-2xl font-bold text-text-black">{expert.name}</p>
-                        <p className="font-['inter'] text-text-icons-light-primary">{expert.role}</p>
+              {speakers.map((speaker, i) => {
+                const speakerImg = getUploadUrl(speaker as unknown as Record<string, unknown>, 'image', '/events/speaker_1.png');
+                const socialLinks = speaker.social_links as SocialLinks | undefined;
+
+                return (
+                  <div key={speaker.id || i} className="flex flex-col sm:flex-row gap-6 bg-[#FaFaFa] rounded-2xl p-4 items-center sm:items-start">
+                    <div className="relative w-[200px] h-[200px] md:w-[240px] md:h-[240px] flex-shrink-0">
+                      <Image
+                        src={speakerImg}
+                        alt={speaker.name}
+                        fill
+                        className="object-cover rounded-xl"
+                      />
+                    </div>
+                    <div className="flex flex-col justify-center h-full gap-8">
+                      <div className="flex flex-col gap-4">
+                        <div className="flex flex-col">
+                          <p className="font-['Plus_Jakarta_Sans'] text-2xl font-bold text-text-black">{speaker.name}</p>
+                          <p className="font-['inter'] text-text-icons-light-primary">{speaker.role}</p>
+                        </div>
+                        <p className="font-['inter'] text-text-grey-mid">
+                          {speaker.description}
+                        </p>
                       </div>
-                      <p className="font-['inter'] text-text-grey-mid">
-                        {expert.desc}
-                      </p>
-                    </div>
-                    <div className="flex gap-4 items-center">
-                      <Link href="#" className="w-5 h-5 flex items-center justify-center text-text-black">
-                        <Image src="/x.svg" alt="Icon X" width={20} height={20} />
-                      </Link>
-                      <Link href="#" className="w-5 h-5 flex items-center justify-center text-text-black">
-                        <Image src="/linkedin.svg" alt="LinkedIn Icon" width={20} height={20} />
-                      </Link>
-                      <Link href="#" className="w-5 h-5 flex items-center justify-center text-text-black">
-                        <Image src="/facebook.svg" alt="Facebook Icon" width={20} height={20} />
-                      </Link>
-                      <Link href="#" className="w-5 h-5 flex items-center justify-center text-text-black">
-                        <Image src="/telegram.svg" alt="Telegram Icon" width={20} height={20} />
-                      </Link>
+                      <div className="flex gap-4 items-center">
+                        {(['x', 'linkedin', 'facebook', 'telegram'] as const).map((platform) => {
+                          const url = socialLinks?.[platform];
+                          if (!url) return null;
+                          return (
+                            <Link key={platform} href={url} target="_blank" rel="noopener noreferrer" className="w-5 h-5 flex items-center justify-center text-text-black">
+                              <Image alt={platform} src={`/${platform}.svg`} width={20} height={20} />
+                            </Link>
+                          );
+                        })}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </section>
+        )}
 
+        {sessionItems.length > 0 && (
         <section className="flex bg-background-base-green-light px-20 py-30 2xl:justify-center">
           <div className="flex flex-col max-w-[1400px] gap-20 2xl:items-center">
             <div className="flex flex-col 2xl:items-center">
               <p className="font-['inter'] text-xl font-semibold uppercase tracking-widest text-text-lime">
-                Session
+                {sessionsLabel}
               </p>
               <p className="text-[2.5rem] font-semibold text-text-black uppercase">
-                Sessions
+                {sessionsTitle}
               </p>
             </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {sessionThemes.map((item, i) => (
-                <div key={i} className="flex flex-col bg-white p-6 gap-3 rounded-[20px]">
+              {sessionItems.map((item, i) => (
+                <div key={item.id || i} className="flex flex-col bg-white p-6 gap-3 rounded-[20px]">
                   <h3 className="font-[inter] font-semibold text-text-black text-base">{item.title}</h3>
                   <p className="font-[inter] text-text-grey-dark text-base">
-                    Harnessing ecosystems for climate adaption, disaster risk reduction, and sustainable livelihoods
+                    {item.description}
                   </p>
                 </div>
               ))}
             </div>
           </div>
         </section>
+        )}
 
         <section className="flex bg-background-base-green-mid px-20 py-30 2xl:justify-center">
           <div className="flex flex-col max-w-[1400px] gap-20 2xl:items-center">
             <div className="flex flex-col 2xl:items-center">
               <p className="font-['inter'] text-xl font-semibold uppercase tracking-widest text-text-green">
-                Participate
+                {registrationLabel}
               </p>
               <p className="text-[2.5rem] font-semibold text-text-black uppercase">
-                Registration
+                {registrationTitle}
               </p>
             </div>
 
             <div className="grid gap-6 md:grid-cols-2">
-              {registrationOptions.map((item, i) => (
-                <div key={i} className="bg-white p-6 rounded-[16px] flex flex-col sm:flex-row gap-6 items-center">
-                  <div className="flex flex-row gap-5 items-start flex-1">
-                    <div className={"flex min-h-[52px] min-w-[52px] items-center justify-center rounded-2xl"}>
-                      <Image
-                        src={`/${item.icon}`}
-                        alt="Document"
-                        width={50}
-                        height={50}
-                        style={{ width: "50px", height: "50px" }}
-                      />
+              {[leftBox, rightBox].map((box, i) => {
+                if (!box) return null;
+                const icon = box.icon as string || 'document_green.png';
+                const boxTitle = box.title as string || '';
+                const boxDesc = box.description as string || '';
+                const boxButton = box.button_text as string || 'Register';
+
+                return (
+                  <div key={i} className="bg-white p-6 rounded-[16px] flex flex-col sm:flex-row gap-6 items-center">
+                    <div className="flex flex-row gap-5 items-start flex-1">
+                      <div className="flex min-h-[52px] min-w-[52px] items-center justify-center rounded-2xl">
+                        <Image
+                          src={`/${icon}`}
+                          alt="Document"
+                          width={50}
+                          height={50}
+                          style={{ width: "50px", height: "50px" }}
+                        />
+                      </div>
+                      <div className="flex flex-col gap-3">
+                        <p className="font-semibold text-text-grey-dark text-[1.6rem] leading-[1.1] tracking-[0]">{boxTitle}</p>
+                        <p className="font-['inter'] text-text-grey-dark text-base">
+                          {boxDesc}
+                        </p>
+                      </div>
                     </div>
-                    <div className="flex flex-col gap-3">
-                      <p className="font-semibold text-text-grey-dark text-[1.6rem] leading-[1.1] tracking-[0]">{item.title}</p>
-                      <p className="font-['inter'] text-text-grey-dark text-base">
-                        {item.desc}
-                      </p>
-                    </div>
+                    <button className="font-[inter] sm:ml-auto h-[36px] px-6 bg-text-green text-text-white-broken rounded-xl text-sm font-semibold flex items-center justify-center self-end">
+                      {boxButton}
+                    </button>
                   </div>
-                  <button className="font-[inter] sm:ml-auto h-[36px] px-6 bg-text-green text-text-white-broken rounded-xl text-sm font-semibold flex items-center justify-center self-end">
-                    {item.submitText}
-                  </button>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </section>
@@ -354,49 +439,53 @@ export default async function Events() {
           <div className="flex flex-col max-w-[1400px] gap-20">
             <div className="flex flex-col">
               <p className="font-['inter'] text-xl font-semibold uppercase tracking-widest text-text-lime">
-                Archive
+                {pastEventsLabel}
               </p>
               <div className="flex flex-col md:flex-row md:items-end justify-between" id="past_events">
                 <h2 className="text-[42px] md:text-[48px] font-bold text-text-black">
-                  Past Events
+                  {pastEventsTitle}
                 </h2>
                 <Link href="/events/past_events" className="flex items-center gap-2 font-['inter'] text-[16px] font-semibold text-[#1f4a31] hover:underline">
-                  View all past events <span>→</span>
+                  {pastEventsViewAll} <span>→</span>
                 </Link>
               </div>
             </div>
 
             <div className="grid gap-[48px] md:grid-cols-1 md:gap-y-[60px] lg:grid-cols-2 lg:gap-x-[60px] lg:gap-y-[72px]">
-              {pastEvents.map((event, i) => (
-                <div key={i} className="grid gap-4 md:grid-cols-[220px_1fr] md:gap-6 items-start lg:grid-cols-[190px_1fr]">
-                  <div className="relative h-[190px] w-full overflow-hidden rounded-2xl md:h-[150px] md:w-[220px] lg:h-[190px] lg:w-[190px]">
-                    <Image
-                      src={event.image}
-                      alt={event.title}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                  <div className="flex flex-col gap-3 lg:h-full lg:max-h-[190px] lg:justify-between">
-                    <p className="font-[inter] font-semibold text-text-green">
-                      {event.date}
-                    </p>
-                    <h3 className="lg:text-xl xl:text-[1.75rem]/[100%] font-semibold text-text-grey-dark">
-                      {event.title}
-                    </h3>
-                    <div className="flex flex-col text-text-grey-dark">
-                      <div className="flex items-center gap-2">
-                        <Image src="/globe.svg" alt="Location" width={16} height={16} />
-                        <p className="font-['inter'] text-[14px]">{event.location}</p>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Image src="/participants.svg" alt="Participants" width={16} height={16} />
-                        <p className="font-['inter'] text-[14px]">{event.participants}</p>
+              {pastEvents.map((event, i) => {
+                const eventImg = (event.image as Record<string, unknown>)?.url as string || '/events_1.png';
+                const eventDate = formatDateRange(event.start_date as string, event.end_date as string) || '';
+                return (
+                  <div key={event.id || i} className="grid gap-4 md:grid-cols-[220px_1fr] md:gap-6 items-start lg:grid-cols-[190px_1fr]">
+                    <div className="relative h-[190px] w-full overflow-hidden rounded-2xl md:h-[150px] md:w-[220px] lg:h-[190px] lg:w-[190px]">
+                      <Image
+                        src={eventImg}
+                        alt={event.title as string}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                    <div className="flex flex-col gap-3 lg:h-full lg:max-h-[190px] lg:justify-between">
+                      <p className="font-[inter] font-semibold text-text-green">
+                        {eventDate}
+                      </p>
+                      <h3 className="lg:text-xl xl:text-[1.75rem]/[100%] font-semibold text-text-grey-dark">
+                        {event.title as string}
+                      </h3>
+                      <div className="flex flex-col text-text-grey-dark">
+                        <div className="flex items-center gap-2">
+                          <Image alt="Location" src="/globe.svg" width={16} height={16} />
+                          <p className="font-['inter'] text-[14px]">{event.location as string}</p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Image alt="Participants" src="/participants.svg" width={16} height={16} />
+                          <p className="font-['inter'] text-[14px]">{event.participants as string}</p>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </section>

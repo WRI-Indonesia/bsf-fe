@@ -5,6 +5,7 @@ import Footer from '../../components/Footer';
 import { getPayload } from 'payload';
 import config from '../../../../payload.config';
 import { cookies } from 'next/headers';
+import { formatDateRange, formatParticipants } from '../../../../lib/helpers';
 
 type pastEventImage = {
   filename: string;
@@ -36,16 +37,24 @@ async function getPastEvents(locale: string = 'en') {
     const result = await payload.find({
       collection: 'events',
       where: {
-        start_date: {
-          less_than: now.toISOString(),
-        },
+        and: [
+          {
+            end_date: {
+              less_than: now.toISOString(),
+            },
+          },
+          {
+            key_date: {
+              exists: false,
+            },
+          },
+        ],
       },
-      limit: 10,
+      limit: 50,
       sort: '-start_date',
       locale: locale as 'en' | 'id',
     });
 
-    console.log(result.docs)
     return result.docs || [];
   } catch (error) {
     console.error("Error fetching past events:", error);
@@ -63,21 +72,25 @@ export default async function PastEvents() {
     <div className="min-h-screen bg-background-base-lime-light">
       <Header locale={locale} />
       <main className="w-full flex flex-col 2xl:justify-center">
-        <section className="flex flex-col mt-[98px] p-20 pt-30 gap-10 max-w-[1280px] mx-auto overflow-hidden">
-          <nav aria-label="Breadcrumb" className="mt-4 mb-6 flex items-center gap-5 text-sm text-text-grey-dark">
-            <Link href="/" className="font-[inter] text-text-grey-mid font-medium hover:underline leading-[22px]">Home</Link>
-            <span className="text-text-grey-dark">/</span>
-            <Link href="/events" className="font-[inter] text-text-grey-mid font-medium hover:underline leading-[22px]">Events</Link>
-            <span className="text-text-grey-dark">/</span>
-            <span className="font-[inter] font-medium text-text-green leading-[22px]">Past Events</span>
-          </nav>
-          <div className="flex flex-col gap-5">
-            <p className="font-semibold text-text-black xl:text-8xl lg:text-6xl md:text-2xl xl:leading-[90px]">
-              Past Events
-            </p>
-            <p className="font-[inter] text-text-grey-dark text-xl font-normal">
-              Explore our past events and activities.
-            </p>
+        <section className="mt-[98px] px-20 py-30">
+          <div className="max-w-[1280px] mx-auto">
+            <div className="flex flex-col gap-10">
+              <nav aria-label="Breadcrumb" className="mt-4 mb-6 flex items-center gap-5 text-sm text-text-grey-dark">
+                <Link href="/" className="font-[inter] text-text-grey-mid font-medium hover:underline leading-[22px]">Home</Link>
+                <span className="text-text-grey-dark">/</span>
+                <Link href="/events" className="font-[inter] text-text-grey-mid font-medium hover:underline leading-[22px]">Events</Link>
+                <span className="text-text-grey-dark">/</span>
+                <span className="font-[inter] font-medium text-text-green leading-[22px]">Past Events</span>
+              </nav>
+              <div className="flex flex-col gap-5">
+                <p className="font-semibold text-text-black xl:text-8xl lg:text-6xl md:text-2xl xl:leading-[90px]">
+                  Past Events
+                </p>
+                <p className="font-[inter] text-text-grey-dark text-xl font-normal">
+                  Explore our past events and activities.
+                </p>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -89,7 +102,7 @@ export default async function PastEvents() {
                 const eventImage =
                   event.image && typeof event.image === 'object'
                     ? `/api/media/file/${event.image.filename}`
-                    : '/media/cafe.png';
+                    : '/events_1.png';
 
                 return (
                   <Link

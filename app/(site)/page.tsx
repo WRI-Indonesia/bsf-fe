@@ -39,6 +39,9 @@ type pastPublication = {
   description: string;
   tag: string;
   meta: string;
+  file?: Record<string, unknown>;
+  date?: string;
+  source?: string;
 } & Record<string, unknown>;
 
 type HomepageBox = {
@@ -354,18 +357,20 @@ export default async function Home() {
           <div className="mx-auto flex w-full flex-wrap items-end justify-between gap-4">
             <div>
               <p className="font-['inter'] text-[20px] font-semibold uppercase text-[#b28d3c]">
-                Latest Publication
+                {(homepageContent?.publications_section as Record<string, unknown>)?.label as string || 'Latest Publication'}
               </p>
               <h2 className="font-semibold text-[40px] mt-4 font-semibold">
-                Recent Knowledge Products
+                {(homepageContent?.publications_section as Record<string, unknown>)?.title as string || 'Recent Knowledge Products'}
               </h2>
             </div>
             <Link href="/publications" className="text-[16px] font-semibold text-text-green hover:underline">
-              View all publications →
+              {(homepageContent?.publications_section as Record<string, unknown>)?.view_all_text as string || 'View all publications →'}
             </Link>
           </div>
           <div className="mx-auto mt-8 w-full space-y-4">
             {(pastPublications as unknown as pastPublication[]).map((publication: pastPublication) => {
+              const pubFile = publication.file as Record<string, unknown> | undefined;
+              const fileUrl = pubFile?.url as string || '#';
               return (
                 <div
                   key={publication.id}
@@ -384,6 +389,7 @@ export default async function Home() {
                         month: 'short',
                         year: 'numeric',
                       }) : publication.source}
+                      {publication.file_type ? ` | ${publication.file_type}` : ''}
                     </p>
                   </div>
                   <div className="mt-1 flex flex-col sm:flex-row sm:publications-center justify-between gap-4">
@@ -395,11 +401,11 @@ export default async function Home() {
                       </span>
                     </div>
                     <div className="flex flex-wrap items-center gap-2 sm:ml-auto">
-                      <Link href="/publication.pdf" target="_blank" download>
+                      <a href={fileUrl} target="_blank" download rel="noopener noreferrer">
                         <button className="flex h-[36px] flex-1 sm:flex-none sm:w-[136px] items-center justify-center gap-2 rounded-xl border border-text-green text-sm font-semibold text-text-green min-w-[120px]">
-                          Download <Image src="/download.svg" alt="Download Icon" width={16} height={16} />
+                          {(homepageContent?.publications_section as Record<string, unknown>)?.download_cta as string || 'Download'} <Image src="/download.svg" alt="Download Icon" width={16} height={16} />
                         </button>
-                      </Link>
+                      </a>
                     </div>
                   </div>
                 </div>

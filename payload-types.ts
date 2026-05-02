@@ -131,6 +131,7 @@ export interface LatestPublication {
   description?: string | null;
   meta?: string | null;
   tag: 'Policy brief' | 'Proceedings' | 'Publications' | 'Technical Outputs';
+  file_type?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -299,6 +300,7 @@ export interface LatestPublicationsSelect<T extends boolean = true> {
   description?: T;
   meta?: T;
   tag?: T;
+  file_type?: T;
   updatedAt?: T;
   createdAt?: T;
 }
