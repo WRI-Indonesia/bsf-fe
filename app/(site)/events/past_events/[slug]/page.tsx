@@ -6,6 +6,8 @@ import Footer from "../../../components/Footer";
 import { getPayload } from "payload";
 import config from "../../../../../payload.config";
 import { cookies } from 'next/headers';
+import { formatDateRange, formatParticipants } from '../../../../../lib/helpers';
+import RichTextRenderer from '../../../../../components/RichTextRenderer';
 
 type PastEventImage = {
   filename: string;
@@ -135,7 +137,7 @@ export default async function PastEventDetail({
     notFound();
   }
 
-  const articleText = extractTextFromRichText(event.article).trim();
+  const articleContent = event.article as Record<string, unknown> | undefined;
   const detailDate = formatDateRange(event.start_date, event.end_date);
   const eventImage = getImageSrc(event.image);
   const related = relatedEvents.slice(0, 3);
@@ -144,23 +146,23 @@ export default async function PastEventDetail({
   return (
     <div className="min-h-screen bg-background-base-lime-light">
       <Header locale={locale} />
-      <main className="flex flex-col 2xl:justify-center gap-10">
-        <section className="flex flex-col mt-[98px] px-20 pt-30 gap-10 max-w-[1280px] overflow-hidden">
-          <nav aria-label="Breadcrumb" className="mt-4 mb-6 flex items-center gap-5 text-sm text-text-grey-dark">
+      <main className="flex flex-col items-center gap-10">
+        <section className="flex flex-col mt-[98px] px-20 pt-30 gap-10 max-w-[1280px] w-full">
+          <nav aria-label="Breadcrumb" className="flex items-center gap-5 text-sm text-text-grey-dark">
             <Link href="/" className="font-[inter] text-text-grey-mid font-medium hover:underline leading-[22px]">Home</Link>
             <span className="text-text-grey-dark">/</span>
             <Link href="/events" className="font-[inter] text-text-grey-mid font-medium hover:underline leading-[22px]">Events</Link>
             <span className="text-text-grey-dark">/</span>
             <Link href="/events/past_events" className="font-[inter] text-text-grey-mid font-medium hover:underline leading-[22px]">Past Events</Link>
             <span className="text-text-grey-dark">/</span>
-            <span className="font-[inter] font-medium text-text-green leading-[22px]">{eventTitle}</span>
+            <span className="font-[inter] font-medium text-text-green leading-[22px] line-clamp-1">{eventTitle}</span>
           </nav>
-          <div className="flex flex-col gap-5 lg:max-h-[800px]">
-            <p className="font-semibold text-text-black lg:text-[3.625rem] md:text-2xl">{eventTitle}</p>
+          <div className="flex flex-col gap-5">
+            <h1 className="font-semibold text-text-black lg:text-[3.625rem] md:text-4xl text-2xl">{eventTitle}</h1>
           </div>
         </section>
 
-        <section className="flex px-20 pb-30 2xl:justify-center">
+        <section className="flex px-20 pb-30 w-full">
           <div className="w-full max-w-[1280px] bg-white rounded-xl px-9 py-8">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               <main className="lg:col-span-2">
@@ -185,9 +187,9 @@ export default async function PastEventDetail({
                     <Image src={eventImage} alt={eventTitle || "Past event"} fill className="object-cover" />
                   </div>
 
-                  <div className="text-text-grey-dark whitespace-pre-line font-[inter] text-text-grey-mid text-justify">
-                    {articleText}
-                  </div>
+                  {articleContent && (
+                    <RichTextRenderer content={articleContent} />
+                  )}
                 </div>
               </main>
 

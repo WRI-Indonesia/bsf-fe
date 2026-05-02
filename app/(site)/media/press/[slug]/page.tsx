@@ -6,6 +6,7 @@ import { cookies } from 'next/headers';
 import { getPayload } from 'payload';
 import config from '../../../../../payload.config';
 import { notFound } from 'next/navigation';
+import RichTextRenderer from '../../../../../components/RichTextRenderer';
 
 type PressItem = {
   id: string;
@@ -14,7 +15,7 @@ type PressItem = {
   source_name: string;
   title: string;
   date: string;
-  content?: string;
+  content?: Record<string, unknown>;
   related_press?: PressItem[];
 };
 
@@ -83,7 +84,7 @@ export default async function PressDetailPage({
     <div className="min-h-screen bg-background-base-lime-light">
       <Header locale={locale} />
       <main className="flex flex-col 2xl:justify-center">
-        <section className="flex flex-col mt-[98px] px-20 pt-30 pb-10 gap-10 max-w-[1280px] mx-auto w-full">
+        <section className="flex flex-col mt-[98px] px-20 pt-30 pb-10 gap-10 max-w-[1280px] w-full">
           <nav aria-label="Breadcrumb" className="flex items-center gap-5 text-sm text-text-grey-dark">
             <Link href="/" className="font-[inter] text-text-grey-mid font-medium hover:underline leading-[22px]">Home</Link>
             <span className="text-text-grey-dark">/</span>
@@ -123,9 +124,7 @@ export default async function PressDetailPage({
                     </div>
 
                     {press.content && (
-                      <div className="text-text-grey-dark whitespace-pre-line font-[inter] text-text-grey-mid text-justify">
-                        {press.content}
-                      </div>
+                      <RichTextRenderer content={press.content} />
                     )}
                   </div>
                 </main>

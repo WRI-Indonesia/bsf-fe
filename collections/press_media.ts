@@ -53,7 +53,7 @@ const pressMedia: CollectionConfig = {
     },
     {
       name: 'content',
-      type: 'textarea',
+      type: 'richText',
       label: 'Article Content',
       localized: true,
     },
