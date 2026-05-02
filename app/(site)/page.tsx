@@ -339,41 +339,48 @@ export default async function Home() {
                 KEY DATES
               </p>
               <div className="mt-6 space-y-6">
-                {upcomingForums.map((item, index) => {
-                  let textColClass = "text-[#173e28]";
-                  let textSubClass = "text-[#486e57]";
-                  let dotClass = "bg-text-green";
-                  const date = formatDateRange(item.start_date as string, item.end_date as string)
-                  
-                  if (index === 1) {
-                    textColClass = "text-[#44a877]";
-                    textSubClass = "text-[#44a877]";
-                    dotClass = "bg-text-green ring-[3px] ring-text-green-light ring-offset-[#e4ebd8] z-1";
-                  } else if (index > 1) {
-                    textColClass = "text-[#a4aba1]";
-                    textSubClass = "text-[#a4aba1]";
-                    dotClass = "bg-text-grey-light";
-                  }
-                  
-                  return (
-                    <div key={(item.start_date ?? '') + index} className="relative flex gap-4">
-                      <div className="relative z-10 mt-[6px] flex flex-col items-center w-[12px]">
-                        <span className={`h-[10px] w-[10px] rounded-full flex-shrink-0 ${dotClass}`} />
-                        {index < upcomingForums.length - 1 ? (
-                          <span className="absolute top-[10px] h-[calc(100%+1.5rem)] w-[1.5px] bg-[#c3cdbe]" />
-                        ) : null}
+                {(() => {
+                  const keyDates = (upcomingForumEvent?.key_dates as Array<{ date: string; label: string }>) || [];
+                  return keyDates.map((kd, index) => {
+                    let textColClass = "text-[#173e28]";
+                    let textSubClass = "text-[#486e57]";
+                    let dotClass = "bg-text-green";
+                    const formattedDate = kd.date ? new Date(kd.date).toLocaleDateString('en-GB', {
+                      day: '2-digit',
+                      month: 'long',
+                      year: 'numeric',
+                    }) : '';
+                    
+                    if (index === 1) {
+                      textColClass = "text-[#44a877]";
+                      textSubClass = "text-[#44a877]";
+                      dotClass = "bg-text-green ring-[3px] ring-text-green-light ring-offset-[#e4ebd8] z-1";
+                    } else if (index > 1) {
+                      textColClass = "text-[#a4aba1]";
+                      textSubClass = "text-[#a4aba1]";
+                      dotClass = "bg-text-grey-light";
+                    }
+                    
+                    return (
+                      <div key={index} className="relative flex gap-4">
+                        <div className="relative z-10 mt-[6px] flex flex-col items-center w-[12px]">
+                          <span className={`h-[10px] w-[10px] rounded-full flex-shrink-0 ${dotClass}`} />
+                          {index < keyDates.length - 1 ? (
+                            <span className="absolute top-[10px] h-[calc(100%+1.5rem)] w-[1.5px] bg-[#c3cdbe]" />
+                          ) : null}
+                        </div>
+                        <div className="relative -top-[1px] flex flex-col gap-1">
+                          <p className={`font-['inter'] text-[13px] tracking-wide font-light leading-none ${textColClass}`}>
+                            {formattedDate}
+                          </p>
+                          <p className={`font-['inter'] text-base font-normal leading-tight ${textSubClass}`}>
+                            {kd.label}
+                          </p>
+                        </div>
                       </div>
-                      <div className="relative -top-[1px] flex flex-col gap-1">
-                        <p className={`font-['inter'] text-[13px] tracking-wide font-light leading-none ${textColClass}`}>
-                          {date}
-                        </p>
-                        <p className={`font-['inter'] text-base font-normal leading-tight ${textSubClass}`}>
-                          {item.title}
-                        </p>
-                      </div>
-                    </div>
-                  );
-                })}
+                    );
+                  });
+                })()}
               </div>
             </div>
           </div>
