@@ -6,7 +6,7 @@ const media: CollectionConfig = {
     read: () => true,
   },
   upload: {
-    staticDir: 'media',
+    staticDir: process.env.UPLOADS_DIR || 'media',
     mimeTypes: ['image/*', 'application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/zip', 'application/x-zip-compressed'],
   },
   fields: [
