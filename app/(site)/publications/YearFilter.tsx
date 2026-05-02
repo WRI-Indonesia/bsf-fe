@@ -7,7 +7,7 @@ export default function YearFilter({ years, activeYear, label }: { years: number
   const searchParams = useSearchParams();
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const params = new URLSearchParams(searchParams.toString());
+    const params = new URLSearchParams(searchParams?.toString() ?? '');
     const value = e.target.value;
     if (value) {
       params.set('year', value);
