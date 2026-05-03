@@ -376,6 +376,12 @@ export default async function Home() {
                       dotClass = "bg-text-grey-light";
                     }
                     
+                    const formattedDate = kdDate ? kdDate.toLocaleDateString('en-GB', {
+                      day: '2-digit',
+                      month: 'long',
+                      year: 'numeric',
+                    }) : '';
+
                     return (
                       <div key={index} className="relative flex gap-4">
                         <div className="relative z-10 mt-[6px] flex flex-col items-center w-[12px]">
