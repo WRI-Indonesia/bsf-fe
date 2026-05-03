@@ -41,7 +41,7 @@ async function getAboutContent(locale: string = 'en') {
     const result = await payload.findGlobal({
       slug: 'about_content',
       locale: locale as 'en' | 'id',
-      depth: 1,
+      depth: 2,
     });
     return result;
   } catch (error) {
@@ -59,8 +59,19 @@ function getSectionArray<T>(section: Record<string, unknown> | undefined, field:
 }
 
 function getUploadUrl(section: Record<string, unknown> | undefined, field: string, fallback: string): string {
-  const upload = section?.[field] as Record<string, unknown> | undefined;
-  return (upload?.url as string) || fallback;
+  const fieldValue = section?.[field];
+  if (!fieldValue) return fallback;
+  if (typeof fieldValue === 'string') return fieldValue;
+  if (typeof fieldValue === 'object' && fieldValue !== null) {
+    let url = (fieldValue as Record<string, unknown>)?.url as string || fallback;
+    try {
+      const parsed = new URL(url);
+      url = parsed.pathname + parsed.search;
+    } catch {
+    }
+    return url;
+  }
+  return fallback;
 }
 
 export default async function About() {
@@ -243,10 +254,16 @@ export default async function About() {
                       </p>
                       <div className="flex gap-4 items-center justify-center xl:justify-start">
                         {(['x', 'facebook', 'linkedin', 'telegram'] as const).map((platform) => {
+                          const platformRoots: Record<string, string> = {
+                            x: 'https://x.com',
+                            facebook: 'https://facebook.com',
+                            linkedin: 'https://linkedin.com',
+                            telegram: 'https://t.me',
+                          };
                           const url = socialLinks?.[platform];
-                          if (!url) return null;
+                          const href = (url && url.trim() !== '' && url !== 'null') ? url : platformRoots[platform];
                           return (
-                            <a key={platform} href={url} target="_blank" rel="noopener noreferrer" className="w-5 h-5 flex items-center justify-center text-text-black">
+                            <a key={platform} href={href} target="_blank" rel="noopener noreferrer" className="w-5 h-5 flex items-center justify-center text-text-black">
                               <Image src={`/${platform}.svg`} alt={platform} width={20} height={20} />
                             </a>
                           );

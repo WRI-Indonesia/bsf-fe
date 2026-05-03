@@ -208,6 +208,7 @@ export interface Event {
     | {
         date: string;
         label: string;
+        show?: boolean | null;
         id?: string | null;
       }[]
     | null;
@@ -421,6 +422,7 @@ export interface EventsSelect<T extends boolean = true> {
     | {
         date?: T;
         label?: T;
+        show?: T;
         id?: T;
       };
   updatedAt?: T;
