@@ -341,25 +341,42 @@ export default async function Home() {
               <div className="mt-6 space-y-6">
                 {(() => {
                   const keyDates = (upcomingForumEvent?.key_dates as Array<{ date: string; label: string }>) || [];
+                  const today = new Date();
+                  today.setHours(0, 0, 0, 0);
+                  
                   return keyDates.map((kd, index) => {
+                    const kdDate = kd.date ? new Date(kd.date) : null;
+                    let isPast = false;
+                    let isToday = false;
+                    let isFuture = false;
+                    
+                    if (kdDate) {
+                      const kdDateOnly = new Date(kdDate);
+                      kdDateOnly.setHours(0, 0, 0, 0);
+                      isPast = kdDateOnly < today;
+                      isToday = kdDateOnly.getTime() === today.getTime();
+                      isFuture = kdDateOnly > today;
+                    }
+                    
                     let textColClass = "text-[#173e28]";
                     let textSubClass = "text-[#486e57]";
                     let dotClass = "bg-text-green";
+                    
+                    if (isPast) {
+                      textColClass = "text-[#a4aba1]";
+                      textSubClass = "text-[#a4aba1]";
+                      dotClass = "bg-text-grey-light";
+                    } else if (isToday) {
+                      textColClass = "text-[#44a877]";
+                      textSubClass = "text-[#44a877]";
+                      dotClass = "bg-text-green ring-[3px] ring-text-green-light ring-offset-[#e4ebd8]";
+                    }
+                    
                     const formattedDate = kd.date ? new Date(kd.date).toLocaleDateString('en-GB', {
                       day: '2-digit',
                       month: 'long',
                       year: 'numeric',
                     }) : '';
-                    
-                    if (index === 1) {
-                      textColClass = "text-[#44a877]";
-                      textSubClass = "text-[#44a877]";
-                      dotClass = "bg-text-green ring-[3px] ring-text-green-light ring-offset-[#e4ebd8] z-1";
-                    } else if (index > 1) {
-                      textColClass = "text-[#a4aba1]";
-                      textSubClass = "text-[#a4aba1]";
-                      dotClass = "bg-text-grey-light";
-                    }
                     
                     return (
                       <div key={index} className="relative flex gap-4">
