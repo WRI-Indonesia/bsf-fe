@@ -46,6 +46,22 @@ async function getMediaContent(locale: string = 'en') {
   }
 }
 
+async function getAlbums(locale: string = 'en') {
+  try {
+    const payload = await getPayload({ config });
+    const result = await payload.find({
+      collection: 'album_media',
+      locale: locale as 'en' | 'id',
+      depth: 2,
+      limit: 9,
+    });
+    return result.docs || [];
+  } catch (error) {
+    console.error("Error fetching albums:", error);
+    return [];
+  }
+}
+
 function getSectionField(section: Record<string, unknown> | undefined, field: string, defaultValue: string): string {
   return (section?.[field] as string) || defaultValue;
 }
@@ -81,12 +97,11 @@ export default async function MediaPage() {
   const locale = cookieStore.get('locale')?.value || 'en';
 
   const mediaContent = await getMediaContent(locale);
+  const albums = await getAlbums(locale);
 
   const photosSection = mediaContent?.photos_section as Record<string, unknown> | undefined;
   const photosLabel = getSectionField(photosSection, 'label', 'Gallery');
   const photosTitle = getSectionField(photosSection, 'title', 'Photos & Videos');
-  const albumRelations = (photosSection?.albums as AlbumItem[]) || [];
-  const albums = albumRelations.slice(0, 9);
   const photosViewAllText = getSectionField(photosSection, 'view_all_text', 'Click here to see all albums');
   const photosViewAllLink = getSectionField(photosSection, 'view_all_link', '/media/gallery');
 
