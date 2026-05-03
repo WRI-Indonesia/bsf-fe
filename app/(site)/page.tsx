@@ -278,7 +278,7 @@ export default async function Home() {
                 <p className="font-[inter] text-lg leading-[1.3] tracking-[0] text-[#697d70] sm:text-xl">
                   {upcomingForumEvent?.description as string || "The 6th ASEAN Biodiversity Science Forum will focus on the implementation of the Global Biodiversity Framework, fostering collaboration and knowledge exchange to drive biodiversity conservation efforts across the ASEAN region."}
                 </p>
-                <div className="flex flex-wrap gap-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))' }}>
                   <div className="flex w-full items-center gap-3 rounded-[12px] border border-outline-green-light bg-[#c3d4be] p-4 sm:w-auto">
                     <Image
                       src="/book.svg"
