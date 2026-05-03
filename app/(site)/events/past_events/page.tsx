@@ -5,6 +5,7 @@ import Footer from '../../components/Footer';
 import { getPayload } from 'payload';
 import config from '../../../../payload.config';
 import { cookies } from 'next/headers';
+
 import { formatDateRange, formatParticipants, getMediaUrl } from '../../../../lib/helpers';
 
 type pastEventImage = {
