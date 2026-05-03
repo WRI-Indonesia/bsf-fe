@@ -57,3 +57,10 @@ export function formatParticipants(count?: string | number | null): string {
   const rounded = Math.floor(num / 1000) * 1000;
   return `${rounded}+`;
 }
+
+export function getMediaUrl(image: unknown, fallback: string = '/events_1.png'): string {
+  if (image && typeof image === 'object' && 'filename' in (image as Record<string, unknown>)) {
+    return `/api/media/file/${(image as { filename: string }).filename}`;
+  }
+  return fallback;
+}
