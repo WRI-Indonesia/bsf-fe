@@ -67,6 +67,15 @@ function getUploadUrl(item: Record<string, unknown> | undefined, fallback: strin
   }
 }
 
+function slugify(value: string) {
+  return value
+    .toLowerCase()
+    .trim()
+    .replace(/["']/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
 export default async function MediaPage() {
   const cookieStore = await cookies();
   const locale = cookieStore.get('locale')?.value || 'en';
@@ -112,12 +121,14 @@ export default async function MediaPage() {
 
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {albums.map((album) => {
+                const albumSlug = slugify(album.title);
                 const imgUrl = getUploadUrl(album.cover_image as unknown as Record<string, unknown>, '/media/gallery.png');
                 const mediaCount = album.media_items?.length || 0;
                 return (
-                  <article
+                  <Link
                     key={album.id}
-                    className="flex flex-col rounded-[16px] overflow-hidden"
+                    href={`/media/${albumSlug}`}
+                    className="flex flex-col rounded-[16px] overflow-hidden bg-white"
                   >
                     <div className="grid gap-3 p-4">
                       <div className="col-span-2">
@@ -130,7 +141,7 @@ export default async function MediaPage() {
                       <p className="mt-2 font-['inter'] text-[16px] font-semibold text-text-black">{album.title}</p>
                       <p className="mt-1 font-['inter'] text-[13px] text-text-grey-light">{mediaCount} Photos &amp; Videos</p>
                     </div>
-                  </article>
+                  </Link>
                 );
               })}
             </div>
