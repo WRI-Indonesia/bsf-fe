@@ -37,7 +37,7 @@ async function getPublications(locale: string = 'en', page: number = 1, limit: n
       page,
       sort: '-date',
       locale: locale as 'en' | 'id',
-      where: Object.keys(where).length > 0 ? where : undefined,
+      where: Object.keys(where).length > 0 ? (where as any) : undefined,
     });
 
     return {
@@ -255,7 +255,7 @@ export default async function Publications({
                   </div>
                 ) : (
                   PUBLICATIONS_DATA.map((pub, i) => {
-                    const pubFile = (pub as Record<string, unknown>).file as Record<string, unknown> | undefined;
+                    const pubFile = (pub as unknown as Record<string, unknown>).file as Record<string, unknown> | undefined;
                     const fileUrl = pubFile?.url as string || '#';
                     return (
                       <div

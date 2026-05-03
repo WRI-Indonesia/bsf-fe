@@ -453,7 +453,7 @@ export default async function Events() {
 
             <div className="grid gap-[48px] md:grid-cols-1 md:gap-y-[60px] lg:grid-cols-2 lg:gap-x-[60px] lg:gap-y-[72px]">
               {pastEvents.map((event, i) => {
-                const eventImg = (event.image as Record<string, unknown>)?.url as string || '/events_1.png';
+                const eventImg = (event.image as unknown as Record<string, unknown>)?.url as string || '/events_1.png';
                 const eventDate = formatDateRange(event.start_date as string, event.end_date as string) || '';
                 return (
                   <div key={event.id || i} className="grid gap-4 md:grid-cols-[220px_1fr] md:gap-6 items-start lg:grid-cols-[190px_1fr]">

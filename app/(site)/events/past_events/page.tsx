@@ -120,7 +120,7 @@ export default async function PastEvents() {
                     </div>
                     <div className="flex flex-col gap-3 lg:h-full lg:max-h-[190px] lg:justify-between">
                       <p className="font-[inter] font-semibold text-text-green">
-                        {formatDateRange(event.start_date, event.end_date)}
+                        {formatDateRange(event.start_date as string, event.end_date as string)}
                       </p>
                       <h3 className="lg:text-xl xl:text-[1.75rem]/[100%] font-semibold text-text-grey-dark line-clamp-2">
                         {event.title}

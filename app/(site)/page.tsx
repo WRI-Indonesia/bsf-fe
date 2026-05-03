@@ -178,7 +178,7 @@ export default async function Home() {
                   </div>
                   <div className="hidden sm:block h-7 w-[1.5px] h-[37px] bg-[#668270] shrink-0" />
                   <div className="flex items-baseline gap-2 whitespace-nowrap">
-                    <span className="text-lg md:text-2xl font-bold leading-none tracking-normal text-text-green">{formatParticipants(heroEvent?.participants) || "500+"}</span>
+                    <span className="text-lg md:text-2xl font-bold leading-none tracking-normal text-text-green">{formatParticipants(heroEvent?.participants as string) || "500+"}</span>
                     <span className="font-['inter'] text-xs md:text-base font-normal leading-none tracking-normal text-text-green">Participants</span>
                   </div>
                 </div>
@@ -287,7 +287,7 @@ export default async function Home() {
                       style={{ width: "20px", height: "18px" }}
                     />
                     <div className="flex flex-col">
-                      <span className="text-xl font-bold text-text-green lg:text-2xl">{formatParticipants(upcomingForumEvent?.participants) || "500+"} Expected</span>
+                      <span className="text-xl font-bold text-text-green lg:text-2xl">{formatParticipants(upcomingForumEvent?.participants as string) || "500+"} Expected</span>
                       <span className="font-['inter'] font-normal text-text-green">Participants</span>
                     </div>
                   </div>

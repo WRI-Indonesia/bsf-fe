@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { JSX } from 'react';
 
 type RichTextNode = {
   type?: string;
@@ -59,7 +59,10 @@ function renderNode(node: RichTextNode, index: number): React.ReactNode {
     case 'quote':
       return <blockquote key={index} className="border-l-4 border-text-green pl-4 italic my-4 text-text-grey-dark">{children}</blockquote>;
     case 'link':
-      return <a key={index} href={node.value || '#'} target="_blank" rel="noopener noreferrer" className="text-text-green underline">{children}</a>;
+      const href = typeof node.value === 'string' 
+        ? node.value 
+        : (node.fields?.url as string) || '#';
+      return <a key={index} href={href as string} target="_blank" rel="noopener noreferrer" className="text-text-green underline">{children}</a>;
     case 'upload': {
       const uploadValue = node.value as Record<string, unknown> | undefined;
       const imgSrc = (uploadValue?.url as string) || node.url || (uploadValue?.filename as string ? `/api/media/file/${uploadValue?.filename}` : '');

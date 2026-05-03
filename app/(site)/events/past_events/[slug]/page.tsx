@@ -98,7 +98,7 @@ async function getPastEventDetail(slug: string, locale: string = 'en') {
     locale: locale as 'en' | 'id',
   });
 
-  const pastEvents = (listResult.docs || []) as PastEvent[];
+  const pastEvents = (listResult.docs || []) as unknown as PastEvent[];
   const matchedEvent = pastEvents.find(
     (event) => slugify(event.title || "") === slug
   );
@@ -115,7 +115,7 @@ async function getPastEventDetail(slug: string, locale: string = 'en') {
     id: matchedEvent.id,
     depth: 1,
     locale: locale as 'en' | 'id',
-  })) as PastEvent | null;
+  })) as unknown as PastEvent | null;
 
   return {
     event: event || matchedEvent,
@@ -138,7 +138,7 @@ export default async function PastEventDetail({
   }
 
   const articleContent = event.article as Record<string, unknown> | undefined;
-  const detailDate = formatDateRange(event.start_date, event.end_date);
+  const detailDate = formatDateRange(event.start_date as string, event.end_date as string);
   const eventImage = getImageSrc(event.image);
   const related = relatedEvents.slice(0, 3);
   const eventTitle = event.title || "";
@@ -217,7 +217,7 @@ export default async function PastEventDetail({
                               <p className="font-[inter] font-semibold text-[#325B53] leading-[100%]">{relatedEvent.title}</p>
                             </div>
                             <div className="flex flex-col text-sm">
-                              <p className="font-[inter] text-text-grey-mid text-sm">{formatDateRange(relatedEvent.start_date, relatedEvent.end_date)}</p>
+                              <p className="font-[inter] text-text-grey-mid text-sm">{formatDateRange(relatedEvent.start_date as string, relatedEvent.end_date as string)}</p>
                               <p className="font-[inter] text-text-grey-mid text-sm">{relatedEvent.location}</p>
                             </div>
                           </div>
