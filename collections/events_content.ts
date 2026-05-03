@@ -395,7 +395,7 @@ const eventsContent: GlobalConfig = {
           name: 'view_all_text',
           type: 'text',
           label: 'View All Text',
-          defaultValue: 'View all past events →',
+          defaultValue: 'View all past events',
           localized: true,
         },
       ],

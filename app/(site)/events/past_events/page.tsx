@@ -5,7 +5,7 @@ import Footer from '../../components/Footer';
 import { getPayload } from 'payload';
 import config from '../../../../payload.config';
 import { cookies } from 'next/headers';
-import { formatDateRange, formatParticipants } from '../../../../lib/helpers';
+import { formatDateRange, formatParticipants, getMediaUrl } from '../../../../lib/helpers';
 
 type pastEventImage = {
   filename: string;
@@ -37,18 +37,9 @@ async function getPastEvents(locale: string = 'en') {
     const result = await payload.find({
       collection: 'events',
       where: {
-        and: [
-          {
-            end_date: {
-              less_than: now.toISOString(),
-            },
-          },
-          {
-            key_dates: {
-              exists: false,
-            },
-          },
-        ],
+        end_date: {
+          less_than: now.toISOString(),
+        },
       },
       limit: 50,
       sort: '-start_date',
@@ -99,10 +90,7 @@ export default async function PastEvents() {
             <div className="grid gap-[48px] md:grid-cols-1 md:gap-y-[60px] lg:grid-cols-2 lg:gap-x-[60px] lg:gap-y-[72px]">
               {(pastEvents as unknown as pastEvent[]).map((event: pastEvent) => {
                 const eventSlug = slugify(event.title || '');
-                const eventImage =
-                  event.image && typeof event.image === 'object'
-                    ? `/api/media/file/${event.image.filename}`
-                    : '/events_1.png';
+                const eventImage = getMediaUrl(event.image, '/events_1.png');
 
                 return (
                   <Link

@@ -26,7 +26,13 @@ function getUploadUrl(item: Record<string, unknown> | undefined, fallback: strin
   if (!item) return fallback;
   const url = item.url as string;
   const filename = item.filename as string;
-  return url || (filename ? `/api/media/file/${filename}` : fallback);
+  const result = url || (filename ? `/api/media/file/${filename}` : fallback);
+  try {
+    const parsed = new URL(result);
+    return parsed.pathname + parsed.search;
+  } catch {
+    return result;
+  }
 }
 
 async function getAlbums(locale: string = 'en') {
