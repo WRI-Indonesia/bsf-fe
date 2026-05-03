@@ -75,6 +75,12 @@ const events: CollectionConfig = {
           label: 'Label',
           localized: true,
         },
+        {
+          name: 'show',
+          type: 'checkbox',
+          label: 'Show on website',
+          defaultValue: true,
+        },
       ],
     },
   ],

@@ -45,8 +45,19 @@ function getSectionArray<T>(section: Record<string, unknown> | undefined, field:
 }
 
 function getUploadUrl(section: Record<string, unknown> | undefined, field: string, fallback: string): string {
-  const upload = section?.[field] as Record<string, unknown> | undefined;
-  return (upload?.url as string) || fallback;
+  const fieldValue = section?.[field];
+  if (!fieldValue) return fallback;
+  if (typeof fieldValue === 'string') return fieldValue;
+  if (typeof fieldValue === 'object' && fieldValue !== null) {
+    let url = (fieldValue as Record<string, unknown>)?.url as string || fallback;
+    try {
+      const parsed = new URL(url);
+      url = parsed.pathname + parsed.search;
+    } catch {
+    }
+    return url;
+  }
+  return fallback;
 }
 
 async function getEventsContent(locale: string = 'en') {
@@ -73,8 +84,8 @@ async function getKeyDates(locale: string = 'en') {
       where: {
         and: [
           {
-            key_dates: {
-              exists: true,
+            'key_dates.show': {
+              not_equals: false,
             },
           },
         ],
@@ -97,20 +108,6 @@ async function getPastEvents(locale: string = 'en') {
     const result = await payload.find({
       collection: 'events',
       limit: 10,
-      where: {
-        and: [
-          {
-            end_date: {
-              less_than: now.toISOString(),
-            },
-          },
-          {
-            key_dates: {
-              exists: false,
-            },
-          },
-        ],
-      },
       sort: '-start_date',
       locale: locale as 'en' | 'id',
     });
@@ -175,7 +172,7 @@ export default async function Events() {
   const pastEventsSection = eventsContent?.past_events_section as Record<string, unknown> | undefined;
   const pastEventsLabel = getSectionField(pastEventsSection, 'label', 'Archive');
   const pastEventsTitle = getSectionField(pastEventsSection, 'title', 'Past Events');
-  const pastEventsViewAll = getSectionField(pastEventsSection, 'view_all_text', 'View all past events →');
+  const pastEventsViewAll = getSectionField(pastEventsSection, 'view_all_text', 'View all past events');
 
   const buttonStyles: Record<string, string> = {
     primary: 'bg-text-green text-text-white-broken',
@@ -258,8 +255,10 @@ export default async function Events() {
             </div>
             <div className="w-full grid gap-6 sm:grid-cols-2 lg:grid-cols-5 2xl:grid-cols-5">
               {keyDates.flatMap((item) => {
-                const keyDatesArray = (item.key_dates as Array<{ date: string; label: string }>) || [];
-                return keyDatesArray.map((kd, i) => {
+                const keyDatesArray = (item.key_dates as Array<{ date: string; label: string; show?: boolean }>) || [];
+                return keyDatesArray
+                  .filter(kd => kd.show !== false)
+                  .map((kd, i) => {
                   const formattedDate = kd.date ? new Date(kd.date).toLocaleDateString('en-GB', {
                     day: '2-digit',
                     month: 'long',
@@ -350,10 +349,16 @@ export default async function Events() {
                       </div>
                       <div className="flex gap-4 items-center">
                         {(['x', 'linkedin', 'facebook', 'telegram'] as const).map((platform) => {
+                          const platformRoots: Record<string, string> = {
+                            x: 'https://x.com',
+                            facebook: 'https://facebook.com',
+                            linkedin: 'https://linkedin.com',
+                            telegram: 'https://t.me',
+                          };
                           const url = socialLinks?.[platform];
-                          if (!url) return null;
+                          const href = (url && url.trim() !== '' && url !== 'null') ? url : platformRoots[platform];
                           return (
-                            <Link key={platform} href={url} target="_blank" rel="noopener noreferrer" className="w-5 h-5 flex items-center justify-center text-text-black">
+                            <Link key={platform} href={href} target="_blank" rel="noopener noreferrer" className="w-5 h-5 flex items-center justify-center text-text-black">
                               <Image alt={platform} src={`/${platform}.svg`} width={20} height={20} />
                             </Link>
                           );
@@ -460,7 +465,7 @@ export default async function Events() {
 
             <div className="grid gap-[48px] md:grid-cols-1 md:gap-y-[60px] lg:grid-cols-2 lg:gap-x-[60px] lg:gap-y-[72px]">
               {pastEvents.map((event, i) => {
-                const eventImg = (event.image as unknown as Record<string, unknown>)?.url as string || '/events_1.png';
+                const eventImg = getUploadUrl(event as unknown as Record<string, unknown>, 'image', '/events_1.png');
                 const eventDate = formatDateRange(event.start_date as string, event.end_date as string) || '';
                 return (
                   <div key={event.id || i} className="grid gap-4 md:grid-cols-[220px_1fr] md:gap-6 items-start lg:grid-cols-[190px_1fr]">

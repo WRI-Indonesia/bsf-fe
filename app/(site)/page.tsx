@@ -340,11 +340,13 @@ export default async function Home() {
               </p>
               <div className="mt-6 space-y-6">
                 {(() => {
-                  const keyDates = (upcomingForumEvent?.key_dates as Array<{ date: string; label: string }>) || [];
+                  const keyDates = (upcomingForumEvent?.key_dates as Array<{ date: string; label: string; show?: boolean }>) || [];
                   const today = new Date();
                   today.setHours(0, 0, 0, 0);
                   
-                  return keyDates.map((kd, index) => {
+                  return keyDates
+                    .filter(kd => kd.show !== false)
+                    .map((kd, index) => {
                     const kdDate = kd.date ? new Date(kd.date) : null;
                     let isPast = false;
                     let isToday = false;
