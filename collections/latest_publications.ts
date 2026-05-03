@@ -22,48 +22,32 @@ const latestPublications: CollectionConfig = {
   },
   hooks: {
     beforeChange: [
-      ({ data, req }) => {
+      async ({ data, req, operation }) => {
         if (data?.file) {
+          let mimeType: string | undefined | null = null;
+
           if (typeof data.file === 'object' && data.file !== null) {
             const fileData = data.file as Record<string, unknown>;
-            const mimeType = fileData.mimeType as string | undefined;
+            mimeType = fileData.mimeType as string | undefined;
+          } else if (typeof data.file === 'number' && req.payload) {
+            try {
+              const mediaDoc = await req.payload.findByID({
+                collection: 'media',
+                id: data.file,
+              });
+              mimeType = mediaDoc?.mimeType as string | undefined;
+            } catch (e) {
+            }
+          }
+
+          if (mimeType) {
             data.file_type = getFileTypeFromMime(mimeType);
           }
         }
         return data;
       },
     ],
-    afterChange: [
-      async ({ doc, req, operation }) => {
-        // Hanya jalankan saat create, bukan update (hindari loop)
-        if (operation !== 'create') return doc;
-        
-        // Cek apakah file_type masih Unknown dan file berupa ID
-        if (doc.file_type === 'Unknown' && doc.file && typeof doc.file === 'number' && req.payload) {
-          try {
-            const mediaDoc = await req.payload.findByID({
-              collection: 'media',
-              id: doc.file,
-            });
-            if (mediaDoc?.mimeType) {
-              const fileType = getFileTypeFromMime(mediaDoc.mimeType as string);
-              if (fileType !== 'Unknown') {
-                await req.payload.update({
-                  collection: 'latest_publications',
-                  id: doc.id,
-                  data: {
-                    file_type: fileType,
-                  },
-                });
-              }
-            }
-          } catch (e) {
-            // Silently fail
-          }
-        }
-        return doc;
-      },
-    ],
+    afterChange: [],
   },
   fields: [
     {
