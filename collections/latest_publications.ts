@@ -24,28 +24,30 @@ const latestPublications: CollectionConfig = {
     beforeChange: [
       ({ data, req }) => {
         if (data?.file) {
-          // When a file is uploaded directly via the API
-          const mimeType = data.file.mimeType;
-          data.file_type = getFileTypeFromMime(mimeType);
-        } else if (data?.file && typeof data.file === 'number') {
-          // If file is an existing media ID, we need to look it up
-          // This will be handled by the afterRead or we can fetch it
+          if (typeof data.file === 'object' && data.file !== null) {
+            const fileData = data.file as Record<string, unknown>;
+            const mimeType = fileData.mimeType as string | undefined;
+            data.file_type = getFileTypeFromMime(mimeType);
+          }
         }
         return data;
       },
     ],
     afterChange: [
-      async ({ doc, req }) => {
-        // If the file is a media relation (ID), fetch its mime type
-        if (doc.file && typeof doc.file === 'number' && req.payload) {
+      async ({ doc, req, operation }) => {
+        // Hanya jalankan saat create, bukan update (hindari loop)
+        if (operation !== 'create') return doc;
+        
+        // Cek apakah file_type masih Unknown dan file berupa ID
+        if (doc.file_type === 'Unknown' && doc.file && typeof doc.file === 'number' && req.payload) {
           try {
             const mediaDoc = await req.payload.findByID({
               collection: 'media',
               id: doc.file,
             });
             if (mediaDoc?.mimeType) {
-              const fileType = getFileTypeFromMime(mediaDoc.mimeType);
-              if (fileType !== doc.file_type) {
+              const fileType = getFileTypeFromMime(mediaDoc.mimeType as string);
+              if (fileType !== 'Unknown') {
                 await req.payload.update({
                   collection: 'latest_publications',
                   id: doc.id,
@@ -56,7 +58,7 @@ const latestPublications: CollectionConfig = {
               }
             }
           } catch (e) {
-            // Silently fail - file type will remain as-is
+            // Silently fail
           }
         }
         return doc;
