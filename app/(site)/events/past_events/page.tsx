@@ -44,7 +44,7 @@ async function getPastEvents(locale: string = 'en') {
             },
           },
           {
-            key_date: {
+            key_dates: {
               exists: false,
             },
           },
