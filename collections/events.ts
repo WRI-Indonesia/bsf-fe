@@ -5,19 +5,32 @@ const events: CollectionConfig = {
   access: {
     read: () => true,
   },
+  admin: {
+    useAsTitle: 'title',
+  },
   fields: [
     {
-      name: 'date',
+      name: 'start_date',
       type: 'date',
+      required: true,
+      label: 'Start Date',
+    },
+    {
+      name: 'end_date',
+      type: 'date',
+      required: true,
+      label: 'End Date',
     },
     {
       name: 'title',
       type: 'text',
       required: true,
+      localized: true,
     },
     {
       name: 'location',
       type: 'text',
+      localized: true,
     },
     {
       name: 'participants',
@@ -31,8 +44,25 @@ const events: CollectionConfig = {
     {
       name: 'article',
       type: 'richText',
+      localized: true,
+    },
+    {
+      name: 'description',
+      type: 'text',
+      localized: true,
+    },
+    {
+      name: 'show_on_homepage',
+      type: 'checkbox',
+      label: 'Show on Homepage',
+      defaultValue: false,
+    },
+    {
+      name: 'key_date',
+      type: 'date',
+      label: 'Key Date',
     },
   ],
-};
+}
 
 export default events;
