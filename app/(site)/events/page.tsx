@@ -7,6 +7,15 @@ import { getPayload } from 'payload';
 import config from '../../../payload.config';
 import { formatDateRange } from '../../../lib/helpers';
 
+function slugify(value: string) {
+  return value
+    .toLowerCase()
+    .trim()
+    .replace(/["']/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
 type SocialLinks = {
   x?: string;
   facebook?: string;
@@ -107,7 +116,12 @@ async function getPastEvents(locale: string = 'en') {
 
     const result = await payload.find({
       collection: 'events',
-      limit: 10,
+      limit: 6,
+      where: {
+        end_date: {
+          less_than: now.toISOString(),
+        },
+      },
       sort: '-start_date',
       locale: locale as 'en' | 'id',
     });
@@ -467,8 +481,9 @@ export default async function Events() {
               {pastEvents.map((event, i) => {
                 const eventImg = getUploadUrl(event as unknown as Record<string, unknown>, 'image', '/events_1.png');
                 const eventDate = formatDateRange(event.start_date as string, event.end_date as string) || '';
+                const eventSlug = slugify(event.title as string || '');
                 return (
-                  <div key={event.id || i} className="grid gap-4 md:grid-cols-[220px_1fr] md:gap-6 items-start lg:grid-cols-[190px_1fr]">
+                  <Link key={event.id || i} href={`/events/past_events/${eventSlug}`} className="grid gap-4 md:grid-cols-[220px_1fr] md:gap-6 items-start lg:grid-cols-[190px_1fr] group">
                     <div className="relative h-[190px] w-full overflow-hidden rounded-2xl md:h-[150px] md:w-[220px] lg:h-[190px] lg:w-[190px]">
                       <Image
                         src={eventImg}
@@ -481,7 +496,7 @@ export default async function Events() {
                       <p className="font-[inter] font-semibold text-text-green">
                         {eventDate}
                       </p>
-                      <h3 className="lg:text-xl xl:text-[1.75rem]/[100%] font-semibold text-text-grey-dark line-clamp-2">
+                      <h3 className="lg:text-xl xl:text-[1.75rem]/[100%] font-semibold text-text-grey-dark line-clamp-2 group-hover:text-text-green transition-colors">
                         {event.title as string}
                       </h3>
                       <div className="flex flex-col text-text-grey-dark">
@@ -495,7 +510,7 @@ export default async function Events() {
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </Link>
                 );
               })}
             </div>

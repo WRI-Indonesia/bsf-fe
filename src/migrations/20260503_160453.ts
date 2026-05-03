@@ -423,7 +423,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"registration_section_right_box_button_text" varchar NOT NULL,
   	"past_events_section_label" varchar DEFAULT 'Archive',
   	"past_events_section_title" varchar DEFAULT 'Past Events',
-  	"past_events_section_view_all_text" varchar DEFAULT 'View all past events →',
+  	"past_events_section_view_all_text" varchar DEFAULT 'View all past events',
   	"id" serial PRIMARY KEY NOT NULL,
   	"_locale" "_locales" NOT NULL,
   	"_parent_id" integer NOT NULL
