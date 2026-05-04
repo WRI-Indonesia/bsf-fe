@@ -9,13 +9,13 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
    END $$;
 
    DO $$ BEGIN
-    ALTER TABLE "users" ADD COLUMN "name" varchar NOT NULL;
+    ALTER TABLE "users" ADD COLUMN "name" varchar;
    EXCEPTION
     WHEN duplicate_column THEN null;
    END $$;
 
    DO $$ BEGIN
-    ALTER TABLE "users" ADD COLUMN "role" "public"."enum_users_role" DEFAULT 'editor' NOT NULL;
+    ALTER TABLE "users" ADD COLUMN "role" "public"."enum_users_role" DEFAULT 'editor';
    EXCEPTION
     WHEN duplicate_column THEN null;
    END $$;`)
