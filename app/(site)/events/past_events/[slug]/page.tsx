@@ -162,7 +162,7 @@ export default async function PastEventDetail({
           </div>
         </section>
 
-        <section className="flex px-20 pb-30 w-full">
+        <section className="flex px-20 pb-30 w-full justify-center">
           <div className="w-full max-w-[1280px] bg-white rounded-xl px-9 py-8">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               <main className="lg:col-span-2">
