@@ -190,7 +190,7 @@ export default async function Home() {
               </p>
             </div>
             <div className="px-8 md:px-12 lg:px-0 lg:pr-10 flex items-end lg:justify-end">
-              <div className="flex flex-col gap-4 w-full sm:max-w-[480px] rounded-xl bg-white/75 p-6">
+              <div className="flex flex-col gap-4 w-full rounded-xl bg-white/75 p-6">
                 <p className="text-base md:text-lg font-['inter'] font-semibold text-text-lime">
                   Upcoming Forum
                 </p>
