@@ -11,6 +11,7 @@ import aboutContent from './collections/about_content';
 import eventsContent from './collections/events_content';
 import publicationsContent from './collections/publications_content';
 import mediaContent from './collections/media_content';
+import users from './collections/users';
 
 export default buildConfig({
   secret: process.env.PAYLOAD_SECRET || 'SECRET_KEY',
@@ -22,7 +23,7 @@ export default buildConfig({
   }),
   editor: lexicalEditor({}),
   serverURL: process.env.PAYLOAD_PUBLIC_SERVER_URL || 'http://localhost:3000',
-  collections: [latestPublications, events, media, albumMedia, pressMedia],
+  collections: [users, latestPublications, events, media, albumMedia, pressMedia],
   globals: [homepageContent, aboutContent, eventsContent, publicationsContent, mediaContent],
   localization: {
     locales: ['en', 'id'],
