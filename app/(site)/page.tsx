@@ -190,21 +190,19 @@ export default async function Home() {
               </p>
             </div>
             <div className="px-8 md:px-12 lg:px-0 lg:pr-10 flex items-end lg:justify-end">
-              <div className="flex flex-col gap-4 w-full rounded-xl bg-white/75 p-6">
+              <div className="flex flex-col gap-4 w-full sm:max-w-[480px] rounded-xl bg-white/75 p-6">
                 <p className="text-base md:text-lg font-['inter'] font-semibold text-text-lime">
                   Upcoming Forum
                 </p>
                 <h3 className="text-[22px] md:text-[32px] lg:text-[38px] font-bold leading-[1.1] tracking-tight text-text-green">
                   {heroEvent?.title as string || "Connecting Biodiversity Science, Policy, and Action"}
                 </h3>
-                <div className="flex w-full flex-col sm:flex-row items-center justify-center gap-2 sm:gap-6 rounded-lg bg-background-base-green/20 px-2 sm:px-4 py-2 text-text-green">
-                  <div className="flex items-baseline gap-2 whitespace-nowrap">
+                <div className="flex w-full flex-col items-center justify-center gap-4 sm:gap-4 rounded-lg text-text-green">
+                  <div className="flex w-full bg-background-base-green/20 justify-center items-baseline gap-2 whitespace-nowrap px-4 py-2">
                     <span className="text-lg md:text-2xl font-bold leading-none tracking-normal text-text-green">{formatDateRange(heroEvent?.start_date as string, heroEvent?.end_date as string) || "14-19"}</span>
                   </div>
-                  <div className="hidden sm:block h-7 w-[1.5px] h-[37px] bg-[#668270] shrink-0" />
-                  <div className="flex items-baseline gap-2 whitespace-nowrap">
-                    <span className="text-lg md:text-2xl font-bold leading-none tracking-normal text-text-green">{formatParticipants(heroEvent?.participants as string) || "500+"}</span>
-                    <span className="font-['inter'] text-xs md:text-base font-normal leading-none tracking-normal text-text-green">Participants</span>
+                  <div className="flex w-full bg-background-base-green/20 justify-center items-baseline gap-2 whitespace-nowrap px-4 py-2">
+                    <span className="text-lg md:text-2xl font-bold leading-none tracking-normal text-text-green">{formatParticipants(heroEvent?.location as string) || "500+"}</span>
                   </div>
                 </div>
                 <div className="grid w-full grid-cols-2 gap-3">
