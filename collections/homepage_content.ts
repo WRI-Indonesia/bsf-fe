@@ -24,6 +24,15 @@ const homepageContent: GlobalConfig = {
           },
         },
         {
+          name: 'background_image',
+          type: 'upload',
+          relationTo: 'media',
+          label: 'Hero Background Image',
+          admin: {
+            description: 'Upload a custom background image for the hero section.',
+          },
+        },
+        {
           name: 'subtitle',
           type: 'textarea',
           label: 'Subtitle',
@@ -38,11 +47,23 @@ const homepageContent: GlobalConfig = {
           localized: true,
         },
         {
+          name: 'register_cta_url',
+          type: 'text',
+          label: 'Register CTA URL',
+          defaultValue: '#',
+        },
+        {
           name: 'explore_cta',
           type: 'text',
           label: 'Explore CTA Text',
           defaultValue: 'Explore Publications',
           localized: true,
+        },
+        {
+          name: 'explore_cta_url',
+          type: 'text',
+          label: 'Explore CTA URL',
+          defaultValue: '/publications',
         },
       ],
     },
@@ -121,6 +142,13 @@ const homepageContent: GlobalConfig = {
         label: 'Upcoming Forum Event',
       },
       {
+        name: 'label',
+        type: 'text',
+        label: 'Section Label',
+        defaultValue: 'Upcoming Forum',
+        localized: true,
+      },
+      {
         name: 'register_cta',
         type: 'text',
         label: 'Register CTA Text',
@@ -128,11 +156,23 @@ const homepageContent: GlobalConfig = {
         localized: true,
       },
       {
+        name: 'register_cta_url',
+        type: 'text',
+        label: 'Register CTA URL',
+        defaultValue: '#',
+      },
+      {
         name: 'view_program_cta',
         type: 'text',
         label: 'View Program CTA Text',
         defaultValue: 'View Program',
         localized: true,
+      },
+      {
+        name: 'view_program_cta_url',
+        type: 'text',
+        label: 'View Program CTA URL',
+        defaultValue: '#',
       },
     ]
     },

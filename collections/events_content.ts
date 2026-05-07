@@ -56,6 +56,12 @@ const eventsContent: GlobalConfig = {
               localized: true,
             },
             {
+              name: 'url',
+              type: 'text',
+              label: 'Button URL',
+              defaultValue: '#',
+            },
+            {
               name: 'style',
               type: 'select',
               label: 'Button Style',
@@ -330,6 +336,12 @@ const eventsContent: GlobalConfig = {
               required: true,
               localized: true,
             },
+            {
+              name: 'button_url',
+              type: 'text',
+              label: 'Button URL',
+              defaultValue: '#',
+            },
           ],
         },
         {
@@ -367,6 +379,12 @@ const eventsContent: GlobalConfig = {
               label: 'Button Text',
               required: true,
               localized: true,
+            },
+            {
+              name: 'button_url',
+              type: 'text',
+              label: 'Button URL',
+              defaultValue: '#',
             },
           ],
         },

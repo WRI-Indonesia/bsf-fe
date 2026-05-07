@@ -67,26 +67,26 @@ export interface Config {
   };
   blocks: {};
   collections: {
+    users: User;
     latest_publications: LatestPublication;
     events: Event;
     media: Media;
     album_media: AlbumMedia;
     press_media: PressMedia;
     'payload-kv': PayloadKv;
-    users: User;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
   collectionsJoins: {};
   collectionsSelect: {
+    users: UsersSelect<false> | UsersSelect<true>;
     latest_publications: LatestPublicationsSelect<false> | LatestPublicationsSelect<true>;
     events: EventsSelect<false> | EventsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     album_media: AlbumMediaSelect<false> | AlbumMediaSelect<true>;
     press_media: PressMediaSelect<false> | PressMediaSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
-    users: UsersSelect<false> | UsersSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -136,6 +136,33 @@ export interface UserAuthOperations {
     email: string;
     password: string;
   };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "users".
+ */
+export interface User {
+  id: number;
+  name: string;
+  role: 'admin' | 'editor';
+  updatedAt: string;
+  createdAt: string;
+  email: string;
+  resetPasswordToken?: string | null;
+  resetPasswordExpiration?: string | null;
+  salt?: string | null;
+  hash?: string | null;
+  loginAttempts?: number | null;
+  lockUntil?: string | null;
+  sessions?:
+    | {
+        id: string;
+        createdAt?: string | null;
+        expiresAt: string;
+      }[]
+    | null;
+  password?: string | null;
+  collection: 'users';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -292,36 +319,15 @@ export interface PayloadKv {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "users".
- */
-export interface User {
-  id: number;
-  updatedAt: string;
-  createdAt: string;
-  email: string;
-  resetPasswordToken?: string | null;
-  resetPasswordExpiration?: string | null;
-  salt?: string | null;
-  hash?: string | null;
-  loginAttempts?: number | null;
-  lockUntil?: string | null;
-  sessions?:
-    | {
-        id: string;
-        createdAt?: string | null;
-        expiresAt: string;
-      }[]
-    | null;
-  password?: string | null;
-  collection: 'users';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
   id: number;
   document?:
+    | ({
+        relationTo: 'users';
+        value: number | User;
+      } | null)
     | ({
         relationTo: 'latest_publications';
         value: number | LatestPublication;
@@ -341,10 +347,6 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'press_media';
         value: number | PressMedia;
-      } | null)
-    | ({
-        relationTo: 'users';
-        value: number | User;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -387,6 +389,30 @@ export interface PayloadMigration {
   batch?: number | null;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "users_select".
+ */
+export interface UsersSelect<T extends boolean = true> {
+  name?: T;
+  role?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  email?: T;
+  resetPasswordToken?: T;
+  resetPasswordExpiration?: T;
+  salt?: T;
+  hash?: T;
+  loginAttempts?: T;
+  lockUntil?: T;
+  sessions?:
+    | T
+    | {
+        id?: T;
+        createdAt?: T;
+        expiresAt?: T;
+      };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -489,28 +515,6 @@ export interface PayloadKvSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "users_select".
- */
-export interface UsersSelect<T extends boolean = true> {
-  updatedAt?: T;
-  createdAt?: T;
-  email?: T;
-  resetPasswordToken?: T;
-  resetPasswordExpiration?: T;
-  salt?: T;
-  hash?: T;
-  loginAttempts?: T;
-  lockUntil?: T;
-  sessions?:
-    | T
-    | {
-        id?: T;
-        createdAt?: T;
-        expiresAt?: T;
-      };
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents_select".
  */
 export interface PayloadLockedDocumentsSelect<T extends boolean = true> {
@@ -554,7 +558,9 @@ export interface HomepageContent {
     featured_event?: (number | null) | Event;
     subtitle?: string | null;
     register_cta?: string | null;
+    register_cta_url?: string | null;
     explore_cta?: string | null;
+    explore_cta_url?: string | null;
   };
   about_section?: {
     label?: string | null;
@@ -571,8 +577,11 @@ export interface HomepageContent {
   };
   upcoming_forum_section?: {
     featured_event?: (number | null) | Event;
+    label?: string | null;
     register_cta?: string | null;
+    register_cta_url?: string | null;
     view_program_cta?: string | null;
+    view_program_cta_url?: string | null;
   };
   publications_section?: {
     label?: string | null;
@@ -621,6 +630,7 @@ export interface AboutContent {
     title?: string | null;
     description?: string | null;
     read_more_text?: string | null;
+    read_more_url?: string | null;
     objectives?:
       | {
           title: string;
@@ -698,6 +708,7 @@ export interface EventsContent {
     buttons?:
       | {
           text: string;
+          url?: string | null;
           style: 'primary' | 'secondary';
           show_arrow?: boolean | null;
           id?: string | null;
@@ -757,12 +768,14 @@ export interface EventsContent {
       title: string;
       description: string;
       button_text: string;
+      button_url?: string | null;
     };
     right_box: {
       icon?: ('document_green.png' | 'document_yellow.png') | null;
       title: string;
       description: string;
       button_text: string;
+      button_url?: string | null;
     };
   };
   past_events_section?: {
@@ -848,7 +861,9 @@ export interface HomepageContentSelect<T extends boolean = true> {
         featured_event?: T;
         subtitle?: T;
         register_cta?: T;
+        register_cta_url?: T;
         explore_cta?: T;
+        explore_cta_url?: T;
       };
   about_section?:
     | T
@@ -869,8 +884,11 @@ export interface HomepageContentSelect<T extends boolean = true> {
     | T
     | {
         featured_event?: T;
+        label?: T;
         register_cta?: T;
+        register_cta_url?: T;
         view_program_cta?: T;
+        view_program_cta_url?: T;
       };
   publications_section?:
     | T
@@ -924,6 +942,7 @@ export interface AboutContentSelect<T extends boolean = true> {
         title?: T;
         description?: T;
         read_more_text?: T;
+        read_more_url?: T;
         objectives?:
           | T
           | {
@@ -989,6 +1008,7 @@ export interface EventsContentSelect<T extends boolean = true> {
           | T
           | {
               text?: T;
+              url?: T;
               style?: T;
               show_arrow?: T;
               id?: T;
@@ -1061,6 +1081,7 @@ export interface EventsContentSelect<T extends boolean = true> {
               title?: T;
               description?: T;
               button_text?: T;
+              button_url?: T;
             };
         right_box?:
           | T
@@ -1069,6 +1090,7 @@ export interface EventsContentSelect<T extends boolean = true> {
               title?: T;
               description?: T;
               button_text?: T;
+              button_url?: T;
             };
       };
   past_events_section?:

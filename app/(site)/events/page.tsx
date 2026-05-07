@@ -41,6 +41,7 @@ type ThematicItem = {
 type ButtonItem = {
   id?: string;
   text: string;
+  url?: string;
   style: 'primary' | 'secondary';
   show_arrow?: boolean;
 };
@@ -216,18 +217,20 @@ export default async function Events() {
               </p>
               <div className="flex flex-row gap-3 max-w-[373px]">
                 {heroButtons.map((button, i) => (
-                  <button key={button.id || i} className={`flex font-[inter] text-sm justify-center w-full items-center gap-[6px] ${buttonStyles[button.style] || buttonStyles.primary} rounded-[8px] px-[10px] py-[16px] h-[36px] font-semibold`}>
-                    {button.text}
-                    {button.show_arrow &&                     
-                      <Image
-                        src="/arrow_right.svg"
-                        alt="Arrow Right"
-                        width={10}
-                        height={9}
-                        style={{ width: "10px", height: "9px" }}
-                      />
-                    }
-                  </button>
+                  <Link key={button.id || i} href={button.url || '#'}>
+                    <button className={`flex font-[inter] text-sm justify-center w-full items-center gap-[6px] ${buttonStyles[button.style] || buttonStyles.primary} rounded-[8px] px-[10px] py-[16px] h-[36px] font-semibold`}>
+                      {button.text}
+                      {button.show_arrow &&                     
+                        <Image
+                          src="/arrow_right.svg"
+                          alt="Arrow Right"
+                          width={10}
+                          height={9}
+                          style={{ width: "10px", height: "9px" }}
+                        />
+                      }
+                    </button>
+                  </Link>
                 ))}
               </div>
             </div>
@@ -370,7 +373,10 @@ export default async function Events() {
                             telegram: 'https://t.me',
                           };
                           const url = socialLinks?.[platform];
-                          const href = (url && url.trim() !== '' && url !== 'null') ? url : platformRoots[platform];
+                          let href = (url && url.trim() !== '' && url !== 'null') ? url : platformRoots[platform];
+                          if (href && !href.startsWith('http://') && !href.startsWith('https://')) {
+                            href = 'https://' + href;
+                          }
                           return (
                             <Link key={platform} href={href} target="_blank" rel="noopener noreferrer" className="w-5 h-5 flex items-center justify-center text-text-black">
                               <Image alt={platform} src={`/${platform}.svg`} width={20} height={20} />
@@ -430,6 +436,7 @@ export default async function Events() {
                 const boxTitle = box.title as string || '';
                 const boxDesc = box.description as string || '';
                 const boxButton = box.button_text as string || 'Register';
+                const boxButtonUrl = box.button_url as string || '#';
 
                 return (
                   <div key={i} className="bg-white p-6 rounded-[16px] flex flex-col sm:flex-row gap-6 items-center">
@@ -450,9 +457,11 @@ export default async function Events() {
                         </p>
                       </div>
                     </div>
-                    <button className="font-[inter] sm:ml-auto h-[36px] px-6 bg-text-green text-text-white-broken rounded-xl text-sm font-semibold flex items-center justify-center self-end">
-                      {boxButton}
-                    </button>
+                    <Link href={boxButtonUrl}>
+                      <button className="font-[inter] sm:ml-auto h-[36px] px-6 bg-text-green text-text-white-broken rounded-xl text-sm font-semibold flex items-center justify-center self-end">
+                        {boxButton}
+                      </button>
+                    </Link>
                   </div>
                 );
               })}
