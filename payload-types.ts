@@ -101,6 +101,7 @@ export interface Config {
     events_content: EventsContent;
     publications_content: PublicationsContent;
     media_content: MediaContent;
+    site_settings: SiteSetting;
   };
   globalsSelect: {
     homepage_content: HomepageContentSelect<false> | HomepageContentSelect<true>;
@@ -108,6 +109,7 @@ export interface Config {
     events_content: EventsContentSelect<false> | EventsContentSelect<true>;
     publications_content: PublicationsContentSelect<false> | PublicationsContentSelect<true>;
     media_content: MediaContentSelect<false> | MediaContentSelect<true>;
+    site_settings: SiteSettingsSelect<false> | SiteSettingsSelect<true>;
   };
   locale: 'en' | 'id';
   widgets: {
@@ -556,6 +558,10 @@ export interface HomepageContent {
      * Select an event to display in the hero section
      */
     featured_event?: (number | null) | Event;
+    /**
+     * Upload a custom background image for the hero section.
+     */
+    background_image?: (number | null) | Media;
     subtitle?: string | null;
     register_cta?: string | null;
     register_cta_url?: string | null;
@@ -852,6 +858,38 @@ export interface MediaContent {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site_settings".
+ */
+export interface SiteSetting {
+  id: number;
+  header?: {
+    about_label?: string | null;
+    events_label?: string | null;
+    events_upcoming_label?: string | null;
+    events_past_label?: string | null;
+    publications_label?: string | null;
+    media_label?: string | null;
+  };
+  footer?: {
+    description?: string | null;
+    home_label?: string | null;
+    about_label?: string | null;
+    events_label?: string | null;
+    upcoming_label?: string | null;
+    past_label?: string | null;
+    publications_label?: string | null;
+    media_label?: string | null;
+    press_label?: string | null;
+    media_kit_label?: string | null;
+    copyright_text?: string | null;
+    privacy_label?: string | null;
+    terms_label?: string | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "homepage_content_select".
  */
 export interface HomepageContentSelect<T extends boolean = true> {
@@ -859,6 +897,7 @@ export interface HomepageContentSelect<T extends boolean = true> {
     | T
     | {
         featured_event?: T;
+        background_image?: T;
         subtitle?: T;
         register_cta?: T;
         register_cta_url?: T;
@@ -1172,6 +1211,42 @@ export interface MediaContentSelect<T extends boolean = true> {
               file?: T;
               id?: T;
             };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site_settings_select".
+ */
+export interface SiteSettingsSelect<T extends boolean = true> {
+  header?:
+    | T
+    | {
+        about_label?: T;
+        events_label?: T;
+        events_upcoming_label?: T;
+        events_past_label?: T;
+        publications_label?: T;
+        media_label?: T;
+      };
+  footer?:
+    | T
+    | {
+        description?: T;
+        home_label?: T;
+        about_label?: T;
+        events_label?: T;
+        upcoming_label?: T;
+        past_label?: T;
+        publications_label?: T;
+        media_label?: T;
+        press_label?: T;
+        media_kit_label?: T;
+        copyright_text?: T;
+        privacy_label?: T;
+        terms_label?: T;
       };
   updatedAt?: T;
   createdAt?: T;

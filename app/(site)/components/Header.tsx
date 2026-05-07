@@ -4,29 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from 'next/navigation';
-
-const navMenus = [
-  {
-    label: "About",
-    href: "/about"
-  },
-  {
-    label: "Events",
-    href: "/events",
-    submenu: [
-      { label: "Upcoming forum", href: "/events#upcoming_forum" },
-      { label: "Past Events", href: "/events/past_events" },
-    ],
-  },
-  {
-    label: "Publications",
-    href: "/publications",
-  },
-  {
-    label: "Media",
-    href: "/media",
-  },
-];
+import { useSiteSettings, type NavItem } from '@/lib/site-settings-context';
 
 const locales = [
   { code: 'en', label: 'EN', flag: 'https://flagcdn.com/w20/us.png' },
@@ -40,7 +18,15 @@ export default function Header({ locale = 'en' }: { locale?: string }) {
   const [openMenu, setOpenMenu] = useState<number | null>(null);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
-  const hasSubmenu = (submenu?: { label: string; href: string }[]) => Boolean(submenu?.length);
+
+  const siteSettings = useSiteSettings();
+  const headerSettings = siteSettings.header;
+  const navMenus = headerSettings?.nav_items || [];
+  const brandLine1 = headerSettings?.brand_line1 || 'Biodiversity';
+  const brandLine2 = headerSettings?.brand_line2 || 'Science Forum';
+
+  const hasSubmenu = (items?: { label: string; href: string }[] | null) =>
+    Boolean(items?.length);
 
   const currentLocale = locales.find(l => l.code === locale) || locales[0];
 
@@ -55,11 +41,11 @@ export default function Header({ locale = 'en' }: { locale?: string }) {
   };
 
   const handleMenuClick = (
-    menu: { href: string; submenu?: { label: string; href: string }[] },
+    menu: NavItem,
     idx: number,
     isMobile = false
   ) => {
-    if (!hasSubmenu(menu.submenu)) {
+    if (!hasSubmenu(menu.sub_items)) {
       setOpenMenu(null);
       if (isMobile) {
         setMobileNavOpen(false);
@@ -83,8 +69,8 @@ export default function Header({ locale = 'en' }: { locale?: string }) {
           className="w-12 h-12 md:w-[56px] md:h-[56px] lg:w-[73px] lg:h-[73px]"
         />
         <div className={`flex flex-col font-semibold text-xl leading-tight ${isHome ? 'text-text-green' : 'text-text-white-broken'}`}>
-          <p>Biodiversity</p>
-          <p>Science Forum</p>
+          <p>{brandLine1}</p>
+          <p>{brandLine2}</p>
         </div>
       </div>
       <nav className="font-['inter'] hidden min-[940px]:flex items-center gap-20 text-base font-medium ml-auto mr-10">
@@ -93,13 +79,13 @@ export default function Header({ locale = 'en' }: { locale?: string }) {
             Home
           </Link>
         </div>
-        {navMenus.map((menu, idx) => (
+        {navMenus.map((menu: NavItem, idx: number) => (
           <div key={menu.label} className="relative">
             <button
               className={`flex items-center gap-2 focus:outline-none cursor-pointer ${isHome ? 'text-text-green' : 'text-text-white-broken'}`}
               onClick={() => handleMenuClick(menu, idx)}
-              aria-expanded={hasSubmenu(menu.submenu) ? openMenu === idx : undefined}
-              aria-controls={hasSubmenu(menu.submenu) ? `submenu-${idx}` : undefined}
+              aria-expanded={hasSubmenu(menu.sub_items) ? openMenu === idx : undefined}
+              aria-controls={hasSubmenu(menu.sub_items) ? `submenu-${idx}` : undefined}
             >
               {menu.label}
               {(menu.label === 'Events') &&               
@@ -113,14 +99,14 @@ export default function Header({ locale = 'en' }: { locale?: string }) {
               }
 
             </button>
-            {hasSubmenu(menu.submenu) && openMenu === idx && (
+            {hasSubmenu(menu.sub_items) && openMenu === idx && (
               <div
                 id={`submenu-${idx}`}
                 className="absolute left-0 mt-2 w-56 rounded-md bg-white shadow-lg z-50"
               >
-                { menu.submenu && 
+                { menu.sub_items && 
                   <div className="py-2 bg-[#E6E9D4] rounded-lg">
-                    {menu.submenu?.map((item) => (
+                    {menu.sub_items?.map((item: { label: string; href: string }) => (
                       <Link
                         key={item.href}
                         href={item.href}
@@ -158,20 +144,20 @@ export default function Header({ locale = 'en' }: { locale?: string }) {
           <button onClick={() => setMobileNavOpen(false)} aria-label="Close navigation menu" className="text-2xl font-bold">×</button>
         </div>
         <Link href="/" className="py-2 px-2 rounded text-[#265F44] font-semibold hover:bg-[#e4ebd8]" onClick={()=>setMobileNavOpen(false)}>Home</Link>
-        {navMenus.map((menu, idx) => (
+        {navMenus.map((menu: NavItem, idx: number) => (
           <div key={menu.label} className="flex flex-col">
             <button
               className="flex items-center justify-between py-2 px-2 rounded text-[#265F44] font-semibold hover:bg-[#e4ebd8] focus:outline-none"
               onClick={() => handleMenuClick(menu, idx, true)}
-              aria-expanded={hasSubmenu(menu.submenu) ? openMenu === idx : undefined}
-              aria-controls={hasSubmenu(menu.submenu) ? `mobile-submenu-${idx}` : undefined}
+              aria-expanded={hasSubmenu(menu.sub_items) ? openMenu === idx : undefined}
+              aria-controls={hasSubmenu(menu.sub_items) ? `mobile-submenu-${idx}` : undefined}
             >
               <span>{menu.label}</span>
-              {hasSubmenu(menu.submenu) ? <span className="text-xs">▼</span> : null}
+              {hasSubmenu(menu.sub_items) ? <span className="text-xs">▼</span> : null}
             </button>
-            {hasSubmenu(menu.submenu) && openMenu === idx && (
+            {hasSubmenu(menu.sub_items) && openMenu === idx && (
               <div id={`mobile-submenu-${idx}`} className="flex flex-col ml-4 border-l border-[#E3E7D7] pl-3 mt-1">
-                {menu.submenu?.map((item) => (
+                {menu.sub_items?.map((item) => (
                   <Link
                     key={item.href}
                     href={item.href}
