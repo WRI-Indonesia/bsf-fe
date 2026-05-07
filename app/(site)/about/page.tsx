@@ -91,6 +91,7 @@ export default async function About() {
   const missionTitle = getSectionField(missionSection, 'title', 'Bridging science and policy for biodiversity action');
   const missionDescription = getSectionField(missionSection, 'description', '');
   const missionReadMore = getSectionField(missionSection, 'read_more_text', 'Read full mission statement');
+  const missionReadMoreUrl = getSectionField(missionSection, 'read_more_url', '#');
   const objectives = getSectionArray<Objective>(missionSection, 'objectives');
 
   const milestonesSection = aboutContent?.milestones_section as Record<string, unknown> | undefined;
@@ -161,7 +162,7 @@ export default async function About() {
               <p className="font-['inter'] text-[18px] text-text-grey-dark leading-[1.6]">
                 {missionDescription}
               </p>
-              <a href="#" className="inline-flex items-center gap-2 font-['inter'] text-[15px] font-semibold text-text-green hover:underline">
+              <a href={missionReadMoreUrl} className="inline-flex items-center gap-2 font-['inter'] text-[15px] font-semibold text-text-green hover:underline">
                 {missionReadMore} <span>→</span>
               </a>
             </div>
@@ -261,7 +262,10 @@ export default async function About() {
                             telegram: 'https://t.me',
                           };
                           const url = socialLinks?.[platform];
-                          const href = (url && url.trim() !== '' && url !== 'null') ? url : platformRoots[platform];
+                          let href = (url && url.trim() !== '' && url !== 'null') ? url : platformRoots[platform];
+                          if (href && !href.startsWith('http://') && !href.startsWith('https://')) {
+                            href = 'https://' + href;
+                          }
                           return (
                             <a key={platform} href={href} target="_blank" rel="noopener noreferrer" className="w-5 h-5 flex items-center justify-center text-text-black">
                               <Image src={`/${platform}.svg`} alt={platform} width={20} height={20} />

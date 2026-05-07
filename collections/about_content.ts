@@ -80,6 +80,12 @@ const aboutContent: GlobalConfig = {
           localized: true,
         },
         {
+          name: 'read_more_url',
+          type: 'text',
+          label: 'Read More URL',
+          defaultValue: '#',
+        },
+        {
           name: 'objectives',
           type: 'array',
           label: 'Objectives',

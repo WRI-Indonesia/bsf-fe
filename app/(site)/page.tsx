@@ -154,16 +154,29 @@ export default async function Home() {
 
   const heroSection = homepageContent?.hero_section as Record<string, unknown> | undefined;
   const heroRegisterCta = heroSection?.register_cta as string || 'Register Now';
+  const heroRegisterCtaUrl = heroSection?.register_cta_url as string || '#';
   const heroExploreCta = heroSection?.explore_cta as string || 'Explore Publications';
+  const heroExploreCtaUrl = heroSection?.explore_cta_url as string || '/publications';
+  const heroBgImage = (heroSection?.background_image as Record<string, unknown>)?.url as string || '/background.png';
 
   const upcomingForumSection = homepageContent?.upcoming_forum_section as Record<string, unknown> | undefined;
+  const upcomingForumLabel = upcomingForumSection?.label as string || 'Upcoming Forum';
   const upcomingRegisterCta = upcomingForumSection?.register_cta as string || 'Register Now';
+  const upcomingRegisterCtaUrl = upcomingForumSection?.register_cta_url as string || '#';
   const upcomingViewProgramCta = upcomingForumSection?.view_program_cta as string || 'View Program';
+  const upcomingViewProgramCtaUrl = upcomingForumSection?.view_program_cta_url as string || '#';
 
-  const contactLabel = (homepageContent?.contact_section as Record<string, unknown>)?.label as string || 'Contact Us';
-  const contactTitle = (homepageContent?.contact_section as Record<string, unknown>)?.title as string || 'Get in touch with the BSF team';
-  const contactDescription = (homepageContent?.contact_section as Record<string, unknown>)?.description as string || "Whether you're interested in partnerships, have questions about the forum, or want to contribute to biodiversity science, we'd love to hear from you.";
-  const contactItems = ((homepageContent?.contact_section as Record<string, unknown>)?.contact_items as Array<{ id?: string; label: string; value: string }>) || [];
+  const contactSection = homepageContent?.contact_section as Record<string, unknown> | undefined;
+  const contactLabel = contactSection?.label as string || 'Contact Us';
+  const contactTitle = contactSection?.title as string || 'Get in touch with the BSF team';
+  const contactDescription = contactSection?.description as string || "Whether you're interested in partnerships, have questions about the forum, or want to contribute to biodiversity science, we'd love to hear from you.";
+  const contactItems = (contactSection?.contact_items as Array<{ id?: string; label: string; value: string }>) || [];
+  const formNamePlaceholder = contactSection?.form_name_placeholder as string || 'Your name';
+  const formEmailPlaceholder = contactSection?.form_email_placeholder as string || 'you@example.com';
+  const formSubjectPlaceholder = contactSection?.form_subject_placeholder as string || 'Add a subject';
+  const formMessagePlaceholder = contactSection?.form_message_placeholder as string || 'Write your message';
+  const formPrivacyText = contactSection?.form_privacy_text as string || 'Your request will be sent securely and remain private.';
+  const formSubmitCta = contactSection?.form_submit_cta as string || 'Send your message';
 
   return (
     <>
@@ -172,7 +185,7 @@ export default async function Home() {
         <section
           className="relative overflow-hidden"
           style={{
-            backgroundImage: "url('/background.png')",
+            backgroundImage: `url('${heroBgImage}')`,
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}
@@ -186,7 +199,7 @@ export default async function Home() {
                 Science Forum
               </div>
               <p className="font-['inter'] text-[15px] md:text-[18px] lg:text-[20px] font-normal text-text-grey-dark">
-                A hub for community to get the biodiversity science updates around ACB.
+                {heroSection?.subtitle as string} 
               </p>
             </div>
             <div className="px-8 md:px-12 lg:px-0 lg:pr-10 flex items-end lg:justify-end">
@@ -206,19 +219,23 @@ export default async function Home() {
                   </div>
                 </div>
                 <div className="grid w-full grid-cols-2 gap-3">
-                  <button className="font-[inter] h-[36px] flex items-center justify-center rounded-lg border border-outline-green bg-white px-4 py-[10px] text-sm font-semibold text-text-green transition-colors hover:bg-gray-50">
-                    <Link href="/publications">{heroExploreCta}</Link>
-                  </button>
-                  <button className="font-[inter] h-[36px] flex items-center justify-center gap-2 rounded-lg bg-[#1f4a31] px-4 py-[10px] text-sm font-semibold text-white transition-colors hover:bg-[#163824]">
-                    {heroRegisterCta}
-                    <Image
-                      src="/arrow_right.svg"
-                      alt="Arrow Right"
-                      width={14}
-                      height={14}
-                      style={{ width: "14px", height: "14px" }}
-                    />
-                  </button>
+                  <Link href={heroExploreCtaUrl}>
+                    <button className="w-full font-[inter] h-[36px] flex items-center justify-center rounded-lg border border-outline-green bg-white px-4 py-[10px] text-sm font-semibold text-text-green transition-colors hover:bg-gray-50">
+                      {heroExploreCta}
+                    </button>
+                  </Link>
+                  <Link href={heroRegisterCtaUrl}>
+                    <button className="w-full font-[inter] h-[36px] flex items-center justify-center gap-2 rounded-lg bg-[#1f4a31] px-4 py-[10px] text-sm font-semibold text-white transition-colors hover:bg-[#163824]">
+                      {heroRegisterCta}
+                      <Image
+                        src="/arrow_right.svg"
+                        alt="Arrow Right"
+                        width={14}
+                        height={14}
+                        style={{ width: "14px", height: "14px" }}
+                      />
+                    </button>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -266,7 +283,7 @@ export default async function Home() {
           <div className="grid w-full gap-10 2xl:max-w-none lg:max-w-[1280px] lg:grid-cols-[minmax(0,1fr)_360px] xl:grid-cols-[minmax(0,1fr)_420px]">
             <div className="flex flex-col justify-center gap-6">
               <p className="font-['inter'] text-xl font-semibold uppercase text-text-lime">
-                UPCOMING FORUM
+                {upcomingForumLabel}
               </p>
               <div className="flex flex-col gap-8">
                 
@@ -316,19 +333,23 @@ export default async function Home() {
                   </div>
                 </div>
                 <div className="flex flex-col gap-3 sm:flex-row sm:gap-6">
-                  <button className="h-[36px] w-full font-['inter'] flex items-center justify-center gap-[6px] rounded-[8px] bg-[#225139] px-[34px] py-[10px] text-sm font-semibold text-white transition-colors hover:bg-[#173e28] sm:w-auto">
-                    {upcomingRegisterCta}
-                    <Image
-                        src="/arrow_right.svg"
-                        alt="Arrow Right"
-                        width={10}
-                        height={9}
-                        style={{ width: "10px", height: "9px" }}
-                      />
-                  </button>
-                  <button className="h-[36px] w-full font-['inter'] flex items-center justify-center rounded-[8px] border border-[#225139] bg-white px-[2.5rem] py-[10px] text-sm font-semibold text-text-green transition-colors hover:bg-[#f6f9f5] sm:w-auto">
-                    {upcomingViewProgramCta}
-                  </button>
+                  <Link href={upcomingRegisterCtaUrl}>
+                    <button className="h-[36px] w-full font-['inter'] flex items-center justify-center gap-[6px] rounded-[8px] bg-[#225139] px-[34px] py-[10px] text-sm font-semibold text-white transition-colors hover:bg-[#173e28] sm:w-auto">
+                      {upcomingRegisterCta}
+                      <Image
+                          src="/arrow_right.svg"
+                          alt="Arrow Right"
+                          width={10}
+                          height={9}
+                          style={{ width: "10px", height: "9px" }}
+                        />
+                    </button>
+                  </Link>
+                  <Link href={upcomingViewProgramCtaUrl}>
+                    <button className="h-[36px] w-full font-['inter'] flex items-center justify-center rounded-[8px] border border-[#225139] bg-white px-[2.5rem] py-[10px] text-sm font-semibold text-text-green transition-colors hover:bg-[#f6f9f5] sm:w-auto">
+                      {upcomingViewProgramCta}
+                    </button>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -501,7 +522,7 @@ export default async function Home() {
                   <span className="block h-[22px] text-sm font-semibold leading-[22px] text-text-black">Full Name</span>
                   <input
                     className="w-full rounded-lg border border-outline-grey-light bg-white px-3 py-3 text-sm font-normal text-[#1b2d1f]"
-                    placeholder="Your name"
+                    placeholder={formNamePlaceholder}
                     type="text"
                   />
                 </label>
@@ -509,7 +530,7 @@ export default async function Home() {
                   <span className="block h-[22px] text-sm font-semibold leading-[22px] text-text-black">Email</span>
                   <input
                     className="w-full rounded-lg border border-outline-grey-light bg-white px-3 py-3 text-sm font-normal text-[#1b2d1f]"
-                    placeholder="you@example.com"
+                    placeholder={formEmailPlaceholder}
                     type="email"
                   />
                 </label>
@@ -518,7 +539,7 @@ export default async function Home() {
                 <span className="block h-[22px] text-sm font-semibold leading-[22px] text-text-black">Subject</span>
                 <input
                   className="w-full rounded-lg border border-outline-grey-light bg-white px-3 py-3 text-sm font-normal text-[#1b2d1f]"
-                  placeholder="Add a subject"
+                    placeholder={formSubjectPlaceholder}
                   type="text"
                 />
               </label>
@@ -526,15 +547,15 @@ export default async function Home() {
                 <span className="block h-[22px] text-sm font-semibold leading-[22px] text-text-black">Message</span>
                 <textarea
                   className="min-h-[158px] w-full rounded-lg border border-outline-grey-light bg-white px-3 py-3 text-sm font-normal text-[#1b2d1f]"
-                  placeholder="Write your message"
+                  placeholder={formMessagePlaceholder}
                 />
               </label>
               <p className="my-6 text-sm text-text-grey-mid">
-                Your request will be sent securely and remain private.
+                {formPrivacyText}
               </p>
               <div>
                 <button className="rounded-md bg-text-green px-6 py-4 text-md font-semibold text-white">
-                  Send your message
+                  {formSubmitCta}
                 </button>
               </div>
             </div>

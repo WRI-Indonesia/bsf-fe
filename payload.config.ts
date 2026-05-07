@@ -11,6 +11,7 @@ import aboutContent from './collections/about_content';
 import eventsContent from './collections/events_content';
 import publicationsContent from './collections/publications_content';
 import mediaContent from './collections/media_content';
+import siteSettings from './collections/site_settings';
 import users from './collections/users';
 
 export default buildConfig({
@@ -24,7 +25,7 @@ export default buildConfig({
   editor: lexicalEditor({}),
   serverURL: process.env.PAYLOAD_PUBLIC_SERVER_URL || 'http://localhost:3000',
   collections: [users, latestPublications, events, media, albumMedia, pressMedia],
-  globals: [homepageContent, aboutContent, eventsContent, publicationsContent, mediaContent],
+  globals: [homepageContent, aboutContent, eventsContent, publicationsContent, mediaContent, siteSettings],
   localization: {
     locales: ['en', 'id'],
     defaultLocale: 'en',
