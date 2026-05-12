@@ -83,6 +83,56 @@ const events: CollectionConfig = {
         },
       ],
     },
+    {
+      name: 'thematic_areas',
+      type: 'array',
+      label: 'Thematic Areas',
+      labels: {
+        singular: 'Thematic Area',
+        plural: 'Thematic Areas',
+      },
+      fields: [
+        {
+          name: 'title',
+          type: 'text',
+          label: 'Title',
+          required: true,
+          localized: true,
+        },
+        {
+          name: 'description',
+          type: 'textarea',
+          label: 'Description',
+          required: true,
+          localized: true,
+        },
+      ],
+    },
+    {
+      name: 'sessions',
+      type: 'array',
+      label: 'Sessions',
+      labels: {
+        singular: 'Session',
+        plural: 'Sessions',
+      },
+      fields: [
+        {
+          name: 'title',
+          type: 'text',
+          label: 'Title',
+          required: true,
+          localized: true,
+        },
+        {
+          name: 'description',
+          type: 'textarea',
+          label: 'Description',
+          required: true,
+          localized: true,
+        },
+      ],
+    },
   ],
 }
 

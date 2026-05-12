@@ -114,6 +114,26 @@ const mediaContent: GlobalConfig = {
           localized: true,
         },
         {
+          name: 'description',
+          type: 'textarea',
+          label: 'Description',
+          defaultValue: 'Download our media resources and brand assets.',
+          localized: true,
+        },
+        {
+          name: 'view_all_text',
+          type: 'text',
+          label: 'View All Link Text',
+          defaultValue: 'All Media Kit',
+          localized: true,
+        },
+        {
+          name: 'view_all_link',
+          type: 'text',
+          label: 'View All Link URL',
+          defaultValue: '/media/kit',
+        },
+        {
           name: 'resources',
           type: 'array',
           label: 'Resources',

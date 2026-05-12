@@ -153,6 +153,7 @@ export default async function Home() {
   const upcomingForumEvent = (homepageContent?.upcoming_forum_section as Record<string, unknown>)?.featured_event as Record<string, unknown> | undefined;
 
   const heroSection = homepageContent?.hero_section as Record<string, unknown> | undefined;
+  const heroTitle = heroSection?.title as string || 'ASEAN Biodiversity\nScience Forum';
   const heroRegisterCta = heroSection?.register_cta as string || 'Register Now';
   const heroRegisterCtaUrl = heroSection?.register_cta_url as string || '#';
   const heroExploreCta = heroSection?.explore_cta as string || 'Explore Publications';
@@ -171,9 +172,13 @@ export default async function Home() {
   const contactTitle = contactSection?.title as string || 'Get in touch with the BSF team';
   const contactDescription = contactSection?.description as string || "Whether you're interested in partnerships, have questions about the forum, or want to contribute to biodiversity science, we'd love to hear from you.";
   const contactItems = (contactSection?.contact_items as Array<{ id?: string; label: string; value: string }>) || [];
+  const formNameLabel = contactSection?.form_name_label as string || 'Full Name';
   const formNamePlaceholder = contactSection?.form_name_placeholder as string || 'Your name';
+  const formEmailLabel = contactSection?.form_email_label as string || 'Email';
   const formEmailPlaceholder = contactSection?.form_email_placeholder as string || 'you@example.com';
+  const formSubjectLabel = contactSection?.form_subject_label as string || 'Subject';
   const formSubjectPlaceholder = contactSection?.form_subject_placeholder as string || 'Add a subject';
+  const formMessageLabel = contactSection?.form_message_label as string || 'Message';
   const formMessagePlaceholder = contactSection?.form_message_placeholder as string || 'Write your message';
   const formPrivacyText = contactSection?.form_privacy_text as string || 'Your request will be sent securely and remain private.';
   const formSubmitCta = contactSection?.form_submit_cta as string || 'Send your message';
@@ -193,10 +198,8 @@ export default async function Home() {
           <div className="absolute inset-0" />
           <div className="relative mx-auto grid w-full gap-10 pb-16 pt-28 lg:grid-cols-[1.2fr_0.8fr] min-h-[820px]">
             <div className="px-8 md:px-12 lg:px-0 lg:pl-[100px] space-y-5 text-[#1f3b2c] flex flex-col justify-center lg:justify-start">
-              <div className="text-[32px] md:text-[40px] lg:text-[56px] xl:text-[88px] font-semibold text-text-grey-dark leading-[1]">
-                ASEAN Biodiversity
-                <br />
-                Science Forum
+              <div className="text-[32px] md:text-[40px] lg:text-[56px] xl:text-[88px] font-semibold text-text-grey-dark leading-[1] whitespace-pre-line">
+                {heroTitle}
               </div>
               <p className="font-['inter'] text-[15px] md:text-[18px] lg:text-[20px] font-normal text-text-grey-dark">
                 {heroSection?.subtitle as string} 
@@ -519,7 +522,7 @@ export default async function Home() {
             <div className="flex flex-col justify-space-between w-full rounded-2xl font-['Plus_Jakarta_Sans']">
               <div className="grid gap-4 sm:grid-cols-2">
                 <label className="flex flex-col gap-2">
-                  <span className="block h-[22px] text-sm font-semibold leading-[22px] text-text-black">Full Name</span>
+                  <span className="block h-[22px] text-sm font-semibold leading-[22px] text-text-black">{formNameLabel}</span>
                   <input
                     className="w-full rounded-lg border border-outline-grey-light bg-white px-3 py-3 text-sm font-normal text-[#1b2d1f]"
                     placeholder={formNamePlaceholder}
@@ -527,7 +530,7 @@ export default async function Home() {
                   />
                 </label>
                 <label className="flex flex-col gap-2">
-                  <span className="block h-[22px] text-sm font-semibold leading-[22px] text-text-black">Email</span>
+                  <span className="block h-[22px] text-sm font-semibold leading-[22px] text-text-black">{formEmailLabel}</span>
                   <input
                     className="w-full rounded-lg border border-outline-grey-light bg-white px-3 py-3 text-sm font-normal text-[#1b2d1f]"
                     placeholder={formEmailPlaceholder}
@@ -536,7 +539,7 @@ export default async function Home() {
                 </label>
               </div>
               <label className="mt-6 flex flex-col gap-2">
-                <span className="block h-[22px] text-sm font-semibold leading-[22px] text-text-black">Subject</span>
+                <span className="block h-[22px] text-sm font-semibold leading-[22px] text-text-black">{formSubjectLabel}</span>
                 <input
                   className="w-full rounded-lg border border-outline-grey-light bg-white px-3 py-3 text-sm font-normal text-[#1b2d1f]"
                     placeholder={formSubjectPlaceholder}
@@ -544,7 +547,7 @@ export default async function Home() {
                 />
               </label>
               <label className="mt-6 flex flex-col gap-2">
-                <span className="block h-[22px] text-sm font-semibold leading-[22px] text-text-black">Message</span>
+                <span className="block h-[22px] text-sm font-semibold leading-[22px] text-text-black">{formMessageLabel}</span>
                 <textarea
                   className="min-h-[158px] w-full rounded-lg border border-outline-grey-light bg-white px-3 py-3 text-sm font-normal text-[#1b2d1f]"
                   placeholder={formMessagePlaceholder}

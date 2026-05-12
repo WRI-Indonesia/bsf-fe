@@ -33,6 +33,13 @@ const homepageContent: GlobalConfig = {
           },
         },
         {
+          name: 'title',
+          type: 'textarea',
+          label: 'Hero Title',
+          defaultValue: 'ASEAN Biodiversity\nScience Forum',
+          localized: true,
+        },
+        {
           name: 'subtitle',
           type: 'textarea',
           label: 'Subtitle',
@@ -264,10 +271,24 @@ const homepageContent: GlobalConfig = {
           localized: true,
         },
         {
+          name: 'form_name_label',
+          type: 'text',
+          label: 'Form Name Label',
+          defaultValue: 'Full Name',
+          localized: true,
+        },
+        {
           name: 'form_email_placeholder',
           type: 'text',
           label: 'Form Email Placeholder',
           defaultValue: 'you@example.com',
+          localized: true,
+        },
+        {
+          name: 'form_email_label',
+          type: 'text',
+          label: 'Form Email Label',
+          defaultValue: 'Email',
           localized: true,
         },
         {
@@ -278,10 +299,24 @@ const homepageContent: GlobalConfig = {
           localized: true,
         },
         {
+          name: 'form_subject_label',
+          type: 'text',
+          label: 'Form Subject Label',
+          defaultValue: 'Subject',
+          localized: true,
+        },
+        {
           name: 'form_message_placeholder',
           type: 'text',
           label: 'Form Message Placeholder',
           defaultValue: 'Write your message',
+          localized: true,
+        },
+        {
+          name: 'form_message_label',
+          type: 'text',
+          label: 'Form Message Label',
+          defaultValue: 'Message',
           localized: true,
         },
         {
