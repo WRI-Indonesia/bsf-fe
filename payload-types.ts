@@ -241,6 +241,20 @@ export interface Event {
         id?: string | null;
       }[]
     | null;
+  thematic_areas?:
+    | {
+        title: string;
+        description: string;
+        id?: string | null;
+      }[]
+    | null;
+  sessions?:
+    | {
+        title: string;
+        description: string;
+        id?: string | null;
+      }[]
+    | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -453,6 +467,20 @@ export interface EventsSelect<T extends boolean = true> {
         show?: T;
         id?: T;
       };
+  thematic_areas?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        id?: T;
+      };
+  sessions?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }
@@ -562,6 +590,7 @@ export interface HomepageContent {
      * Upload a custom background image for the hero section.
      */
     background_image?: (number | null) | Media;
+    title?: string | null;
     subtitle?: string | null;
     register_cta?: string | null;
     register_cta_url?: string | null;
@@ -607,9 +636,13 @@ export interface HomepageContent {
         }[]
       | null;
     form_name_placeholder?: string | null;
+    form_name_label?: string | null;
     form_email_placeholder?: string | null;
+    form_email_label?: string | null;
     form_subject_placeholder?: string | null;
+    form_subject_label?: string | null;
     form_message_placeholder?: string | null;
+    form_message_label?: string | null;
     form_privacy_text?: string | null;
     form_submit_cta?: string | null;
   };
@@ -728,13 +761,6 @@ export interface EventsContent {
   thematic_areas_section?: {
     label?: string | null;
     title?: string | null;
-    items?:
-      | {
-          title: string;
-          description: string;
-          id?: string | null;
-        }[]
-      | null;
   };
   speakers_section?: {
     label?: string | null;
@@ -758,13 +784,6 @@ export interface EventsContent {
   sessions_section?: {
     label?: string | null;
     title?: string | null;
-    items?:
-      | {
-          title: string;
-          description: string;
-          id?: string | null;
-        }[]
-      | null;
   };
   registration_section: {
     label?: string | null;
@@ -842,6 +861,9 @@ export interface MediaContent {
   media_kit_section?: {
     label?: string | null;
     title?: string | null;
+    description?: string | null;
+    view_all_text?: string | null;
+    view_all_link?: string | null;
     resources?:
       | {
           image: number | Media;
@@ -898,6 +920,7 @@ export interface HomepageContentSelect<T extends boolean = true> {
     | {
         featured_event?: T;
         background_image?: T;
+        title?: T;
         subtitle?: T;
         register_cta?: T;
         register_cta_url?: T;
@@ -951,9 +974,13 @@ export interface HomepageContentSelect<T extends boolean = true> {
               id?: T;
             };
         form_name_placeholder?: T;
+        form_name_label?: T;
         form_email_placeholder?: T;
+        form_email_label?: T;
         form_subject_placeholder?: T;
+        form_subject_label?: T;
         form_message_placeholder?: T;
+        form_message_label?: T;
         form_privacy_text?: T;
         form_submit_cta?: T;
       };
@@ -1064,13 +1091,6 @@ export interface EventsContentSelect<T extends boolean = true> {
     | {
         label?: T;
         title?: T;
-        items?:
-          | T
-          | {
-              title?: T;
-              description?: T;
-              id?: T;
-            };
       };
   speakers_section?:
     | T
@@ -1100,13 +1120,6 @@ export interface EventsContentSelect<T extends boolean = true> {
     | {
         label?: T;
         title?: T;
-        items?:
-          | T
-          | {
-              title?: T;
-              description?: T;
-              id?: T;
-            };
       };
   registration_section?:
     | T
@@ -1201,6 +1214,9 @@ export interface MediaContentSelect<T extends boolean = true> {
     | {
         label?: T;
         title?: T;
+        description?: T;
+        view_all_text?: T;
+        view_all_link?: T;
         resources?:
           | T
           | {

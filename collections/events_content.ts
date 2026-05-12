@@ -122,31 +122,6 @@ const eventsContent: GlobalConfig = {
           defaultValue: 'Thematic Areas',
           localized: true,
         },
-        {
-          name: 'items',
-          type: 'array',
-          label: 'Thematic Areas',
-          labels: {
-            singular: 'Thematic Area',
-            plural: 'Thematic Areas',
-          },
-          fields: [
-            {
-              name: 'title',
-              type: 'text',
-              label: 'Title',
-              required: true,
-              localized: true,
-            },
-            {
-              name: 'description',
-              type: 'textarea',
-              label: 'Description',
-              required: true,
-              localized: true,
-            },
-          ],
-        },
       ],
     },
     {
@@ -253,31 +228,6 @@ const eventsContent: GlobalConfig = {
           label: 'Title',
           defaultValue: 'Sessions',
           localized: true,
-        },
-        {
-          name: 'items',
-          type: 'array',
-          label: 'Sessions',
-          labels: {
-            singular: 'Session',
-            plural: 'Sessions',
-          },
-          fields: [
-            {
-              name: 'title',
-              type: 'text',
-              label: 'Title',
-              required: true,
-              localized: true,
-            },
-            {
-              name: 'description',
-              type: 'textarea',
-              label: 'Description',
-              required: true,
-              localized: true,
-            },
-          ],
         },
       ],
     },

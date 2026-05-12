@@ -49,7 +49,9 @@ export default async function MediaKitPage() {
 
   const mediaContent = await getMediaContent(locale);
   const kitSection = mediaContent?.media_kit_section as Record<string, unknown> | undefined;
+  const kitLabel = (kitSection?.label as string) || 'Media Kit';
   const kitTitle = (kitSection?.title as string) || 'Media Kit';
+  const kitDescription = (kitSection?.description as string) || 'Download our media resources and brand assets.';
   const kitResources = (kitSection?.resources as ResourceItem[]) || [];
 
   return (
@@ -64,12 +66,15 @@ export default async function MediaKitPage() {
             <span className="text-text-grey-dark">/</span>
             <span className="font-[inter] font-semibold text-text-green leading-6">Media Kit</span>
           </nav>
-          <div className="flex flex-col gap-5">
+          <div className="flex flex-col gap-4">
+            <p className="font-['inter'] text-xl font-semibold uppercase tracking-widest text-text-lime">
+              {kitLabel}
+            </p>
             <h1 className="font-semibold text-text-black xl:text-8xl lg:text-6xl md:text-4xl text-2xl">
               {kitTitle}
             </h1>
             <p className="font-[inter] text-text-grey-dark text-xl font-normal">
-              Download our media resources and brand assets.
+              {kitDescription}
             </p>
           </div>
         </section>
@@ -79,12 +84,13 @@ export default async function MediaKitPage() {
             <div className="grid gap-6 md:grid-cols-2">
               {kitResources.map((resource) => {
                 const resourceImg = getUploadUrl(resource.image as unknown as Record<string, unknown>, '/media/gallery.png');
-                return (
-                  <button
-                    key={resource.id}
-                    type="button"
-                    className="flex items-center justify-between gap-6 rounded-2xl border border-outline-grey-light bg-white p-5 text-left"
-                  >
+                const fileUrl = resource.file
+                  ? getUploadUrl(resource.file as unknown as Record<string, unknown>, '')
+                  : '';
+                const isDownloadable = Boolean(fileUrl);
+                const cardClasses = `flex items-center justify-between gap-6 rounded-2xl border border-outline-grey-light bg-white p-5 text-left ${isDownloadable ? 'hover:shadow-md transition-shadow' : 'opacity-60 cursor-not-allowed'}`;
+                const cardContent = (
+                  <>
                     <div className="flex items-center gap-4">
                       <div className="relative w-14 h-14 rounded-lg overflow-hidden flex-shrink-0">
                         <Image src={resourceImg} alt={resource.title} fill className="object-cover" />
@@ -97,7 +103,27 @@ export default async function MediaKitPage() {
                       </div>
                     </div>
                     <span className="text-text-green text-xl" aria-hidden="true">→</span>
-                  </button>
+                  </>
+                );
+
+                if (!isDownloadable) {
+                  return (
+                    <div key={resource.id || resource.title} className={cardClasses} aria-disabled="true">
+                      {cardContent}
+                    </div>
+                  );
+                }
+
+                return (
+                  <a
+                    key={resource.id || resource.title}
+                    href={fileUrl}
+                    download
+                    className={cardClasses}
+                    aria-label={`Download ${resource.title}`}
+                  >
+                    {cardContent}
+                  </a>
                 );
               })}
             </div>

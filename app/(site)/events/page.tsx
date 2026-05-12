@@ -162,7 +162,7 @@ export default async function Events() {
   const thematicSection = eventsContent?.thematic_areas_section as Record<string, unknown> | undefined;
   const thematicLabel = getSectionField(thematicSection, 'label', 'Programme');
   const thematicTitle = getSectionField(thematicSection, 'title', 'Thematic Areas');
-  const thematicItems = getSectionArray<ThematicItem>(thematicSection, 'items');
+  const thematicItems = (heroEvent?.thematic_areas as ThematicItem[]) || [];
 
   // Speakers section
   const speakersSection = eventsContent?.speakers_section as Record<string, unknown> | undefined;
@@ -174,7 +174,7 @@ export default async function Events() {
   const sessionsSection = eventsContent?.sessions_section as Record<string, unknown> | undefined;
   const sessionsLabel = getSectionField(sessionsSection, 'label', 'Session');
   const sessionsTitle = getSectionField(sessionsSection, 'title', 'Sessions');
-  const sessionItems = getSectionArray<ThematicItem>(sessionsSection, 'items');
+  const sessionItems = (heroEvent?.sessions as ThematicItem[]) || [];
 
   // Registration section
   const registrationSection = eventsContent?.registration_section as Record<string, unknown> | undefined;
