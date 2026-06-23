@@ -64,10 +64,13 @@ export type SupportedTimezones =
 export interface Config {
   auth: {
     users: UserAuthOperations;
+    'public-users': PublicUserAuthOperations;
   };
   blocks: {};
   collections: {
     users: User;
+    'public-users': PublicUser;
+    abstracts: Abstract;
     latest_publications: LatestPublication;
     events: Event;
     media: Media;
@@ -81,6 +84,8 @@ export interface Config {
   collectionsJoins: {};
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
+    'public-users': PublicUsersSelect<false> | PublicUsersSelect<true>;
+    abstracts: AbstractsSelect<false> | AbstractsSelect<true>;
     latest_publications: LatestPublicationsSelect<false> | LatestPublicationsSelect<true>;
     events: EventsSelect<false> | EventsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
@@ -115,13 +120,31 @@ export interface Config {
   widgets: {
     collections: CollectionsWidget;
   };
-  user: User;
+  user: User | PublicUser;
   jobs: {
     tasks: unknown;
     workflows: unknown;
   };
 }
 export interface UserAuthOperations {
+  forgotPassword: {
+    email: string;
+    password: string;
+  };
+  login: {
+    email: string;
+    password: string;
+  };
+  registerFirstUser: {
+    email: string;
+    password: string;
+  };
+  unlock: {
+    email: string;
+    password: string;
+  };
+}
+export interface PublicUserAuthOperations {
   forgotPassword: {
     email: string;
     password: string;
@@ -168,41 +191,50 @@ export interface User {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "latest_publications".
+ * via the `definition` "public-users".
  */
-export interface LatestPublication {
+export interface PublicUser {
   id: number;
-  title: string;
-  description: string;
-  source: string;
-  date: string;
-  tag: 'Policy brief' | 'Proceedings' | 'Publications' | 'Technical Outputs';
-  file: number | Media;
-  /**
-   * Automatically detected from the uploaded file
-   */
-  file_type: string;
+  name: string;
   updatedAt: string;
   createdAt: string;
+  email: string;
+  resetPasswordToken?: string | null;
+  resetPasswordExpiration?: string | null;
+  salt?: string | null;
+  hash?: string | null;
+  loginAttempts?: number | null;
+  lockUntil?: string | null;
+  sessions?:
+    | {
+        id: string;
+        createdAt?: string | null;
+        expiresAt: string;
+      }[]
+    | null;
+  password?: string | null;
+  collection: 'public-users';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "media".
+ * via the `definition` "abstracts".
  */
-export interface Media {
+export interface Abstract {
   id: number;
-  alt?: string | null;
+  event: number | Event;
+  user?: (number | null) | PublicUser;
+  main_author: string;
+  affiliation: string;
+  title: string;
+  text: string;
+  keywords: {
+    keyword: string;
+    id?: string | null;
+  }[];
+  citation: string;
+  status: 'submitted' | 'under_review' | 'accepted' | 'rejected';
   updatedAt: string;
   createdAt: string;
-  url?: string | null;
-  thumbnailURL?: string | null;
-  filename?: string | null;
-  mimeType?: string | null;
-  filesize?: number | null;
-  width?: number | null;
-  height?: number | null;
-  focalX?: number | null;
-  focalY?: number | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -255,6 +287,44 @@ export interface Event {
         id?: string | null;
       }[]
     | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media".
+ */
+export interface Media {
+  id: number;
+  alt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "latest_publications".
+ */
+export interface LatestPublication {
+  id: number;
+  title: string;
+  description: string;
+  source: string;
+  date: string;
+  tag: 'Policy brief' | 'Proceedings' | 'Publications' | 'Technical Outputs';
+  file: number | Media;
+  /**
+   * Automatically detected from the uploaded file
+   */
+  file_type: string;
   updatedAt: string;
   createdAt: string;
 }
@@ -345,6 +415,14 @@ export interface PayloadLockedDocument {
         value: number | User;
       } | null)
     | ({
+        relationTo: 'public-users';
+        value: number | PublicUser;
+      } | null)
+    | ({
+        relationTo: 'abstracts';
+        value: number | Abstract;
+      } | null)
+    | ({
         relationTo: 'latest_publications';
         value: number | LatestPublication;
       } | null)
@@ -365,10 +443,15 @@ export interface PayloadLockedDocument {
         value: number | PressMedia;
       } | null);
   globalSlug?: string | null;
-  user: {
-    relationTo: 'users';
-    value: number | User;
-  };
+  user:
+    | {
+        relationTo: 'users';
+        value: number | User;
+      }
+    | {
+        relationTo: 'public-users';
+        value: number | PublicUser;
+      };
   updatedAt: string;
   createdAt: string;
 }
@@ -378,10 +461,15 @@ export interface PayloadLockedDocument {
  */
 export interface PayloadPreference {
   id: number;
-  user: {
-    relationTo: 'users';
-    value: number | User;
-  };
+  user:
+    | {
+        relationTo: 'users';
+        value: number | User;
+      }
+    | {
+        relationTo: 'public-users';
+        value: number | PublicUser;
+      };
   key?: string | null;
   value?:
     | {
@@ -429,6 +517,51 @@ export interface UsersSelect<T extends boolean = true> {
         createdAt?: T;
         expiresAt?: T;
       };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "public-users_select".
+ */
+export interface PublicUsersSelect<T extends boolean = true> {
+  name?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  email?: T;
+  resetPasswordToken?: T;
+  resetPasswordExpiration?: T;
+  salt?: T;
+  hash?: T;
+  loginAttempts?: T;
+  lockUntil?: T;
+  sessions?:
+    | T
+    | {
+        id?: T;
+        createdAt?: T;
+        expiresAt?: T;
+      };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "abstracts_select".
+ */
+export interface AbstractsSelect<T extends boolean = true> {
+  event?: T;
+  user?: T;
+  main_author?: T;
+  affiliation?: T;
+  title?: T;
+  text?: T;
+  keywords?:
+    | T
+    | {
+        keyword?: T;
+        id?: T;
+      };
+  citation?: T;
+  status?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
