@@ -1,5 +1,6 @@
+import { cookies, headers } from "next/headers";
 import { NextResponse } from "next/server";
-import { createPayloadRequest, getPayload } from "payload";
+import { createLocalReq, getPayload } from "payload";
 import config from "@payload-config";
 
 import {
@@ -31,10 +32,6 @@ const jsonError = (
 
 export async function POST(request: Request) {
   const payload = await getPayload({ config });
-  const payloadRequest = await createPayloadRequest({
-    config,
-    request: request.clone(),
-  });
 
   try {
     const body = (await request.json()) as Partial<AbstractSubmissionValues>;
@@ -48,7 +45,22 @@ export async function POST(request: Request) {
       title: typeof body.title === "string" ? body.title : "",
     };
 
-    if (!payloadRequest.user || payloadRequest.user.collection !== "public-users") {
+    const requestHeaders = new Headers(await headers());
+    const cookieStore = await cookies();
+    const cookieHeader = cookieStore
+      .getAll()
+      .map(({ name, value }) => `${name}=${value}`)
+      .join("; ");
+
+    if (cookieHeader) {
+      requestHeaders.set("cookie", cookieHeader);
+    }
+
+    const { user } = await payload.auth({
+      headers: requestHeaders,
+    });
+
+    if (!user || user.collection !== "public-users") {
       return jsonError(
         {
           code: "UNAUTHENTICATED",
@@ -57,6 +69,8 @@ export async function POST(request: Request) {
         401,
       );
     }
+
+    const payloadRequest = await createLocalReq({ user }, payload);
 
     const { errors, normalized } = validateAbstractSubmission(input);
 
@@ -98,7 +112,7 @@ export async function POST(request: Request) {
 
     await payload.create({
       collection: "abstracts",
-      data: normalized,
+      data: normalized as never,
       req: payloadRequest,
     });
 

@@ -7,6 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "e2e": "playwright test",
+    "e2e:ui": "playwright test --ui",
+    "e2e:headed": "playwright test --headed",
     "postinstall": "node scripts/patch-loadenv.js",
     "migrate:create": "NODE_OPTIONS=\"--import tsx\" npx payload migrate:create",
     "migrate": "NODE_OPTIONS=\"--import tsx\" npx payload migrate",
@@ -26,6 +29,7 @@
   },
   "devDependencies": {
     "@next/env": "^15.5.15",
+    "@playwright/test": "^1.61.0",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/nodemailer": "^8.0.1",

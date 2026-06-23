@@ -86,6 +86,7 @@ export default function AbstractSubmissionForm({
     try {
       const response = await fetch("/api/abstracts/submit", {
         body: JSON.stringify(formValues),
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
