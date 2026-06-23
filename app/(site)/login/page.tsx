@@ -1,7 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useState, type ChangeEvent, type FormEvent } from "react";
+
+import {
+  getSafeRedirect,
+  PUBLIC_AUTH_ERROR_CODES,
+  PUBLIC_AUTH_FALLBACK_REDIRECT,
+  type PublicAuthResponse,
+} from "@/lib/public-auth";
 
 type AuthTab = "login" | "signup";
 
@@ -69,8 +77,124 @@ const tabContent: Record<
 };
 
 export default function LoginPage() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [activeTab, setActiveTab] = useState<AuthTab>("login");
+  const [formValues, setFormValues] = useState({
+    login: {
+      email: "",
+      password: "",
+    },
+    signup: {
+      email: "",
+      name: "",
+      password: "",
+    },
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [isAwaitingVerification, setIsAwaitingVerification] = useState(false);
+
   const currentTab = tabContent[activeTab];
+  const redirectTarget = getSafeRedirect(
+    searchParams.get("redirect"),
+    PUBLIC_AUTH_FALLBACK_REDIRECT,
+  );
+  const verified = searchParams.get("verified") === "1";
+  const verifyError = searchParams.get("verifyError") === "1";
+  const visibleSuccessMessage =
+    verified && activeTab === "login"
+      ? "Your email has been verified. You can log in now."
+      : successMessage;
+  const visibleErrorMessage =
+    verifyError && activeTab === "login"
+      ? "That verification link is invalid or has expired."
+      : errorMessage;
+  const currentValues = formValues[activeTab];
+
+  const handleInputChange =
+    (tab: AuthTab, field: string) =>
+    (event: ChangeEvent<HTMLInputElement>) => {
+      const { value } = event.target;
+
+      setFormValues((current) => ({
+        ...current,
+        [tab]: {
+          ...current[tab],
+          [field]: value,
+        },
+      }));
+    };
+
+  const handleTabChange = (tab: AuthTab) => {
+    setActiveTab(tab);
+    setErrorMessage(null);
+    setSuccessMessage(null);
+
+    if (tab === "signup") {
+      setIsAwaitingVerification(false);
+    }
+  };
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    setIsSubmitting(true);
+    setErrorMessage(null);
+    setSuccessMessage(null);
+
+    try {
+      const payload =
+        activeTab === "login"
+          ? {
+              ...formValues.login,
+              redirect: redirectTarget,
+            }
+          : formValues.signup;
+
+      const response = await fetch(`/api/auth/public/${activeTab}`, {
+        body: JSON.stringify(payload),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+      });
+
+      const result = (await response.json()) as PublicAuthResponse;
+
+      if (!result.ok) {
+        if (result.code === PUBLIC_AUTH_ERROR_CODES.unverifiedEmail) {
+          setIsAwaitingVerification(true);
+        }
+
+        setErrorMessage(result.message);
+        return;
+      }
+
+      if (activeTab === "signup") {
+        setIsAwaitingVerification(true);
+        setSuccessMessage(result.message);
+        setFormValues((current) => ({
+          ...current,
+          signup: {
+            email: "",
+            name: "",
+            password: "",
+          },
+        }));
+        return;
+      }
+
+      router.push(result.redirect || redirectTarget);
+      router.refresh();
+    } catch (error) {
+      console.error("Public auth request failed:", error);
+      setErrorMessage("Something went wrong. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-background-base-lime-light px-5 py-16 sm:px-8 sm:py-20 lg:px-20 lg:py-[120px]">
@@ -91,7 +215,7 @@ export default function LoginPage() {
               <div className="grid grid-cols-2 gap-0">
                 <button
                   type="button"
-                  onClick={() => setActiveTab("login")}
+                  onClick={() => handleTabChange("login")}
                   aria-pressed={activeTab === "login"}
                   className={`rounded-lg px-3 py-2 text-base transition-colors ${
                     activeTab === "login"
@@ -103,7 +227,7 @@ export default function LoginPage() {
                 </button>
                 <button
                   type="button"
-                  onClick={() => setActiveTab("signup")}
+                  onClick={() => handleTabChange("signup")}
                   aria-pressed={activeTab === "signup"}
                   className={`rounded-lg px-3 py-2 text-base transition-colors ${
                     activeTab === "signup"
@@ -118,8 +242,26 @@ export default function LoginPage() {
 
             <form
               className="mt-6 flex flex-col gap-6"
-              onSubmit={(event) => event.preventDefault()}
+              onSubmit={handleSubmit}
             >
+              {visibleSuccessMessage ? (
+                <p className="rounded-xl border border-green-200 bg-green-50 px-4 py-3 font-['inter'] text-sm leading-5 text-green-900">
+                  {visibleSuccessMessage}
+                </p>
+              ) : null}
+
+              {visibleErrorMessage ? (
+                <p className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 font-['inter'] text-sm leading-5 text-red-900">
+                  {visibleErrorMessage}
+                </p>
+              ) : null}
+
+              {activeTab === "signup" && isAwaitingVerification ? (
+                <p className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 font-['inter'] text-sm leading-5 text-slate-700">
+                  Check your inbox for a verification email before logging in.
+                </p>
+              ) : null}
+
               <div className="flex flex-col gap-6 pb-6">
                 {currentTab.fields.map((field) => (
                   <div key={`${activeTab}-${field.id}`} className="flex flex-col gap-2">
@@ -134,6 +276,11 @@ export default function LoginPage() {
                       type={field.type}
                       placeholder={field.placeholder}
                       autoComplete={field.autoComplete}
+                      value={String(currentValues[field.id as keyof typeof currentValues] ?? "")}
+                      onChange={handleInputChange(activeTab, field.id)}
+                      minLength={field.id === "password" ? 8 : undefined}
+                      required
+                      disabled={isSubmitting}
                       className="h-10 w-full rounded-md border border-outline-grey-light px-3 font-['inter'] text-sm leading-5 text-text-black placeholder:text-slate-500 focus:border-text-green focus:outline-none"
                     />
                   </div>
@@ -142,9 +289,10 @@ export default function LoginPage() {
 
               <button
                 type="submit"
+                disabled={isSubmitting}
                 className="flex h-10 w-full items-center justify-center rounded-xl bg-text-green px-3 py-2 font-['inter'] text-sm leading-6 font-medium text-slate-50 transition-opacity hover:opacity-95"
               >
-                {currentTab.cta}
+                {isSubmitting ? "Please wait..." : currentTab.cta}
               </button>
 
               <p className="px-6 text-center font-['inter'] text-sm leading-5 text-[#020617]">

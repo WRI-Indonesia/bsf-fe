@@ -1,6 +1,7 @@
 import { buildConfig } from 'payload';
 import { postgresAdapter } from '@payloadcms/db-postgres';
 import { lexicalEditor } from '@payloadcms/richtext-lexical';
+import { smtpEmailAdapter } from './lib/payload-email-adapter';
 import latestPublications from './collections/latest_publications';
 import events from './collections/events';
 import media from './collections/media';
@@ -32,6 +33,7 @@ export default buildConfig({
     },
   }),
   editor: lexicalEditor({}),
+  email: smtpEmailAdapter,
   serverURL: process.env.PAYLOAD_PUBLIC_SERVER_URL || 'http://localhost:3000',
   collections: [users, publicUsers, abstracts, latestPublications, events, media, albumMedia, pressMedia],
   globals: [homepageContent, aboutContent, eventsContent, publicationsContent, mediaContent, siteSettings],
