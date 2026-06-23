@@ -1,4 +1,10 @@
-import type { CollectionBeforeChangeHook, CollectionConfig } from 'payload';
+import type {
+  CollectionBeforeChangeHook,
+  CollectionBeforeValidateHook,
+  CollectionConfig,
+} from 'payload';
+
+import { ABSTRACT_TEXT_MAX_LENGTH } from '@/lib/abstract-submission';
 
 type RequestUser = {
   id: number | string;
@@ -16,6 +22,54 @@ const getRelationId = (
   if (value == null) return null;
   if (typeof value === 'object') return value.id ?? null;
   return value;
+};
+
+const normalizeText = (value: unknown) =>
+  typeof value === 'string' ? value.trim() : value;
+
+const normalizeKeywords = (value: unknown) => {
+  if (!Array.isArray(value)) {
+    return value;
+  }
+
+  return value
+    .map((item) => {
+      if (!item || typeof item !== 'object') {
+        return null;
+      }
+
+      const keyword = normalizeText((item as { keyword?: unknown }).keyword);
+
+      if (!keyword || typeof keyword !== 'string') {
+        return null;
+      }
+
+      return { keyword };
+    })
+    .filter(Boolean);
+};
+
+const validateAbstractShape: CollectionBeforeValidateHook = async ({ data }) => {
+  if (!data) {
+    return data;
+  }
+
+  data.main_author = normalizeText(data.main_author);
+  data.affiliation = normalizeText(data.affiliation);
+  data.title = normalizeText(data.title);
+  data.text = normalizeText(data.text);
+  data.citation = normalizeText(data.citation);
+  data.keywords = normalizeKeywords(data.keywords);
+
+  if (typeof data.text === 'string' && data.text.length > ABSTRACT_TEXT_MAX_LENGTH) {
+    throw new Error(`Abstract text must be ${ABSTRACT_TEXT_MAX_LENGTH} characters or fewer.`);
+  }
+
+  if (!Array.isArray(data.keywords) || data.keywords.length === 0) {
+    throw new Error('At least one keyword is required.');
+  }
+
+  return data;
 };
 
 const ensureUniqueAbstractPerEvent: CollectionBeforeChangeHook = async ({
@@ -135,6 +189,7 @@ const abstracts: CollectionConfig = {
     },
   },
   hooks: {
+    beforeValidate: [validateAbstractShape],
     beforeChange: [ensureUniqueAbstractPerEvent],
   },
   fields: [

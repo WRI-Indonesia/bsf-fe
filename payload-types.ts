@@ -196,6 +196,7 @@ export interface User {
 export interface PublicUser {
   id: number;
   name: string;
+  verified?: boolean | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -203,6 +204,8 @@ export interface PublicUser {
   resetPasswordExpiration?: string | null;
   salt?: string | null;
   hash?: string | null;
+  _verified?: boolean | null;
+  _verificationToken?: string | null;
   loginAttempts?: number | null;
   lockUntil?: string | null;
   sessions?:
@@ -524,6 +527,7 @@ export interface UsersSelect<T extends boolean = true> {
  */
 export interface PublicUsersSelect<T extends boolean = true> {
   name?: T;
+  verified?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -531,6 +535,8 @@ export interface PublicUsersSelect<T extends boolean = true> {
   resetPasswordExpiration?: T;
   salt?: T;
   hash?: T;
+  _verified?: T;
+  _verificationToken?: T;
   loginAttempts?: T;
   lockUntil?: T;
   sessions?:
@@ -879,9 +885,9 @@ export interface EventsContent {
     image?: (number | null) | Media;
     buttons?:
       | {
-          text: string;
+          text?: string | null;
           url?: string | null;
-          style: 'primary' | 'secondary';
+          style?: ('primary' | 'secondary') | null;
           show_arrow?: boolean | null;
           id?: string | null;
         }[]
