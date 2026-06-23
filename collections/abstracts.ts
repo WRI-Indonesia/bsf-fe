@@ -124,6 +124,15 @@ const abstracts: CollectionConfig = {
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'main_author', 'event', 'status', 'updatedAt'],
+    components: {
+      listMenuItems: ['@/app/(payload)/admin/components/AbstractsListMenuItems#AbstractsListMenuItems'],
+      views: {
+        byEvent: {
+          Component: '@/app/(payload)/admin/components/AbstractsByEventView#AbstractsByEventView',
+          path: '/by-event',
+        },
+      },
+    },
   },
   hooks: {
     beforeChange: [ensureUniqueAbstractPerEvent],

@@ -18,6 +18,13 @@ import abstracts from './collections/abstracts';
 
 export default buildConfig({
   secret: process.env.PAYLOAD_SECRET || 'SECRET_KEY',
+  admin: {
+    components: {
+      afterNavLinks: [
+        '@/app/(payload)/admin/components/AbstractsByEventNavLink#AbstractsByEventNavLink',
+      ],
+    },
+  },
   db: postgresAdapter({
     pool: {
       connectionString:
