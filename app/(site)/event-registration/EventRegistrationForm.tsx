@@ -11,6 +11,15 @@ const steps = [
   "Conforme",
 ] as const;
 
+const foodPreferenceOptions = [
+  "Halal",
+  "Vegetarian",
+  "No restriction",
+  "Other",
+] as const;
+
+type FoodPreference = (typeof foodPreferenceOptions)[number] | null;
+
 type RegistrationFormValues = {
   bioSketch: string;
   cvFile: File | null;
@@ -18,14 +27,18 @@ type RegistrationFormValues = {
   email: string;
   fieldOfExpertise: string;
   firstName: string;
+  foodPreference: FoodPreference;
   fullAddress: string;
+  isInternationalParticipant: boolean;
   lastName: string;
   middleName: string;
+  mobile: string;
   organization: string;
   postalCode: string;
   positionTitle: string;
   profilePhotoFile: File | null;
   prefix: string;
+  whatsappOrViber: string;
 };
 
 const initialValues: RegistrationFormValues = {
@@ -35,14 +48,18 @@ const initialValues: RegistrationFormValues = {
   email: "",
   fieldOfExpertise: "",
   firstName: "",
+  foodPreference: null,
   fullAddress: "",
+  isInternationalParticipant: false,
   lastName: "",
   middleName: "",
+  mobile: "",
   organization: "",
   postalCode: "",
   positionTitle: "",
   profilePhotoFile: null,
   prefix: "",
+  whatsappOrViber: "",
 };
 
 const fieldClassName =
@@ -246,6 +263,113 @@ function UploadField({
   );
 }
 
+function CheckboxMark() {
+  return (
+    <svg
+      aria-hidden="true"
+      className="h-3.5 w-3.5"
+      fill="none"
+      viewBox="0 0 16 16"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M4 8.25 6.5 10.75 12 5.25"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.75"
+      />
+    </svg>
+  );
+}
+
+function RadioOption({
+  checked,
+  label,
+  onClick,
+}: {
+  checked: boolean;
+  label: string;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      aria-pressed={checked}
+      className="flex items-center gap-3 text-left"
+      onClick={onClick}
+      type="button"
+    >
+      <span
+        className={`flex h-[22px] w-[22px] items-center justify-center rounded-full border transition-colors ${
+          checked
+            ? "border-text-green"
+            : "border-[#EAEAF0] bg-white"
+        }`}
+      >
+        <span
+          className={`h-3 w-3 rounded-full transition-colors ${
+            checked ? "bg-text-green" : "bg-transparent"
+          }`}
+        />
+      </span>
+      <span className="font-['inter'] text-[13px] leading-none text-text-black">
+        {label}
+      </span>
+    </button>
+  );
+}
+
+function FutureStepPlaceholder({
+  activeStep,
+  onBack,
+  onContinue,
+}: {
+  activeStep: number;
+  onBack: () => void;
+  onContinue: () => void;
+}) {
+  const isLastStep = activeStep === steps.length;
+
+  return (
+    <CardShell
+      actions={
+        <>
+          <button
+            aria-label={`Back to ${steps[activeStep - 2].toLowerCase()}`}
+            className={iconButtonClassName}
+            onClick={onBack}
+            type="button"
+          >
+            <BackIcon />
+          </button>
+
+          <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center sm:justify-end">
+            <button className={secondaryButtonClassName} type="button">
+              Save as draft
+            </button>
+            <button
+              className={primaryButtonClassName}
+              onClick={onContinue}
+              type="button"
+            >
+              {isLastStep ? "Complete" : "Continue"}
+            </button>
+          </div>
+        </>
+      }
+      description={`This ${steps[activeStep - 1].toLowerCase()} step will be implemented next.`}
+      title={`${steps[activeStep - 1]} details`}
+    >
+      <div className="rounded-xl border border-dashed border-[#C8D2C3] bg-[#FBFBF9] px-6 py-10">
+        <p className="font-['inter'] text-base leading-7 text-text-black">
+          The {steps[activeStep - 1].toLowerCase()} step is reserved for the
+          next part of the registration flow.
+        </p>
+      </div>
+    </CardShell>
+  );
+}
+
 export default function EventRegistrationForm() {
   const [activeStep, setActiveStep] = useState(1);
   const [values, setValues] = useState(initialValues);
@@ -275,6 +399,20 @@ export default function EventRegistrationForm() {
         [field]: nextFile,
       }));
     };
+
+  const handleFoodPreferenceChange = (option: FoodPreference) => {
+    setValues((current) => ({
+      ...current,
+      foodPreference: current.foodPreference === option ? null : option,
+    }));
+  };
+
+  const toggleInternationalParticipant = () => {
+    setValues((current) => ({
+      ...current,
+      isInternationalParticipant: !current.isInternationalParticipant,
+    }));
+  };
 
   return (
     <div className="flex w-full flex-col items-center gap-11">
@@ -458,33 +596,103 @@ export default function EventRegistrationForm() {
             </label>
           </div>
         </CardShell>
-      ) : (
+      ) : activeStep === 3 ? (
         <CardShell
           actions={
             <>
               <button
-                className={secondaryButtonClassName}
+                aria-label="Back to professional information"
+                className={iconButtonClassName}
                 onClick={() => setActiveStep(2)}
                 type="button"
               >
-                Back to professional information
+                <BackIcon />
               </button>
-              <div className="font-['inter'] text-sm leading-5 text-text-grey-mid">
-                Additional registration steps will be implemented next.
+
+              <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center sm:justify-end">
+                <button className={secondaryButtonClassName} type="button">
+                  Save as draft
+                </button>
+                <button
+                  className={primaryButtonClassName}
+                  onClick={() => setActiveStep(4)}
+                  type="button"
+                >
+                  Continue
+                </button>
               </div>
             </>
           }
-          description="This placeholder keeps the wizard flow moving while the remaining registration steps are still being built."
-          title="Additional"
+          description="Logistics for your stay during the forum."
+          title="Additional details"
         >
-          <div className="rounded-xl border border-dashed border-[#C8D2C3] bg-[#FBFBF9] px-6 py-10">
-            <p className="font-['inter'] text-base leading-7 text-text-black">
-              Additional registration details are coming next. This placeholder
-              keeps the wizard progression intact while the remaining steps are
-              still under development.
-            </p>
+          <div className="flex flex-col gap-6 pb-6">
+            <div className="grid gap-6 md:grid-cols-2">
+              <TextField
+                id="mobile"
+                label="Mobile"
+                onChange={handleChange("mobile")}
+                value={values.mobile}
+              />
+              <TextField
+                id="whatsappOrViber"
+                label="Whatsapp / viber"
+                onChange={handleChange("whatsappOrViber")}
+                value={values.whatsappOrViber}
+              />
+            </div>
+
+            <div className="flex flex-col gap-4">
+              <span className={labelClassName}>Food preference</span>
+              <div className="flex flex-wrap items-center gap-x-8 gap-y-4">
+                {foodPreferenceOptions.map((option) => (
+                  <RadioOption
+                    checked={values.foodPreference === option}
+                    key={option}
+                    label={option}
+                    onClick={() => handleFoodPreferenceChange(option)}
+                  />
+                ))}
+              </div>
+            </div>
+
+            <button
+              aria-pressed={values.isInternationalParticipant}
+              className="flex w-full items-start gap-4 rounded-xl border border-[#EAEAEA] bg-[#F6F7F9] p-4 text-left"
+              onClick={toggleInternationalParticipant}
+              type="button"
+            >
+              <span
+                className={`mt-0.5 flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-[8px] transition-colors ${
+                  values.isInternationalParticipant
+                    ? "bg-[#017649] text-white"
+                    : "border-2 border-[#EAEAF0] bg-white text-transparent"
+                }`}
+              >
+                <CheckboxMark />
+              </span>
+              <span className="flex min-w-0 flex-1 flex-col gap-2 font-['inter']">
+                <span className="text-base leading-none text-text-black">
+                  I am an international participant
+                </span>
+                <span className="text-sm leading-5 text-text-grey-mid">
+                  You&apos;ll be asked to upload passport details and flight
+                  info in the next step.
+                </span>
+              </span>
+            </button>
           </div>
         </CardShell>
+      ) : (
+        <FutureStepPlaceholder
+          activeStep={activeStep}
+          onBack={() => setActiveStep(activeStep - 1)}
+          onContinue={() =>
+            setActiveStep((current) =>
+              current < steps.length ? current + 1 : current,
+            )
+          }
+        />
       )}
     </div>
   );
