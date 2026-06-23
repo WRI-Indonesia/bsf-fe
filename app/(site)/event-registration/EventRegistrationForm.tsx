@@ -27,6 +27,7 @@ type RegistrationFormValues = {
   email: string;
   fieldOfExpertise: string;
   firstName: string;
+  flightNotes: string;
   foodPreference: FoodPreference;
   fullAddress: string;
   isInternationalParticipant: boolean;
@@ -34,8 +35,13 @@ type RegistrationFormValues = {
   middleName: string;
   mobile: string;
   organization: string;
+  nationality: string;
+  passportInfoPageFile: File | null;
+  passportNumber: string;
   postalCode: string;
   positionTitle: string;
+  preferredArrivalDate: string;
+  preferredDepartureDate: string;
   profilePhotoFile: File | null;
   prefix: string;
   whatsappOrViber: string;
@@ -48,6 +54,7 @@ const initialValues: RegistrationFormValues = {
   email: "",
   fieldOfExpertise: "",
   firstName: "",
+  flightNotes: "",
   foodPreference: null,
   fullAddress: "",
   isInternationalParticipant: false,
@@ -55,8 +62,13 @@ const initialValues: RegistrationFormValues = {
   middleName: "",
   mobile: "",
   organization: "",
+  nationality: "",
+  passportInfoPageFile: null,
+  passportNumber: "",
   postalCode: "",
   positionTitle: "",
+  preferredArrivalDate: "",
+  preferredDepartureDate: "",
   profilePhotoFile: null,
   prefix: "",
   whatsappOrViber: "",
@@ -374,6 +386,7 @@ export default function EventRegistrationForm() {
   const [activeStep, setActiveStep] = useState(1);
   const [values, setValues] = useState(initialValues);
   const cvUploadId = useId();
+  const passportInfoPageUploadId = useId();
   const profilePhotoUploadId = useId();
 
   const handleChange =
@@ -390,7 +403,7 @@ export default function EventRegistrationForm() {
     };
 
   const handleFileChange =
-    (field: "cvFile" | "profilePhotoFile") =>
+    (field: "cvFile" | "passportInfoPageFile" | "profilePhotoFile") =>
     (event: ChangeEvent<HTMLInputElement>) => {
       const nextFile = event.target.files?.[0] ?? null;
 
@@ -681,6 +694,96 @@ export default function EventRegistrationForm() {
                 </span>
               </span>
             </button>
+          </div>
+        </CardShell>
+      ) : activeStep === 4 ? (
+        <CardShell
+          actions={
+            <>
+              <button
+                aria-label="Back to additional details"
+                className={iconButtonClassName}
+                onClick={() => setActiveStep(3)}
+                type="button"
+              >
+                <BackIcon />
+              </button>
+
+              <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center sm:justify-end">
+                <button className={secondaryButtonClassName} type="button">
+                  Save as draft
+                </button>
+                <button
+                  className={primaryButtonClassName}
+                  onClick={() => setActiveStep(5)}
+                  type="button"
+                >
+                  Continue
+                </button>
+              </div>
+            </>
+          }
+          description="Required for international participants."
+          title="Travel - Flight booking & passport (international)"
+        >
+          <div className="flex flex-col gap-6 pb-6">
+            <UploadField
+              accept=".pdf,.png,.jpg,.jpeg,application/pdf,image/png,image/jpeg"
+              acceptedFilesLabel="PDF / PNG / JPG . max 5 MB"
+              file={values.passportInfoPageFile}
+              id={passportInfoPageUploadId}
+              label="Passport info page"
+              onChange={handleFileChange("passportInfoPageFile")}
+            />
+
+            <div className="grid gap-6 md:grid-cols-2">
+              <TextField
+                id="passportNumber"
+                label="Passport number"
+                onChange={handleChange("passportNumber")}
+                value={values.passportNumber}
+              />
+              <TextField
+                id="nationality"
+                label="Nationality"
+                onChange={handleChange("nationality")}
+                value={values.nationality}
+              />
+            </div>
+
+            <div className="grid gap-6 md:grid-cols-2">
+              <label className="flex flex-col gap-2">
+                <span className={labelClassName}>Preferred arrival date</span>
+                <input
+                  className={fieldClassName}
+                  name="preferredArrivalDate"
+                  onChange={handleChange("preferredArrivalDate")}
+                  type="date"
+                  value={values.preferredArrivalDate}
+                />
+              </label>
+
+              <label className="flex flex-col gap-2">
+                <span className={labelClassName}>Preferred departure date</span>
+                <input
+                  className={fieldClassName}
+                  name="preferredDepartureDate"
+                  onChange={handleChange("preferredDepartureDate")}
+                  type="date"
+                  value={values.preferredDepartureDate}
+                />
+              </label>
+            </div>
+
+            <label className="flex flex-col gap-2">
+              <span className={labelClassName}>Flight notes</span>
+              <textarea
+                className={textareaClassName}
+                name="flightNotes"
+                onChange={handleChange("flightNotes")}
+                value={values.flightNotes}
+              />
+            </label>
           </div>
         </CardShell>
       ) : (
