@@ -13,6 +13,7 @@ import {
   type AbstractSubmissionValues,
   validateAbstractSubmission,
 } from "@/lib/abstract-submission";
+import { sendAbstractSubmissionAdminNotification } from "@/lib/abstract-submission-admin-notification";
 
 const jsonError = (
   body: {
@@ -110,11 +111,31 @@ export async function POST(request: Request) {
       );
     }
 
-    await payload.create({
+    const submission = await payload.create({
       collection: "abstracts",
       data: normalized as never,
       req: payloadRequest,
     });
+
+    try {
+      await sendAbstractSubmissionAdminNotification({
+        adminEmail: process.env.ADMIN_EMAIL,
+        defaultFromAddress: payload.email.defaultFromAddress,
+        defaultFromName: payload.email.defaultFromName,
+        eventTitle:
+          typeof event.title === "string" ? event.title : `Event ${event.id}`,
+        payload,
+        submission: {
+          id: submission.id,
+          keywords: submission.keywords,
+          main_author: submission.main_author,
+          title: submission.title,
+        },
+        submitterEmail: user.email,
+      });
+    } catch (error) {
+      console.error("Admin abstract notification failed:", error);
+    }
 
     return NextResponse.json<AbstractSubmissionResponse>({
       message: "Abstract submitted successfully. The organising committee will review it internally.",
