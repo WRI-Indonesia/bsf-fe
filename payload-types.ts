@@ -71,6 +71,7 @@ export interface Config {
     users: User;
     'public-users': PublicUser;
     abstracts: Abstract;
+    'event-registrations': EventRegistration;
     latest_publications: LatestPublication;
     events: Event;
     media: Media;
@@ -86,6 +87,7 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     'public-users': PublicUsersSelect<false> | PublicUsersSelect<true>;
     abstracts: AbstractsSelect<false> | AbstractsSelect<true>;
+    'event-registrations': EventRegistrationsSelect<false> | EventRegistrationsSelect<true>;
     latest_publications: LatestPublicationsSelect<false> | LatestPublicationsSelect<true>;
     events: EventsSelect<false> | EventsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
@@ -314,6 +316,43 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "event-registrations".
+ */
+export interface EventRegistration {
+  id: number;
+  abstract: number | Abstract;
+  registrationKey: string;
+  status: 'draft' | 'submitted';
+  prefix?: string | null;
+  firstName?: string | null;
+  middleName?: string | null;
+  lastName?: string | null;
+  email?: string | null;
+  organization?: string | null;
+  department?: string | null;
+  postalCode?: string | null;
+  fullAddress?: string | null;
+  positionTitle?: string | null;
+  fieldOfExpertise?: string | null;
+  bioSketch?: string | null;
+  mobile?: string | null;
+  whatsappOrViber?: string | null;
+  foodPreference?: ('Halal' | 'Vegetarian' | 'No restriction' | 'Other') | null;
+  isInternationalParticipant?: boolean | null;
+  passportNumber?: string | null;
+  nationality?: string | null;
+  preferredArrivalDate?: string | null;
+  preferredDepartureDate?: string | null;
+  flightNotes?: string | null;
+  cvFile?: (number | null) | Media;
+  profilePhotoFile?: (number | null) | Media;
+  passportInfoPageFile?: (number | null) | Media;
+  signatureFile?: (number | null) | Media;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "latest_publications".
  */
 export interface LatestPublication {
@@ -424,6 +463,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'abstracts';
         value: number | Abstract;
+      } | null)
+    | ({
+        relationTo: 'event-registrations';
+        value: number | EventRegistration;
       } | null)
     | ({
         relationTo: 'latest_publications';
@@ -566,6 +609,42 @@ export interface AbstractsSelect<T extends boolean = true> {
       };
   citation?: T;
   status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "event-registrations_select".
+ */
+export interface EventRegistrationsSelect<T extends boolean = true> {
+  abstract?: T;
+  registrationKey?: T;
+  status?: T;
+  prefix?: T;
+  firstName?: T;
+  middleName?: T;
+  lastName?: T;
+  email?: T;
+  organization?: T;
+  department?: T;
+  postalCode?: T;
+  fullAddress?: T;
+  positionTitle?: T;
+  fieldOfExpertise?: T;
+  bioSketch?: T;
+  mobile?: T;
+  whatsappOrViber?: T;
+  foodPreference?: T;
+  isInternationalParticipant?: T;
+  passportNumber?: T;
+  nationality?: T;
+  preferredArrivalDate?: T;
+  preferredDepartureDate?: T;
+  flightNotes?: T;
+  cvFile?: T;
+  profilePhotoFile?: T;
+  passportInfoPageFile?: T;
+  signatureFile?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -885,9 +964,9 @@ export interface EventsContent {
     image?: (number | null) | Media;
     buttons?:
       | {
-          text?: string | null;
+          text: string;
           url?: string | null;
-          style?: ('primary' | 'secondary') | null;
+          style: 'primary' | 'secondary';
           show_arrow?: boolean | null;
           id?: string | null;
         }[]
@@ -924,21 +1003,21 @@ export interface EventsContent {
     label?: string | null;
     title?: string | null;
   };
-  registration_section: {
+  registration_section?: {
     label?: string | null;
     title?: string | null;
-    left_box: {
+    left_box?: {
       icon?: ('document_green.png' | 'document_yellow.png') | null;
-      title: string;
-      description: string;
-      button_text: string;
+      title?: string | null;
+      description?: string | null;
+      button_text?: string | null;
       button_url?: string | null;
     };
-    right_box: {
+    right_box?: {
       icon?: ('document_green.png' | 'document_yellow.png') | null;
-      title: string;
-      description: string;
-      button_text: string;
+      title?: string | null;
+      description?: string | null;
+      button_text?: string | null;
       button_url?: string | null;
     };
   };

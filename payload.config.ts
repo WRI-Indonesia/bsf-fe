@@ -16,6 +16,7 @@ import siteSettings from './collections/site_settings';
 import users from './collections/users';
 import publicUsers from './collections/public_users';
 import abstracts from './collections/abstracts';
+import eventRegistrations from './collections/event_registrations';
 
 export default buildConfig({
   secret: process.env.PAYLOAD_SECRET || 'SECRET_KEY',
@@ -35,7 +36,7 @@ export default buildConfig({
   editor: lexicalEditor({}),
   email: smtpEmailAdapter,
   serverURL: process.env.PAYLOAD_PUBLIC_SERVER_URL || 'http://localhost:3000',
-  collections: [users, publicUsers, abstracts, latestPublications, events, media, albumMedia, pressMedia],
+  collections: [users, publicUsers, abstracts, eventRegistrations, latestPublications, events, media, albumMedia, pressMedia],
   globals: [homepageContent, aboutContent, eventsContent, publicationsContent, mediaContent, siteSettings],
   localization: {
     locales: ['en', 'id'],
