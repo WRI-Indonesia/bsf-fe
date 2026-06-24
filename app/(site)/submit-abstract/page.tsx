@@ -47,8 +47,6 @@ export default async function SubmitAbstractPage({
     getEvent(eventId),
   ]);
 
-  console.log("pub user", publicUser, event);
-
   if (!event) {
     redirect("/events");
   }

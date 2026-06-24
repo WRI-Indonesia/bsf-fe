@@ -1,7 +1,7 @@
 import config from "@payload-config";
 import { getPayload, type TypedUser } from "payload";
 
-type PublicUser = TypedUser & {
+export type PublicUser = TypedUser & {
   collection?: string;
   email?: string;
   id: number | string;

@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import { Inter } from 'next/font/google';
 import "../globals.css";
-import { cookies } from 'next/headers';
+import { cookies, headers } from 'next/headers';
 import { getPayload } from 'payload';
 import config from '../../payload.config';
 import { SiteSettingsProvider } from '../../lib/site-settings-context';
+import { PublicUserProvider } from '../../lib/public-user-context';
+import { getPublicUserFromHeaders } from '@/lib/public-user-session';
 
 export const inter = Inter({ subsets: ['latin'] });
 
@@ -37,7 +39,11 @@ export default async function RootLayout({
 }>) {
   const cookieStore = await cookies();
   const locale = cookieStore.get('locale')?.value || 'en';
-  const siteSettings = await getSiteSettings(locale);
+  const requestHeaders = await headers();
+  const [siteSettings, publicUser] = await Promise.all([
+    getSiteSettings(locale),
+    getPublicUserFromHeaders(requestHeaders),
+  ]);
 
   return (
     <html
@@ -45,9 +51,17 @@ export default async function RootLayout({
       className="h-full antialiased"
     >
       <body className="min-h-full flex flex-col">
-        <SiteSettingsProvider settings={siteSettings as unknown as Record<string, unknown> | null}>
-          {children}
-        </SiteSettingsProvider>
+        <PublicUserProvider
+          session={{
+            email: publicUser?.email,
+            isLoggedIn: Boolean(publicUser),
+            name: publicUser?.name,
+          }}
+        >
+          <SiteSettingsProvider settings={siteSettings as unknown as Record<string, unknown> | null}>
+            {children}
+          </SiteSettingsProvider>
+        </PublicUserProvider>
       </body>
     </html>
   );
