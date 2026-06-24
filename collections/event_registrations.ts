@@ -215,6 +215,10 @@ const eventRegistrations: CollectionConfig = {
       ],
     },
     {
+      name: "foodPreferenceOther",
+      type: "text",
+    },
+    {
       name: "isInternationalParticipant",
       type: "checkbox",
       defaultValue: false,

@@ -26,6 +26,7 @@ export type EventRegistrationFormValues = {
   firstName: string;
   flightNotes: string;
   foodPreference: FoodPreference;
+  foodPreferenceOther: string;
   fullAddress: string;
   isInternationalParticipant: boolean;
   lastName: string;
@@ -47,10 +48,17 @@ export type EventRegistrationFormValues = {
 
 export type EventRegistrationPayloadValues = Omit<
   EventRegistrationFormValues,
-  "cvFile" | "passportInfoPageFile" | "profilePhotoFile" | "signatureFile"
+  | "cvFile"
+  | "passportInfoPageFile"
+  | "preferredArrivalDate"
+  | "preferredDepartureDate"
+  | "profilePhotoFile"
+  | "signatureFile"
 > & {
   cvFile: EventRegistrationFileValue | number | string | null;
   passportInfoPageFile: EventRegistrationFileValue | number | string | null;
+  preferredArrivalDate: null | string;
+  preferredDepartureDate: null | string;
   profilePhotoFile: EventRegistrationFileValue | number | string | null;
   signatureFile: EventRegistrationFileValue | number | string | null;
 };
@@ -84,6 +92,7 @@ export const createEmptyEventRegistrationValues =
     firstName: "",
     flightNotes: "",
     foodPreference: null,
+    foodPreferenceOther: "",
     fullAddress: "",
     isInternationalParticipant: false,
     lastName: "",
@@ -106,9 +115,9 @@ export const createEmptyEventRegistrationValues =
 const trimString = (value: unknown) =>
   typeof value === "string" ? value.trim() : "";
 
-const normalizeOptionalDate = (value: unknown) => {
+const normalizeOptionalDate = (value: unknown): null | string => {
   const normalized = trimString(value);
-  return normalized || "";
+  return normalized || null;
 };
 
 const normalizeFoodPreference = (value: unknown): FoodPreference => {
@@ -151,33 +160,39 @@ const hasFileValue = (value: unknown) => {
 
 export const normalizeEventRegistrationValues = (
   values: Partial<EventRegistrationPayloadValues>,
-): EventRegistrationPayloadValues => ({
-  bioSketch: trimString(values.bioSketch),
-  cvFile: values.cvFile ?? null,
-  department: trimString(values.department),
-  email: trimString(values.email),
-  fieldOfExpertise: trimString(values.fieldOfExpertise),
-  firstName: trimString(values.firstName),
-  flightNotes: trimString(values.flightNotes),
-  foodPreference: normalizeFoodPreference(values.foodPreference),
-  fullAddress: trimString(values.fullAddress),
-  isInternationalParticipant: normalizeBoolean(values.isInternationalParticipant),
-  lastName: trimString(values.lastName),
-  middleName: trimString(values.middleName),
-  mobile: trimString(values.mobile),
-  nationality: trimString(values.nationality),
-  organization: trimString(values.organization),
-  passportInfoPageFile: values.passportInfoPageFile ?? null,
-  passportNumber: trimString(values.passportNumber),
-  postalCode: trimString(values.postalCode),
-  positionTitle: trimString(values.positionTitle),
-  preferredArrivalDate: normalizeOptionalDate(values.preferredArrivalDate),
-  preferredDepartureDate: normalizeOptionalDate(values.preferredDepartureDate),
-  profilePhotoFile: values.profilePhotoFile ?? null,
-  prefix: trimString(values.prefix),
-  signatureFile: values.signatureFile ?? null,
-  whatsappOrViber: trimString(values.whatsappOrViber),
-});
+): EventRegistrationPayloadValues => {
+  const foodPreference = normalizeFoodPreference(values.foodPreference);
+
+  return {
+    bioSketch: trimString(values.bioSketch),
+    cvFile: values.cvFile ?? null,
+    department: trimString(values.department),
+    email: trimString(values.email),
+    fieldOfExpertise: trimString(values.fieldOfExpertise),
+    firstName: trimString(values.firstName),
+    flightNotes: trimString(values.flightNotes),
+    foodPreference,
+    foodPreferenceOther:
+      foodPreference === "Other" ? trimString(values.foodPreferenceOther) : "",
+    fullAddress: trimString(values.fullAddress),
+    isInternationalParticipant: normalizeBoolean(values.isInternationalParticipant),
+    lastName: trimString(values.lastName),
+    middleName: trimString(values.middleName),
+    mobile: trimString(values.mobile),
+    nationality: trimString(values.nationality),
+    organization: trimString(values.organization),
+    passportInfoPageFile: values.passportInfoPageFile ?? null,
+    passportNumber: trimString(values.passportNumber),
+    postalCode: trimString(values.postalCode),
+    positionTitle: trimString(values.positionTitle),
+    preferredArrivalDate: normalizeOptionalDate(values.preferredArrivalDate),
+    preferredDepartureDate: normalizeOptionalDate(values.preferredDepartureDate),
+    profilePhotoFile: values.profilePhotoFile ?? null,
+    prefix: trimString(values.prefix),
+    signatureFile: values.signatureFile ?? null,
+    whatsappOrViber: trimString(values.whatsappOrViber),
+  };
+};
 
 const requiredOnSubmit: EventRegistrationFieldName[] = [
   "firstName",
@@ -224,6 +239,14 @@ export const validateEventRegistration = (
 
   if (!normalized.foodPreference) {
     errors.foodPreference = "Please select a food preference.";
+  }
+
+  if (
+    normalized.foodPreference === "Other" &&
+    !normalized.foodPreferenceOther
+  ) {
+    errors.foodPreferenceOther =
+      "Please tell us your food preference.";
   }
 
   if (normalized.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalized.email)) {

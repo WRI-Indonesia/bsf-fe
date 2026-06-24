@@ -33,6 +33,7 @@ type RegistrationDocument = {
   firstName?: string | null;
   flightNotes?: string | null;
   foodPreference?: FoodPreference;
+  foodPreferenceOther?: string | null;
   fullAddress?: string | null;
   isInternationalParticipant?: boolean | null;
   lastName?: string | null;
@@ -118,6 +119,7 @@ function getInitialValues(
     firstName: registration.firstName ?? "",
     flightNotes: registration.flightNotes ?? "",
     foodPreference: registration.foodPreference ?? null,
+    foodPreferenceOther: registration.foodPreferenceOther ?? "",
     fullAddress: registration.fullAddress ?? "",
     isInternationalParticipant:
       registration.isInternationalParticipant ?? false,
@@ -490,8 +492,13 @@ export default function EventRegistrationForm({
     setValues((current) => ({
       ...current,
       foodPreference: current.foodPreference === option ? null : option,
+      foodPreferenceOther:
+        current.foodPreference === option || option !== "Other"
+          ? ""
+          : current.foodPreferenceOther,
     }));
     clearFieldError("foodPreference");
+    clearFieldError("foodPreferenceOther");
     clearMessages();
   };
 
@@ -533,6 +540,7 @@ export default function EventRegistrationForm({
       ["preferredArrivalDate", values.preferredArrivalDate],
       ["preferredDepartureDate", values.preferredDepartureDate],
       ["prefix", values.prefix],
+      ["foodPreferenceOther", values.foodPreferenceOther],
       ["whatsappOrViber", values.whatsappOrViber],
     ];
 
@@ -551,10 +559,12 @@ export default function EventRegistrationForm({
 
     const fileEntries: Array<
       [
-        | "cvFile"
-        | "passportInfoPageFile"
-        | "profilePhotoFile"
-        | "signatureFile",
+        (
+          | "cvFile"
+          | "passportInfoPageFile"
+          | "profilePhotoFile"
+          | "signatureFile"
+        ),
         EventRegistrationFileValue,
       ]
     > = [
@@ -635,10 +645,10 @@ export default function EventRegistrationForm({
 
   return (
     <div className="flex w-full flex-col items-center gap-6">
-      <div className="w-full max-w-[1074px] rounded-xl border border-[#CFE8D9] bg-[#F4FAF6] px-4 py-3 font-['inter'] text-sm leading-5 text-text-black">
+      {/* <div className="w-full max-w-[1074px] rounded-xl border border-[#CFE8D9] bg-[#F4FAF6] px-4 py-3 font-['inter'] text-sm leading-5 text-text-black">
         Registration status:{" "}
         <span className="font-semibold capitalize">{savedStatus}</span>
-      </div>
+      </div> */}
       {renderStatusBanner()}
       <div className="flex w-full flex-col items-center gap-11">
         <StepIndicator activeStep={activeStep} />
@@ -929,6 +939,19 @@ export default function EventRegistrationForm({
                   ))}
                 </div>
                 <FieldError error={fieldErrors.foodPreference} />
+                {values.foodPreference === "Other" ? (
+                  <div className="max-w-[420px]">
+                    <TextField
+                      disabled={isSubmitting}
+                      error={fieldErrors.foodPreferenceOther}
+                      id="foodPreferenceOther"
+                      label="Please specify"
+                      onChange={handleChange("foodPreferenceOther")}
+                      placeholder="Tell us your dietary preference"
+                      value={values.foodPreferenceOther}
+                    />
+                  </div>
+                ) : null}
               </div>
 
               <button

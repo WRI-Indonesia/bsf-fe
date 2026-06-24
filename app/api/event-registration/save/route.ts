@@ -160,6 +160,7 @@ export async function POST(request: Request) {
       firstName: readStringField(formData, "firstName"),
       flightNotes: readStringField(formData, "flightNotes"),
       foodPreference: readFoodPreferenceField(formData),
+      foodPreferenceOther: readStringField(formData, "foodPreferenceOther"),
       fullAddress: readStringField(formData, "fullAddress"),
       isInternationalParticipant: readBooleanField(
         formData,

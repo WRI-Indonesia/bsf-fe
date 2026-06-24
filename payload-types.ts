@@ -338,6 +338,7 @@ export interface EventRegistration {
   mobile?: string | null;
   whatsappOrViber?: string | null;
   foodPreference?: ('Halal' | 'Vegetarian' | 'No restriction' | 'Other') | null;
+  foodPreferenceOther?: string | null;
   isInternationalParticipant?: boolean | null;
   passportNumber?: string | null;
   nationality?: string | null;
@@ -635,6 +636,7 @@ export interface EventRegistrationsSelect<T extends boolean = true> {
   mobile?: T;
   whatsappOrViber?: T;
   foodPreference?: T;
+  foodPreferenceOther?: T;
   isInternationalParticipant?: T;
   passportNumber?: T;
   nationality?: T;
