@@ -4,6 +4,7 @@ import type {
   CollectionConfig,
 } from 'payload';
 
+import { acceptAbstract, rejectAbstract } from '@/lib/abstract-decision';
 import { ABSTRACT_TEXT_MAX_LENGTH } from '@/lib/abstract-submission';
 
 type RequestUser = {
@@ -22,6 +23,14 @@ const getRelationId = (
   if (value == null) return null;
   if (typeof value === 'object') return value.id ?? null;
   return value;
+};
+
+const normalizeDocId = (value: number | string) => {
+  if (typeof value === 'number') {
+    return value;
+  }
+
+  return /^\d+$/.test(value) ? Number(value) : value;
 };
 
 const normalizeText = (value: unknown) =>
@@ -131,6 +140,117 @@ const ensureUniqueAbstractPerEvent: CollectionBeforeChangeHook = async ({
 
 const abstracts: CollectionConfig = {
   slug: 'abstracts',
+  endpoints: [
+    {
+      handler: async (req) => {
+        const user = req.user as RequestUser | undefined;
+
+        if (!isCmsUser(user)) {
+          return Response.json(
+            {
+              message: 'You are not allowed to accept abstracts.',
+            },
+            { status: 403 },
+          );
+        }
+
+        const id = req.routeParams?.id;
+
+        if (typeof id !== 'string' && typeof id !== 'number') {
+          return Response.json(
+            {
+              message: 'A valid abstract ID is required.',
+            },
+            { status: 400 },
+          );
+        }
+
+        try {
+          const normalizedId = normalizeDocId(id);
+
+          const result = await acceptAbstract({
+            id: normalizedId,
+            payload: req.payload,
+            req,
+          });
+
+          return Response.json({
+            doc: result.abstract,
+            message: `Abstract accepted and registration email sent to the submitter.`,
+            registrationURL: result.registrationURL,
+          });
+        } catch (error) {
+          const message =
+            error instanceof Error
+              ? error.message
+              : 'The abstract could not be accepted.';
+
+          return Response.json(
+            {
+              message,
+            },
+            { status: 500 },
+          );
+        }
+      },
+      method: 'post',
+      path: '/:id/accept',
+    },
+    {
+      handler: async (req) => {
+        const user = req.user as RequestUser | undefined;
+
+        if (!isCmsUser(user)) {
+          return Response.json(
+            {
+              message: 'You are not allowed to reject abstracts.',
+            },
+            { status: 403 },
+          );
+        }
+
+        const id = req.routeParams?.id;
+
+        if (typeof id !== 'string' && typeof id !== 'number') {
+          return Response.json(
+            {
+              message: 'A valid abstract ID is required.',
+            },
+            { status: 400 },
+          );
+        }
+
+        try {
+          const normalizedId = normalizeDocId(id);
+
+          const result = await rejectAbstract({
+            id: normalizedId,
+            payload: req.payload,
+            req,
+          });
+
+          return Response.json({
+            doc: result.abstract,
+            message: 'Abstract rejected.',
+          });
+        } catch (error) {
+          const message =
+            error instanceof Error
+              ? error.message
+              : 'The abstract could not be rejected.';
+
+          return Response.json(
+            {
+              message,
+            },
+            { status: 500 },
+          );
+        }
+      },
+      method: 'post',
+      path: '/:id/reject',
+    },
+  ],
   access: {
     create: ({ req }) => {
       const user = req.user as RequestUser | undefined;
@@ -177,8 +297,13 @@ const abstracts: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'title',
-    defaultColumns: ['title', 'main_author', 'event', 'status', 'updatedAt'],
+    defaultColumns: ['title', 'main_author', 'event', 'status', 'actions', 'updatedAt'],
     components: {
+      edit: {
+        beforeDocumentControls: [
+          '@/app/(payload)/admin/components/AbstractDecisionActions#AbstractDecisionActions',
+        ],
+      },
       listMenuItems: ['@/app/(payload)/admin/components/AbstractsListMenuItems#AbstractsListMenuItems'],
       views: {
         byEvent: {
@@ -270,6 +395,18 @@ const abstracts: CollectionConfig = {
           value: 'rejected',
         },
       ],
+    },
+    {
+      name: 'actions',
+      type: 'ui',
+      label: 'Actions',
+      admin: {
+        components: {
+          Cell: '@/app/(payload)/admin/components/AbstractDecisionListCell#AbstractDecisionListCell',
+        },
+        disableBulkEdit: true,
+        disableListColumn: false,
+      },
     },
   ],
 };

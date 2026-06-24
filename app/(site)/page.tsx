@@ -158,6 +158,8 @@ export default async function Home() {
     homepageContent?.upcoming_forum_section as Record<string, unknown>
   )?.featured_event as Record<string, unknown> | undefined;
 
+  console.log("upcoming forum evebt", upcomingForumEvent);
+
   const heroSection = homepageContent?.hero_section as
     | Record<string, unknown>
     | undefined;
