@@ -226,6 +226,13 @@ export default async function Home() {
   const formSubmitCta =
     (contactSection?.form_submit_cta as string) || "Send your message";
 
+  const featuredEventId =
+    typeof heroEvent?.id === "string"
+      ? heroEvent.id
+      : typeof heroEvent?.id === "number"
+        ? String(heroEvent.id)
+        : "";
+
   return (
     <>
       <Header locale={locale} />
@@ -279,7 +286,7 @@ export default async function Home() {
                       {heroExploreCta}
                     </button>
                   </Link>
-                  <Link href={`/submit-abstract?event=${heroEvent?.id}`}>
+                  <Link href={`/submit-abstract?event=${featuredEventId}`}>
                     {/* WIP */}
                     {/* <Link href={heroRegisterCtaUrl}> */}
                     <button className="w-full font-[inter] h-[36px] flex items-center justify-center gap-2 rounded-lg bg-[#1f4a31] px-4 py-[10px] text-sm font-semibold text-white transition-colors hover:bg-[#163824]">
