@@ -9,7 +9,8 @@ import {
   type EventRegistrationResponse,
   type EventRegistrationStatus,
   type FoodPreference,
-  validateEventRegistration,
+  validateEventRegistrationDraft,
+  validateEventRegistrationSubmission,
 } from "@/lib/event-registration";
 
 type RegistrationDoc = {
@@ -19,6 +20,7 @@ type RegistrationDoc = {
   profilePhotoFile?: number | { id?: number | null } | null;
   registrationKey: string;
   signatureFile?: number | { id?: number | null } | null;
+  status?: EventRegistrationStatus | null;
 };
 
 const jsonError = (
@@ -146,6 +148,16 @@ export async function POST(request: Request) {
       );
     }
 
+    if (registration.status === "submitted") {
+      return jsonError(
+        {
+          message:
+            "This registration has already been submitted and can no longer be edited.",
+        },
+        409,
+      );
+    }
+
     const cvFile = readFileField(formData, "cvFile");
     const profilePhotoFile = readFileField(formData, "profilePhotoFile");
     const passportInfoPageFile = readFileField(formData, "passportInfoPageFile");
@@ -180,12 +192,18 @@ export async function POST(request: Request) {
       preferredDepartureDate: readStringField(formData, "preferredDepartureDate"),
       profilePhotoFile:
         profilePhotoFile ?? getUploadId(registration.profilePhotoFile),
-      prefix: readStringField(formData, "prefix"),
+      prefix: readStringField(
+        formData,
+        "prefix",
+      ) as EventRegistrationPayloadValues["prefix"],
       signatureFile: signatureFile ?? getUploadId(registration.signatureFile),
       whatsappOrViber: readStringField(formData, "whatsappOrViber"),
     };
 
-    const { errors, normalized } = validateEventRegistration(payloadValues, status);
+    const { errors, normalized } =
+      status === "submitted"
+        ? validateEventRegistrationSubmission(payloadValues)
+        : validateEventRegistrationDraft(payloadValues);
 
     if (Object.keys(errors).length > 0) {
       return jsonError(

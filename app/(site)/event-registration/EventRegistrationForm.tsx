@@ -1,19 +1,23 @@
 "use client";
 
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useId, useState, type ChangeEvent, type ReactNode } from "react";
 
 import {
   createEmptyEventRegistrationValues,
   foodPreferenceOptions,
+  registrationPrefixOptions,
   type EventRegistrationFieldErrors,
   type EventRegistrationFileValue,
   type EventRegistrationFormValues,
   type EventRegistrationResponse,
   type EventRegistrationStatus,
+  type EventRegistrationStep,
   type FoodPreference,
   type UploadedRegistrationAsset,
-  validateEventRegistration,
+  validateEventRegistrationStep,
+  validateEventRegistrationSubmission,
 } from "@/lib/event-registration";
 
 const steps = [
@@ -61,12 +65,14 @@ type EventRegistrationFormProps = {
 
 const fieldClassName =
   "h-10 w-full rounded-md border border-outline-grey-light bg-white px-3 font-['inter'] text-sm leading-5 text-text-black placeholder:text-[#717D96] focus:border-text-green focus:outline-none";
-
+const selectClassName = `${fieldClassName} appearance-none pr-10`;
 const labelClassName = "font-['inter'] text-base leading-none text-text-black";
 const secondaryButtonClassName =
   "flex h-9 items-center justify-center rounded-lg border border-outline-green bg-white px-4 py-2 font-['inter'] text-sm font-semibold tracking-[0.1px] text-text-green shadow-[0px_1px_2px_0px_rgba(16,24,40,0.04)] transition-colors hover:bg-[#F6F9F5] disabled:cursor-not-allowed disabled:opacity-60";
 const primaryButtonClassName =
   "flex h-9 w-full items-center justify-center rounded-lg bg-text-green px-4 py-2 font-['inter'] text-sm font-semibold tracking-[0.1px] text-text-white-broken shadow-[0px_1px_2px_0px_rgba(16,24,40,0.04)] transition-opacity hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-60 sm:w-[200px]";
+const fullWidthPrimaryButtonClassName =
+  "flex h-9 w-full items-center justify-center rounded-lg bg-text-green px-4 py-2 font-['inter'] text-sm font-semibold tracking-[0.1px] text-text-white-broken shadow-[0px_1px_2px_0px_rgba(16,24,40,0.04)] transition-opacity hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-60";
 const iconButtonClassName =
   "flex h-9 w-9 items-center justify-center rounded-lg border border-outline-green bg-white text-text-green shadow-[0px_1px_2px_0px_rgba(16,24,40,0.04)] transition-colors hover:bg-[#F6F9F5] disabled:cursor-not-allowed disabled:opacity-60";
 const textareaClassName =
@@ -139,7 +145,11 @@ function getInitialValues(
       ? registration.preferredDepartureDate.slice(0, 10)
       : "",
     profilePhotoFile: toUploadedAsset(registration.profilePhotoFile),
-    prefix: registration.prefix ?? "",
+    prefix: registrationPrefixOptions.includes(
+      registration.prefix as (typeof registrationPrefixOptions)[number],
+    )
+      ? (registration.prefix as EventRegistrationFormValues["prefix"])
+      : "",
     signatureFile: toUploadedAsset(registration.signatureFile),
     whatsappOrViber: registration.whatsappOrViber ?? "",
   };
@@ -251,6 +261,67 @@ function TextField({
         type={type}
         value={value}
       />
+      <FieldError error={error} />
+    </label>
+  );
+}
+
+function SelectField({
+  disabled,
+  error,
+  id,
+  label,
+  onChange,
+  options,
+  placeholder,
+  value,
+}: {
+  disabled?: boolean;
+  error?: string;
+  id: keyof EventRegistrationFormValues;
+  label: string;
+  onChange: (event: ChangeEvent<HTMLSelectElement>) => void;
+  options: readonly string[];
+  placeholder: string;
+  value: string;
+}) {
+  return (
+    <label className="flex flex-col gap-2">
+      <span className={labelClassName}>{label}</span>
+      <div className="relative">
+        <select
+          className={selectClassName}
+          disabled={disabled}
+          id={id}
+          name={id}
+          onChange={onChange}
+          value={value}
+        >
+          <option value="">{placeholder}</option>
+          {options.map((option) => (
+            <option key={option} value={option}>
+              {option}
+            </option>
+          ))}
+        </select>
+        <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-text-grey-mid">
+          <svg
+            aria-hidden="true"
+            className="h-4 w-4"
+            fill="none"
+            viewBox="0 0 16 16"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="m4 6 4 4 4-4"
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="1.5"
+            />
+          </svg>
+        </span>
+      </div>
       <FieldError error={error} />
     </label>
   );
@@ -411,11 +482,30 @@ function RadioOption({
   );
 }
 
+function SubmittedStateCard() {
+  return (
+    <div className="w-full max-w-[724px] rounded-2xl border border-outline-grey-light bg-white p-6 shadow-[0px_1px_2px_0px_rgba(16,24,40,0.04)]">
+      <div className="flex flex-col items-center gap-6 rounded-xl border border-[#CFE8D9] bg-[#E9F8F1] px-5 py-8 text-center">
+        <div className="flex flex-col gap-3">
+          <h2 className="text-[32px] leading-none font-semibold text-text-black">
+            Registration submitted
+          </h2>
+          <p className="font-['inter'] text-base leading-6 text-text-black">
+            Your registration has already been submitted and can no longer be
+            edited from this page.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function EventRegistrationForm({
   initialRegistration,
   registrationKey,
 }: EventRegistrationFormProps) {
-  const [activeStep, setActiveStep] = useState(1);
+  const router = useRouter();
+  const [activeStep, setActiveStep] = useState<EventRegistrationStep>(1);
   const [values, setValues] = useState<EventRegistrationFormValues>(
     getInitialValues(initialRegistration),
   );
@@ -458,7 +548,11 @@ export default function EventRegistrationForm({
 
   const handleChange =
     (field: keyof EventRegistrationFormValues) =>
-    (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    (
+      event: ChangeEvent<
+        HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+      >,
+    ) => {
       const nextValue = event.target.value;
 
       setValues((current) => ({
@@ -584,14 +678,6 @@ export default function EventRegistrationForm({
   };
 
   const persistRegistration = async (status: EventRegistrationStatus) => {
-    const { errors } = validateEventRegistration(values, status);
-
-    if (Object.keys(errors).length > 0) {
-      setFieldErrors(errors);
-      setFormError("Please correct the highlighted fields.");
-      return false;
-    }
-
     setIsSubmitting(true);
     setFieldErrors({});
     setFormError(null);
@@ -623,6 +709,50 @@ export default function EventRegistrationForm({
     }
   };
 
+  const validateCurrentStep = (step: EventRegistrationStep) => {
+    const { errors } = validateEventRegistrationStep(values, step);
+
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+      setFormError("Please correct the highlighted fields.");
+      setSuccessMessage(null);
+      return false;
+    }
+
+    setFieldErrors({});
+    setFormError(null);
+    return true;
+  };
+
+  const handleContinue = async (currentStep: EventRegistrationStep) => {
+    if (!validateCurrentStep(currentStep)) {
+      return;
+    }
+
+    const didSave = await persistRegistration("draft");
+
+    if (didSave && currentStep < 5) {
+      setActiveStep((currentStep + 1) as EventRegistrationStep);
+    }
+  };
+
+  const handleSubmit = async () => {
+    const { errors } = validateEventRegistrationSubmission(values);
+
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+      setFormError("Please correct the highlighted fields.");
+      setSuccessMessage(null);
+      return;
+    }
+
+    const didSave = await persistRegistration("submitted");
+
+    if (didSave) {
+      router.refresh();
+    }
+  };
+
   const renderStatusBanner = () => {
     if (formError) {
       return (
@@ -643,60 +773,84 @@ export default function EventRegistrationForm({
     return null;
   };
 
+  const renderStepActions = (
+    currentStep: EventRegistrationStep,
+    options?: {
+      backDisabled?: boolean;
+      continueLabel?: string;
+      onContinue?: () => void;
+    },
+  ) => {
+    const continueLabel = options?.continueLabel ?? "Continue";
+    const onContinue =
+      options?.onContinue ?? (() => void handleContinue(currentStep));
+
+    return (
+      <>
+        <button
+          aria-label={
+            currentStep === 1 ? "Go back" : `Back to step ${currentStep - 1}`
+          }
+          className={iconButtonClassName}
+          disabled={isSubmitting || options?.backDisabled || currentStep === 1}
+          onClick={() =>
+            currentStep > 1
+              ? setActiveStep((currentStep - 1) as EventRegistrationStep)
+              : undefined
+          }
+          type="button"
+        >
+          <BackIcon />
+        </button>
+
+        <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center sm:justify-end">
+          <button
+            className={secondaryButtonClassName}
+            disabled={isSubmitting}
+            onClick={() => void persistRegistration("draft")}
+            type="button"
+          >
+            {isSubmitting ? "Saving..." : "Save as draft"}
+          </button>
+          <button
+            className={primaryButtonClassName}
+            disabled={isSubmitting}
+            onClick={onContinue}
+            type="button"
+          >
+            {isSubmitting ? "Saving..." : continueLabel}
+          </button>
+        </div>
+      </>
+    );
+  };
+
+  if (savedStatus === "submitted") {
+    return <SubmittedStateCard />;
+  }
+
   return (
     <div className="flex w-full flex-col items-center gap-6">
-      {/* <div className="w-full max-w-[1074px] rounded-xl border border-[#CFE8D9] bg-[#F4FAF6] px-4 py-3 font-['inter'] text-sm leading-5 text-text-black">
-        Registration status:{" "}
-        <span className="font-semibold capitalize">{savedStatus}</span>
-      </div> */}
       {renderStatusBanner()}
       <div className="flex w-full flex-col items-center gap-11">
         <StepIndicator activeStep={activeStep} />
 
         {activeStep === 1 ? (
           <CardShell
-            actions={
-              <>
-                <button
-                  aria-label="Go back"
-                  className={iconButtonClassName}
-                  disabled
-                  type="button"
-                >
-                  <BackIcon />
-                </button>
-
-                <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center sm:justify-end">
-                  <button
-                    className={secondaryButtonClassName}
-                    disabled={isSubmitting}
-                    onClick={() => void persistRegistration("draft")}
-                    type="button"
-                  >
-                    {isSubmitting ? "Saving..." : "Save as draft"}
-                  </button>
-                  <button
-                    className={primaryButtonClassName}
-                    disabled={isSubmitting}
-                    onClick={() => setActiveStep(2)}
-                    type="button"
-                  >
-                    Continue
-                  </button>
-                </div>
-              </>
-            }
+            actions={renderStepActions(1)}
             description="As they should appear on your forum badge and travel documents."
             title="Personal details"
           >
             <div className="flex flex-col gap-6 pb-6">
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-                <TextField
+                <SelectField
                   disabled={isSubmitting}
+                  error={fieldErrors.prefix}
                   id="prefix"
                   label="Prefix"
                   onChange={handleChange("prefix")}
-                  placeholder="Dr."
+                  options={registrationPrefixOptions}
+                  placeholder="Select prefix"
                   value={values.prefix}
                 />
                 <TextField
@@ -778,38 +932,7 @@ export default function EventRegistrationForm({
           </CardShell>
         ) : activeStep === 2 ? (
           <CardShell
-            actions={
-              <>
-                <button
-                  aria-label="Back to personal details"
-                  className={iconButtonClassName}
-                  disabled={isSubmitting}
-                  onClick={() => setActiveStep(1)}
-                  type="button"
-                >
-                  <BackIcon />
-                </button>
-
-                <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center sm:justify-end">
-                  <button
-                    className={secondaryButtonClassName}
-                    disabled={isSubmitting}
-                    onClick={() => void persistRegistration("draft")}
-                    type="button"
-                  >
-                    {isSubmitting ? "Saving..." : "Save as draft"}
-                  </button>
-                  <button
-                    className={primaryButtonClassName}
-                    disabled={isSubmitting}
-                    onClick={() => setActiveStep(3)}
-                    type="button"
-                  >
-                    Continue
-                  </button>
-                </div>
-              </>
-            }
+            actions={renderStepActions(2)}
             description="Helps us place you in the right thematic sessions."
             title="Professional information"
           >
@@ -871,38 +994,7 @@ export default function EventRegistrationForm({
           </CardShell>
         ) : activeStep === 3 ? (
           <CardShell
-            actions={
-              <>
-                <button
-                  aria-label="Back to professional information"
-                  className={iconButtonClassName}
-                  disabled={isSubmitting}
-                  onClick={() => setActiveStep(2)}
-                  type="button"
-                >
-                  <BackIcon />
-                </button>
-
-                <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center sm:justify-end">
-                  <button
-                    className={secondaryButtonClassName}
-                    disabled={isSubmitting}
-                    onClick={() => void persistRegistration("draft")}
-                    type="button"
-                  >
-                    {isSubmitting ? "Saving..." : "Save as draft"}
-                  </button>
-                  <button
-                    className={primaryButtonClassName}
-                    disabled={isSubmitting}
-                    onClick={() => setActiveStep(4)}
-                    type="button"
-                  >
-                    Continue
-                  </button>
-                </div>
-              </>
-            }
+            actions={renderStepActions(3)}
             description="Logistics for your stay during the forum."
             title="Additional details"
           >
@@ -983,107 +1075,124 @@ export default function EventRegistrationForm({
             </div>
           </CardShell>
         ) : activeStep === 4 ? (
-          <CardShell
-            actions={
-              <>
-                <button
-                  aria-label="Back to additional details"
-                  className={iconButtonClassName}
+          values.isInternationalParticipant ? (
+            <CardShell
+              actions={renderStepActions(4)}
+              description="Required for international participants."
+              title="Travel - Flight booking & passport (international)"
+            >
+              <div className="flex flex-col gap-6 pb-6">
+                <UploadField
+                  accept=".pdf,.png,.jpg,.jpeg,application/pdf,image/png,image/jpeg"
+                  acceptedFilesLabel="PDF / PNG / JPG . max 5 MB"
                   disabled={isSubmitting}
-                  onClick={() => setActiveStep(3)}
+                  error={fieldErrors.passportInfoPageFile}
+                  file={values.passportInfoPageFile}
+                  id={passportInfoPageUploadId}
+                  label="Passport info page"
+                  onChange={handleFileChange("passportInfoPageFile")}
+                />
+
+                <div className="grid gap-6 md:grid-cols-2">
+                  <TextField
+                    disabled={isSubmitting}
+                    error={fieldErrors.passportNumber}
+                    id="passportNumber"
+                    label="Passport number"
+                    onChange={handleChange("passportNumber")}
+                    value={values.passportNumber}
+                  />
+                  <TextField
+                    disabled={isSubmitting}
+                    error={fieldErrors.nationality}
+                    id="nationality"
+                    label="Nationality"
+                    onChange={handleChange("nationality")}
+                    value={values.nationality}
+                  />
+                </div>
+
+                <div className="grid gap-6 md:grid-cols-2">
+                  <TextField
+                    disabled={isSubmitting}
+                    error={fieldErrors.preferredArrivalDate}
+                    id="preferredArrivalDate"
+                    label="Preferred arrival date"
+                    onChange={handleChange("preferredArrivalDate")}
+                    type="date"
+                    value={values.preferredArrivalDate}
+                  />
+
+                  <TextField
+                    disabled={isSubmitting}
+                    error={fieldErrors.preferredDepartureDate}
+                    id="preferredDepartureDate"
+                    label="Preferred departure date"
+                    onChange={handleChange("preferredDepartureDate")}
+                    type="date"
+                    value={values.preferredDepartureDate}
+                  />
+                </div>
+
+                <label className="flex flex-col gap-2">
+                  <span className={labelClassName}>Flight notes</span>
+                  <textarea
+                    className={textareaClassName}
+                    disabled={isSubmitting}
+                    name="flightNotes"
+                    onChange={handleChange("flightNotes")}
+                    value={values.flightNotes}
+                  />
+                </label>
+              </div>
+            </CardShell>
+          ) : (
+            <CardShell
+              actions={
+                <>
+                  <button
+                    aria-label="Back to additional details"
+                    className={iconButtonClassName}
+                    disabled={isSubmitting}
+                    onClick={() => setActiveStep(3)}
+                    type="button"
+                  >
+                    <BackIcon />
+                  </button>
+
+                  <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center sm:justify-end">
+                    <button
+                      className={secondaryButtonClassName}
+                      disabled={isSubmitting}
+                      onClick={() => void persistRegistration("draft")}
+                      type="button"
+                    >
+                      {isSubmitting ? "Saving..." : "Save as draft"}
+                    </button>
+                  </div>
+                </>
+              }
+              description="No additional travel documents required for domestic participants."
+              title="Travel"
+            >
+              <div className="flex flex-col gap-6 pb-6">
+                <div className="rounded-xl border border-[#EAEAEA] bg-[#F6F7F9] px-6 py-9">
+                  <p className="font-['inter'] text-sm leading-5 text-text-black">
+                    You marked yourself as a domestic participant. You can
+                    continue to the declaration step.
+                  </p>
+                </div>
+                <button
+                  className={fullWidthPrimaryButtonClassName}
+                  disabled={isSubmitting}
+                  onClick={() => void handleContinue(4)}
                   type="button"
                 >
-                  <BackIcon />
+                  {isSubmitting ? "Saving..." : "Continue to declaration"}
                 </button>
-
-                <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center sm:justify-end">
-                  <button
-                    className={secondaryButtonClassName}
-                    disabled={isSubmitting}
-                    onClick={() => void persistRegistration("draft")}
-                    type="button"
-                  >
-                    {isSubmitting ? "Saving..." : "Save as draft"}
-                  </button>
-                  <button
-                    className={primaryButtonClassName}
-                    disabled={isSubmitting}
-                    onClick={() => setActiveStep(5)}
-                    type="button"
-                  >
-                    Continue
-                  </button>
-                </div>
-              </>
-            }
-            description="Required for international participants."
-            title="Travel - Flight booking & passport (international)"
-          >
-            <div className="flex flex-col gap-6 pb-6">
-              <UploadField
-                accept=".pdf,.png,.jpg,.jpeg,application/pdf,image/png,image/jpeg"
-                acceptedFilesLabel="PDF / PNG / JPG . max 5 MB"
-                disabled={isSubmitting || !values.isInternationalParticipant}
-                error={fieldErrors.passportInfoPageFile}
-                file={values.passportInfoPageFile}
-                id={passportInfoPageUploadId}
-                label="Passport info page"
-                onChange={handleFileChange("passportInfoPageFile")}
-              />
-
-              <div className="grid gap-6 md:grid-cols-2">
-                <TextField
-                  disabled={isSubmitting || !values.isInternationalParticipant}
-                  error={fieldErrors.passportNumber}
-                  id="passportNumber"
-                  label="Passport number"
-                  onChange={handleChange("passportNumber")}
-                  value={values.passportNumber}
-                />
-                <TextField
-                  disabled={isSubmitting || !values.isInternationalParticipant}
-                  error={fieldErrors.nationality}
-                  id="nationality"
-                  label="Nationality"
-                  onChange={handleChange("nationality")}
-                  value={values.nationality}
-                />
               </div>
-
-              <div className="grid gap-6 md:grid-cols-2">
-                <TextField
-                  disabled={isSubmitting || !values.isInternationalParticipant}
-                  error={fieldErrors.preferredArrivalDate}
-                  id="preferredArrivalDate"
-                  label="Preferred arrival date"
-                  onChange={handleChange("preferredArrivalDate")}
-                  type="date"
-                  value={values.preferredArrivalDate}
-                />
-
-                <TextField
-                  disabled={isSubmitting || !values.isInternationalParticipant}
-                  error={fieldErrors.preferredDepartureDate}
-                  id="preferredDepartureDate"
-                  label="Preferred departure date"
-                  onChange={handleChange("preferredDepartureDate")}
-                  type="date"
-                  value={values.preferredDepartureDate}
-                />
-              </div>
-
-              <label className="flex flex-col gap-2">
-                <span className={labelClassName}>Flight notes</span>
-                <textarea
-                  className={textareaClassName}
-                  disabled={isSubmitting || !values.isInternationalParticipant}
-                  name="flightNotes"
-                  onChange={handleChange("flightNotes")}
-                  value={values.flightNotes}
-                />
-              </label>
-            </div>
-          </CardShell>
+            </CardShell>
+          )
         ) : (
           <CardShell
             actions={
@@ -1110,7 +1219,7 @@ export default function EventRegistrationForm({
                   <button
                     className={primaryButtonClassName}
                     disabled={isSubmitting}
-                    onClick={() => void persistRegistration("submitted")}
+                    onClick={() => void handleSubmit()}
                     type="button"
                   >
                     {isSubmitting ? "Submitting..." : "Submit"}

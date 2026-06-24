@@ -101,6 +101,11 @@ export default async function EventRegistrationPage({
                 message="We couldn't find that registration. Please check the link or contact the organising committee for a fresh invitation."
                 title="Registration not found"
               />
+            ) : registration.status === "submitted" ? (
+              <RegistrationStateCard
+                message="Your registration has already been submitted and can no longer be edited from this page."
+                title="Registration submitted"
+              />
             ) : (
               <EventRegistrationForm
                 initialRegistration={registration}
