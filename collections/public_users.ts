@@ -24,29 +24,12 @@ const publicUsers: CollectionConfig = {
   admin: {
     useAsTitle: "email",
   },
-  hooks: {
-    beforeChange: [
-      ({ data }) => {
-        if (typeof data?._verified === "boolean") {
-          data.verified = data._verified;
-        }
-
-        return data;
-      },
-    ],
-  },
   fields: [
     {
       name: "name",
       type: "text",
       required: true,
       label: "Name",
-    },
-    {
-      name: "verified",
-      type: "checkbox",
-      defaultValue: false,
-      label: "Verified",
     },
   ],
 };

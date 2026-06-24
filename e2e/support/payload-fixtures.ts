@@ -64,7 +64,6 @@ async function ensureVerifiedPublicUser() {
         email: FIXTURE_USER.email,
         name: FIXTURE_USER.name,
         password: FIXTURE_USER.password,
-        verified: true,
       },
       id: user.id,
     });
@@ -79,7 +78,6 @@ async function ensureVerifiedPublicUser() {
       email: FIXTURE_USER.email,
       name: FIXTURE_USER.name,
       password: FIXTURE_USER.password,
-      verified: true,
     },
   });
 }

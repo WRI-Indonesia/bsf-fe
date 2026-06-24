@@ -198,7 +198,6 @@ export interface User {
 export interface PublicUser {
   id: number;
   name: string;
-  verified?: boolean | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -571,7 +570,6 @@ export interface UsersSelect<T extends boolean = true> {
  */
 export interface PublicUsersSelect<T extends boolean = true> {
   name?: T;
-  verified?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
