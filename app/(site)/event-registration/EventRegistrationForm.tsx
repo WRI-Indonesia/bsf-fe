@@ -1245,7 +1245,7 @@ export default function EventRegistrationForm({
               <a
                 className={downloadButtonClassName}
                 download
-                href="/publication.pdf"
+                href="/document/Declaration of Commitment Form.pdf"
               >
                 <Image
                   alt=""
