@@ -6,6 +6,7 @@ import Header from "./components/Header";
 import config from "../../payload.config";
 import { cookies } from "next/headers";
 import { formatDateRange, formatParticipants } from "../../lib/helpers";
+import { getCanonicalUpcomingEvent } from "@/lib/upcoming-event";
 
 const iconMap: Record<string, string> = {
   globe: "/globe.svg",
@@ -69,51 +70,13 @@ async function getPublications(locale: string = "en") {
   }
 }
 
-async function getForum(locale: string = "en") {
+async function getUpcomingEvent(locale: string = "en") {
   try {
     const payload = await getPayload({ config });
-
-    const featuredResult = await payload.find({
-      collection: "events",
-      limit: 1,
-      where: {
-        and: [
-          {
-            start_date: {
-              greater_than: new Date(),
-            },
-          },
-          {
-            show_on_homepage: {
-              equals: true,
-            },
-          },
-        ],
-      },
-      sort: "start_date",
-      locale: locale as "en" | "id",
-    });
-
-    if (featuredResult.docs.length > 0) {
-      return featuredResult.docs;
-    }
-
-    const result = await payload.find({
-      collection: "events",
-      limit: 1,
-      where: {
-        start_date: {
-          greater_than: new Date(),
-        },
-      },
-      sort: "start_date",
-      locale: locale as "en" | "id",
-    });
-
-    return result.docs || [];
+    return await getCanonicalUpcomingEvent(payload, locale as "en" | "id");
   } catch (error) {
-    console.error("Error fetching forum events:", error);
-    return [];
+    console.error("Error fetching upcoming event:", error);
+    return null;
   }
 }
 
@@ -139,7 +102,7 @@ export default async function Home() {
   const locale = cookieStore.get("locale")?.value || "en";
 
   const pastPublications = await getPublications(locale);
-  const upcomingForums = await getForum(locale);
+  const upcomingEvent = await getUpcomingEvent(locale);
   const homepageContent = await getHomepageContent(locale);
 
   const aboutBoxes =
@@ -152,22 +115,11 @@ export default async function Home() {
     homepageContent?.about_section as Record<string, unknown>
   )?.description as string;
 
-  const heroEvent = (homepageContent?.hero_section as Record<string, unknown>)
-    ?.featured_event as Record<string, unknown> | undefined;
-  const upcomingForumEvent = (
-    homepageContent?.upcoming_forum_section as Record<string, unknown>
-  )?.featured_event as Record<string, unknown> | undefined;
-
-  console.log("upcoming forum evebt", upcomingForumEvent);
-
   const heroSection = homepageContent?.hero_section as
     | Record<string, unknown>
     | undefined;
   const heroTitle =
     (heroSection?.title as string) || "ASEAN Biodiversity\nScience Forum";
-  const heroRegisterCta =
-    (heroSection?.register_cta as string) || "Register Now";
-  const heroRegisterCtaUrl = (heroSection?.register_cta_url as string) || "#";
   const heroExploreCta =
     (heroSection?.explore_cta as string) || "Explore Publications";
   const heroExploreCtaUrl =
@@ -229,11 +181,20 @@ export default async function Home() {
     (contactSection?.form_submit_cta as string) || "Send your message";
 
   const featuredEventId =
-    typeof heroEvent?.id === "string"
-      ? heroEvent.id
-      : typeof heroEvent?.id === "number"
-        ? String(heroEvent.id)
+    typeof upcomingEvent?.id === "string"
+      ? upcomingEvent.id
+      : typeof upcomingEvent?.id === "number"
+        ? String(upcomingEvent.id)
         : "";
+
+  const keyDates =
+    (upcomingEvent?.key_dates as Array<{
+      date: string;
+      label: string;
+      show?: boolean;
+    }>) || [];
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
 
   return (
     <>
@@ -258,54 +219,57 @@ export default async function Home() {
               </p>
             </div>
             <div className="px-8 md:px-12 lg:px-0 lg:pr-10 flex items-end lg:justify-end">
-              <div className="flex flex-col gap-4 w-full sm:max-w-[480px] rounded-xl bg-white/75 p-6">
-                <p className="text-base md:text-lg font-['inter'] font-semibold text-text-lime">
-                  Upcoming Forum
-                </p>
-                <h3 className="text-[22px] md:text-[32px] lg:text-[38px] font-bold leading-[1.1] tracking-tight text-text-green">
-                  {(heroEvent?.title as string) ||
-                    "Connecting Biodiversity Science, Policy, and Action"}
-                </h3>
-                <div className="flex w-full flex-col items-center justify-center gap-4 sm:gap-4 rounded-lg text-text-green">
-                  <div className="flex w-full bg-background-base-green/20 justify-center items-baseline gap-2 whitespace-nowrap px-4 py-2">
-                    <span className="text-lg md:text-2xl font-bold leading-none tracking-normal text-text-green">
-                      {formatDateRange(
-                        heroEvent?.start_date as string,
-                        heroEvent?.end_date as string,
-                      ) || "14-19"}
-                    </span>
+              {upcomingEvent && (
+                <div className="flex flex-col gap-4 w-full sm:max-w-[480px] rounded-xl bg-white/75 p-6">
+                  <p className="text-base md:text-lg font-['inter'] font-semibold text-text-lime">
+                    Upcoming Forum
+                  </p>
+                  <h3 className="text-[22px] md:text-[32px] lg:text-[38px] font-bold leading-[1.1] tracking-tight text-text-green">
+                    {(upcomingEvent?.title as string) ||
+                      "Connecting Biodiversity Science, Policy, and Action"}
+                  </h3>
+                  <div className="flex w-full flex-col items-center justify-center gap-4 sm:gap-4 rounded-lg text-text-green">
+                    <div className="flex w-full bg-background-base-green/20 justify-center items-baseline gap-2 whitespace-nowrap px-4 py-2">
+                      <span className="text-lg md:text-2xl font-bold leading-none tracking-normal text-text-green">
+                        {formatDateRange(
+                          upcomingEvent?.start_date as string,
+                          upcomingEvent?.end_date as string,
+                        ) || "14-19"}
+                      </span>
+                    </div>
+                    <div className="flex w-full bg-background-base-green/20 justify-center items-baseline gap-2 whitespace-nowrap px-4 py-2">
+                      <span className="text-lg md:text-2xl font-bold leading-none tracking-normal text-text-green">
+                        {formatParticipants(
+                          upcomingEvent?.location as string,
+                        ) || "500+"}
+                      </span>
+                    </div>
                   </div>
-                  <div className="flex w-full bg-background-base-green/20 justify-center items-baseline gap-2 whitespace-nowrap px-4 py-2">
-                    <span className="text-lg md:text-2xl font-bold leading-none tracking-normal text-text-green">
-                      {formatParticipants(heroEvent?.location as string) ||
-                        "500+"}
-                    </span>
-                  </div>
-                </div>
-                <div className="grid w-full grid-cols-2 gap-3">
-                  <Link href={heroExploreCtaUrl}>
-                    <button className="w-full font-[inter] h-[36px] flex items-center justify-center rounded-lg border border-outline-green bg-white px-4 py-[10px] text-sm font-semibold text-text-green transition-colors hover:bg-gray-50">
-                      {heroExploreCta}
-                    </button>
-                  </Link>
-                  <Link href={`/submit-abstract?event=${featuredEventId}`}>
-                    {/* WIP */}
-                    {/* <Link href={heroRegisterCtaUrl}> */}
-                    <button className="w-full font-[inter] h-[36px] flex items-center justify-center gap-2 rounded-lg bg-[#1f4a31] px-4 py-[10px] text-sm font-semibold text-white transition-colors hover:bg-[#163824]">
-                      Submit Your Abstract
+                  <div className="grid w-full grid-cols-2 gap-3">
+                    <Link href={heroExploreCtaUrl}>
+                      <button className="w-full font-[inter] h-[36px] flex items-center justify-center rounded-lg border border-outline-green bg-white px-4 py-[10px] text-sm font-semibold text-text-green transition-colors hover:bg-gray-50">
+                        {heroExploreCta}
+                      </button>
+                    </Link>
+                    <Link href={`/submit-abstract?event=${featuredEventId}`}>
                       {/* WIP */}
-                      {/* {heroRegisterCta} */}
-                      <Image
-                        src="/arrow_right.svg"
-                        alt="Arrow Right"
-                        width={14}
-                        height={14}
-                        style={{ width: "14px", height: "14px" }}
-                      />
-                    </button>
-                  </Link>
+                      {/* <Link href={heroRegisterCtaUrl}> */}
+                      <button className="w-full font-[inter] h-[36px] flex items-center justify-center gap-2 rounded-lg bg-[#1f4a31] px-4 py-[10px] text-sm font-semibold text-white transition-colors hover:bg-[#163824]">
+                        Submit Your Abstract
+                        {/* WIP */}
+                        {/* {heroRegisterCta} */}
+                        <Image
+                          src="/arrow_right.svg"
+                          alt="Arrow Right"
+                          width={14}
+                          height={14}
+                          style={{ width: "14px", height: "14px" }}
+                        />
+                      </button>
+                    </Link>
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
         </section>
@@ -351,190 +315,183 @@ export default async function Home() {
             </div>
           </div>
         </section>
-        <section className="bg-[#e4ebd8] px-20 py-30">
-          <div className="grid w-full gap-10 2xl:max-w-none lg:max-w-[1280px] lg:grid-cols-[minmax(0,1fr)_360px] xl:grid-cols-[minmax(0,1fr)_420px]">
-            <div className="flex flex-col justify-center gap-6">
-              <p className="font-['inter'] text-xl font-semibold uppercase text-text-lime">
-                {upcomingForumLabel}
-              </p>
-              <div className="flex flex-col gap-8">
-                <span className="h-fit text-[2rem] font-semibold leading-[1] tracking-[0] text-text-black sm:text-[2.25rem] lg:text-[2.5rem]">
-                  {(upcomingForumEvent?.title as string) ||
-                    "Implementing the Global Biodiversity Framework"}
-                </span>
-                <p className="font-[inter] text-lg leading-[1.3] tracking-[0] text-[#697d70] sm:text-xl">
-                  {(upcomingForumEvent?.description as string) ||
-                    "The 6th ASEAN Biodiversity Science Forum will focus on the implementation of the Global Biodiversity Framework, fostering collaboration and knowledge exchange to drive biodiversity conservation efforts across the ASEAN region."}
+        {upcomingEvent && (
+          <section className="bg-[#e4ebd8] px-20 py-30">
+            <div className="grid w-full gap-10 2xl:max-w-none lg:max-w-[1280px] lg:grid-cols-[minmax(0,1fr)_360px] xl:grid-cols-[minmax(0,1fr)_420px]">
+              <div className="flex flex-col justify-center gap-6">
+                <p className="font-['inter'] text-xl font-semibold uppercase text-text-lime">
+                  {upcomingForumLabel}
                 </p>
-                <div
-                  className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"
-                  style={{
-                    gridTemplateColumns:
-                      "repeat(auto-fill, minmax(200px, 1fr))",
-                  }}
-                >
-                  <div className="flex w-full items-center gap-3 rounded-[12px] border border-outline-green-light bg-[#c3d4be] p-4 sm:w-auto">
-                    <Image
-                      src="/book.svg"
-                      alt="Evidence-Based"
-                      width={20}
-                      height={18}
-                      style={{ width: "20px", height: "18px" }}
-                    />
-                    <div className="flex flex-col">
-                      <span className="text-xl font-bold text-text-green lg:text-2xl">
-                        {formatDateRange(
-                          upcomingForumEvent?.start_date as string,
-                          upcomingForumEvent?.end_date as string,
-                        ) || "10-12 November 2026"}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="flex w-full items-center gap-3 rounded-[12px] border border-outline-green-light bg-[#c3d4be] p-4 sm:w-auto">
-                    <Image
-                      src="/book.svg"
-                      alt="Location"
-                      width={20}
-                      height={18}
-                      style={{ width: "20px", height: "18px" }}
-                    />
-                    <div className="flex flex-col">
-                      <span className="text-xl font-bold text-text-green lg:text-2xl">
-                        {(upcomingForumEvent?.location as string) ||
-                          "Jakarta, Indonesia"}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="flex w-full items-center gap-3 rounded-[12px] border border-outline-green-light bg-[#c3d4be] p-4 sm:w-auto">
-                    <Image
-                      src="/book.svg"
-                      alt="Participants"
-                      width={20}
-                      height={18}
-                      style={{ width: "20px", height: "18px" }}
-                    />
-                    <div className="flex flex-col">
-                      <span className="text-xl font-bold text-text-green lg:text-2xl">
-                        {formatParticipants(
-                          upcomingForumEvent?.participants as string,
-                        ) || "500+"}{" "}
-                        Expected
-                      </span>
-                      <span className="font-['inter'] font-normal text-text-green">
-                        Participants
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                <div className="flex flex-col gap-3 sm:flex-row sm:gap-6">
-                  <Link href={upcomingRegisterCtaUrl}>
-                    <button className="h-[36px] w-full font-['inter'] flex items-center justify-center gap-[6px] rounded-[8px] bg-[#225139] px-[34px] py-[10px] text-sm font-semibold text-white transition-colors hover:bg-[#173e28] sm:w-auto">
-                      {upcomingRegisterCta}
+                <div className="flex flex-col gap-8">
+                  <span className="h-fit text-[2rem] font-semibold leading-[1] tracking-[0] text-text-black sm:text-[2.25rem] lg:text-[2.5rem]">
+                    {(upcomingEvent?.title as string) ||
+                      "Implementing the Global Biodiversity Framework"}
+                  </span>
+                  <p className="font-[inter] text-lg leading-[1.3] tracking-[0] text-[#697d70] sm:text-xl">
+                    {(upcomingEvent?.description as string) ||
+                      "The 6th ASEAN Biodiversity Science Forum will focus on the implementation of the Global Biodiversity Framework, fostering collaboration and knowledge exchange to drive biodiversity conservation efforts across the ASEAN region."}
+                  </p>
+                  <div
+                    className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"
+                    style={{
+                      gridTemplateColumns:
+                        "repeat(auto-fill, minmax(200px, 1fr))",
+                    }}
+                  >
+                    <div className="flex w-full items-center gap-3 rounded-[12px] border border-outline-green-light bg-[#c3d4be] p-4 sm:w-auto">
                       <Image
-                        src="/arrow_right.svg"
-                        alt="Arrow Right"
-                        width={10}
-                        height={9}
-                        style={{ width: "10px", height: "9px" }}
+                        src="/book.svg"
+                        alt="Evidence-Based"
+                        width={20}
+                        height={18}
+                        style={{ width: "20px", height: "18px" }}
                       />
-                    </button>
-                  </Link>
-                  <Link href={upcomingViewProgramCtaUrl}>
-                    <button className="h-[36px] w-full font-['inter'] flex items-center justify-center rounded-[8px] border border-[#225139] bg-white px-[2.5rem] py-[10px] text-sm font-semibold text-text-green transition-colors hover:bg-[#f6f9f5] sm:w-auto">
-                      {upcomingViewProgramCta}
-                    </button>
-                  </Link>
+                      <div className="flex flex-col">
+                        <span className="text-xl font-bold text-text-green lg:text-2xl">
+                          {formatDateRange(
+                            upcomingEvent?.start_date as string,
+                            upcomingEvent?.end_date as string,
+                          ) || "10-12 November 2026"}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="flex w-full items-center gap-3 rounded-[12px] border border-outline-green-light bg-[#c3d4be] p-4 sm:w-auto">
+                      <Image
+                        src="/book.svg"
+                        alt="Location"
+                        width={20}
+                        height={18}
+                        style={{ width: "20px", height: "18px" }}
+                      />
+                      <div className="flex flex-col">
+                        <span className="text-xl font-bold text-text-green lg:text-2xl">
+                          {(upcomingEvent?.location as string) ||
+                            "Jakarta, Indonesia"}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="flex w-full items-center gap-3 rounded-[12px] border border-outline-green-light bg-[#c3d4be] p-4 sm:w-auto">
+                      <Image
+                        src="/book.svg"
+                        alt="Participants"
+                        width={20}
+                        height={18}
+                        style={{ width: "20px", height: "18px" }}
+                      />
+                      <div className="flex flex-col">
+                        <span className="text-xl font-bold text-text-green lg:text-2xl">
+                          {formatParticipants(
+                            upcomingEvent?.participants as string,
+                          ) || "500+"}{" "}
+                          Expected
+                        </span>
+                        <span className="font-['inter'] font-normal text-text-green">
+                          Participants
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex flex-col gap-3 sm:flex-row sm:gap-6">
+                    <Link href={upcomingRegisterCtaUrl}>
+                      <button className="h-[36px] w-full font-['inter'] flex items-center justify-center gap-[6px] rounded-[8px] bg-[#225139] px-[34px] py-[10px] text-sm font-semibold text-white transition-colors hover:bg-[#173e28] sm:w-auto">
+                        {upcomingRegisterCta}
+                        <Image
+                          src="/arrow_right.svg"
+                          alt="Arrow Right"
+                          width={10}
+                          height={9}
+                          style={{ width: "10px", height: "9px" }}
+                        />
+                      </button>
+                    </Link>
+                    <Link href={upcomingViewProgramCtaUrl}>
+                      <button className="h-[36px] w-full font-['inter'] flex items-center justify-center rounded-[8px] border border-[#225139] bg-white px-[2.5rem] py-[10px] text-sm font-semibold text-text-green transition-colors hover:bg-[#f6f9f5] sm:w-auto">
+                        {upcomingViewProgramCta}
+                      </button>
+                    </Link>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="flex flex-col justify-center lg:pl-2 xl:pl-6">
-              <p className="font-['inter'] text-base font-bold uppercase tracking-wider text-text-green">
-                KEY DATES
-              </p>
-              <div className="mt-6 space-y-6">
-                {(() => {
-                  const keyDates =
-                    (upcomingForumEvent?.key_dates as Array<{
-                      date: string;
-                      label: string;
-                      show?: boolean;
-                    }>) || [];
-                  const today = new Date();
-                  today.setHours(0, 0, 0, 0);
+              {keyDates.length > 0 && (
+                <div className="flex flex-col justify-center lg:pl-2 xl:pl-6">
+                  <p className="font-['inter'] text-base font-bold uppercase tracking-wider text-text-green">
+                    KEY DATES
+                  </p>
+                  <div className="mt-6 space-y-6">
+                    {keyDates
+                      .filter((kd) => kd.show !== false)
+                      .map((kd, index) => {
+                        const kdDate = kd.date ? new Date(kd.date) : null;
+                        let isPast = false;
+                        let isToday = false;
+                        let isFuture = false;
 
-                  return keyDates
-                    .filter((kd) => kd.show !== false)
-                    .map((kd, index) => {
-                      const kdDate = kd.date ? new Date(kd.date) : null;
-                      let isPast = false;
-                      let isToday = false;
-                      let isFuture = false;
+                        if (kdDate) {
+                          const kdDateOnly = new Date(kdDate);
+                          kdDateOnly.setHours(0, 0, 0, 0);
+                          isPast = kdDateOnly < today;
+                          isToday = kdDateOnly.getTime() === today.getTime();
+                          isFuture = kdDateOnly > today;
+                        }
 
-                      if (kdDate) {
-                        const kdDateOnly = new Date(kdDate);
-                        kdDateOnly.setHours(0, 0, 0, 0);
-                        isPast = kdDateOnly < today;
-                        isToday = kdDateOnly.getTime() === today.getTime();
-                        isFuture = kdDateOnly > today;
-                      }
+                        let textColClass = "text-[#173e28]";
+                        let textSubClass = "text-[#486e57]";
+                        let dotClass = "bg-text-green";
 
-                      let textColClass = "text-[#173e28]";
-                      let textSubClass = "text-[#486e57]";
-                      let dotClass = "bg-text-green";
+                        if (isPast) {
+                          textColClass = "text-text-green";
+                          textSubClass = "text-text-green";
+                          dotClass = "bg-text-green";
+                        } else if (isToday) {
+                          textColClass = "text-text-green-light";
+                          textSubClass = "text-text-green-light";
+                          dotClass =
+                            "bg-text-green ring-[3px] ring-text-green-light ring-offset-[#e4ebd8]";
+                        } else if (isFuture) {
+                          textColClass = "text-text-grey-light";
+                          textSubClass = "text-text-grey-light";
+                          dotClass = "bg-text-grey-light";
+                        }
 
-                      if (isPast) {
-                        textColClass = "text-text-green";
-                        textSubClass = "text-text-green";
-                        dotClass = "bg-text-green";
-                      } else if (isToday) {
-                        textColClass = "text-text-green-light";
-                        textSubClass = "text-text-green-light";
-                        dotClass =
-                          "bg-text-green ring-[3px] ring-text-green-light ring-offset-[#e4ebd8]";
-                      } else if (isFuture) {
-                        textColClass = "text-text-grey-light";
-                        textSubClass = "text-text-grey-light";
-                        dotClass = "bg-text-grey-light";
-                      }
+                        const formattedDate = kdDate
+                          ? kdDate.toLocaleDateString("en-GB", {
+                              day: "2-digit",
+                              month: "long",
+                              year: "numeric",
+                            })
+                          : "";
 
-                      const formattedDate = kdDate
-                        ? kdDate.toLocaleDateString("en-GB", {
-                            day: "2-digit",
-                            month: "long",
-                            year: "numeric",
-                          })
-                        : "";
-
-                      return (
-                        <div key={index} className="relative flex gap-4">
-                          <div className="relative z-10 mt-[6px] flex flex-col items-center w-[12px]">
-                            <span
-                              className={`h-[10px] w-[10px] rounded-full flex-shrink-0 ${dotClass}`}
-                            />
-                            {index < keyDates.length - 1 ? (
-                              <span className="absolute top-[10px] h-[calc(100%+1.5rem)] w-[1.5px] bg-[#c3cdbe]" />
-                            ) : null}
+                        return (
+                          <div key={index} className="relative flex gap-4">
+                            <div className="relative z-10 mt-[6px] flex flex-col items-center w-[12px]">
+                              <span
+                                className={`h-[10px] w-[10px] rounded-full flex-shrink-0 ${dotClass}`}
+                              />
+                              {index < keyDates.length - 1 ? (
+                                <span className="absolute top-[10px] h-[calc(100%+1.5rem)] w-[1.5px] bg-[#c3cdbe]" />
+                              ) : null}
+                            </div>
+                            <div className="relative -top-[1px] flex flex-col gap-1">
+                              <p
+                                className={`font-['inter'] text-[13px] tracking-wide font-light leading-none ${textColClass}`}
+                              >
+                                {formattedDate}
+                              </p>
+                              <p
+                                className={`font-['inter'] text-base font-normal leading-tight ${textSubClass}`}
+                              >
+                                {kd.label}
+                              </p>
+                            </div>
                           </div>
-                          <div className="relative -top-[1px] flex flex-col gap-1">
-                            <p
-                              className={`font-['inter'] text-[13px] tracking-wide font-light leading-none ${textColClass}`}
-                            >
-                              {formattedDate}
-                            </p>
-                            <p
-                              className={`font-['inter'] text-base font-normal leading-tight ${textSubClass}`}
-                            >
-                              {kd.label}
-                            </p>
-                          </div>
-                        </div>
-                      );
-                    });
-                })()}
-              </div>
+                        );
+                      })}
+                  </div>
+                </div>
+              )}
             </div>
-          </div>
-        </section>
+          </section>
+        )}
         <section className="bg-white px-[80px] py-[120px] text-[#1b2d1f]">
           <div className="mx-auto flex w-full flex-wrap items-end justify-between gap-4">
             <div>

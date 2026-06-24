@@ -1,5 +1,7 @@
 import type { CollectionConfig } from 'payload';
 
+import { syncSingleUpcomingEvent } from '@/lib/upcoming-event';
+
 const events: CollectionConfig = {
   slug: 'events',
   access: {
@@ -7,6 +9,9 @@ const events: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'title',
+  },
+  hooks: {
+    beforeChange: [syncSingleUpcomingEvent],
   },
   fields: [
     {
@@ -56,6 +61,16 @@ const events: CollectionConfig = {
       type: 'checkbox',
       label: 'Show on Homepage',
       defaultValue: false,
+    },
+    {
+      name: 'is_upcoming_event',
+      type: 'checkbox',
+      label: 'Upcoming Event',
+      defaultValue: false,
+      admin: {
+        description:
+          'Marks this event as the site-wide upcoming event. Checking this will uncheck it on any other event.',
+      },
     },
     {
       name: 'key_dates',
@@ -134,6 +149,6 @@ const events: CollectionConfig = {
       ],
     },
   ],
-}
+};
 
 export default events;

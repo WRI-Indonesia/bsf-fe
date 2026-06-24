@@ -15,15 +15,6 @@ const homepageContent: GlobalConfig = {
       label: 'Hero Section',
       fields: [
         {
-          name: 'featured_event',
-          type: 'relationship',
-          relationTo: 'events',
-          label: 'Featured Event',
-          admin: {
-            description: 'Select an event to display in the hero section',
-          },
-        },
-        {
           name: 'background_image',
           type: 'upload',
           relationTo: 'media',
@@ -142,12 +133,6 @@ const homepageContent: GlobalConfig = {
     type: 'group',
     label: 'Upcoming Forum Section',
     fields: [
-      {
-        name: 'featured_event',
-        type: 'relationship',
-        relationTo: 'events',
-        label: 'Upcoming Forum Event',
-      },
       {
         name: 'label',
         type: 'text',

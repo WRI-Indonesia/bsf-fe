@@ -15,15 +15,6 @@ const eventsContent: GlobalConfig = {
       label: "Hero Section",
       fields: [
         {
-          name: "featured_event",
-          type: "relationship",
-          relationTo: "events",
-          label: "Featured Event",
-          admin: {
-            description: "Select an event to display in the hero section",
-          },
-        },
-        {
           name: "label",
           type: "text",
           label: "Label",
