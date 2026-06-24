@@ -70,15 +70,28 @@ export default function Header({ locale = 'en' }: { locale?: string }) {
     isMobile = false
   ) => {
     if (!hasSubmenu(menu.sub_items)) {
-      setOpenMenu(null);
       if (isMobile) {
-        setMobileNavOpen(false);
+        closeMobileNav();
+      } else {
+        setOpenMenu(null);
       }
       router.push(menu.href);
       return;
     }
 
     setOpenMenu(openMenu === idx ? null : idx);
+  };
+
+  const closeMobileNav = () => {
+    setMobileNavOpen(false);
+    setOpenMenu(null);
+    setProfileOpen(false);
+  };
+
+  const toggleMobileNav = () => {
+    setOpenMenu(null);
+    setProfileOpen(false);
+    setMobileNavOpen((current) => !current);
   };
 
   useEffect(() => {
@@ -123,6 +136,7 @@ export default function Header({ locale = 'en' }: { locale?: string }) {
       }
 
       setProfileOpen(false);
+      setMobileNavOpen(false);
       router.refresh();
     } catch (error) {
       console.error('Public logout failed:', error);
@@ -202,7 +216,7 @@ export default function Header({ locale = 'en' }: { locale?: string }) {
         <button
           className="flex flex-col justify-center items-center w-10 h-10 rounded-md border border-[#C3D2C3] bg-white"
           aria-label="Open navigation menu"
-          onClick={() => setMobileNavOpen((v) => !v)}
+          onClick={toggleMobileNav}
         >
           <span className={`block w-6 h-0.5 bg-text-green mb-1 transition-all ${mobileNavOpen ? 'rotate-45 translate-y-2' : ''}`}></span>
           <span className={`block w-6 h-0.5 bg-text-green mb-1 transition-all ${mobileNavOpen ? 'opacity-0' : ''}`}></span>
@@ -211,14 +225,14 @@ export default function Header({ locale = 'en' }: { locale?: string }) {
       </div>
 
       {mobileNavOpen && (
-        <div className="fixed inset-0 z-40 bg-black/40 min-[940px]:hidden" onClick={() => setMobileNavOpen(false)} />
+        <div className="fixed inset-0 z-40 bg-black/40 min-[940px]:hidden" onClick={closeMobileNav} />
       )}
       <nav className={`fixed top-0 left-0 z-50 h-full w-[80vw] max-w-xs bg-white shadow-xl p-6 flex flex-col gap-6 min-[940px]:hidden transition-transform duration-300 ${mobileNavOpen ? 'translate-x-0' : '-translate-x-full'}`} style={{transitionProperty:'transform'}}>
         <div className="flex items-center justify-between mb-8">
           <Image src="/bsf_logo.png" alt="BSF logo" width={48} height={48} style={{ width: '48px', height: '48px' }} />
-          <button onClick={() => setMobileNavOpen(false)} aria-label="Close navigation menu" className="text-2xl font-bold">×</button>
+          <button onClick={closeMobileNav} aria-label="Close navigation menu" className="text-2xl font-bold">×</button>
         </div>
-        <Link href="/" className="py-2 px-2 rounded text-[#265F44] font-semibold hover:bg-[#e4ebd8]" onClick={()=>setMobileNavOpen(false)}>Home</Link>
+        <Link href="/" className="py-2 px-2 rounded text-[#265F44] font-semibold hover:bg-[#e4ebd8]" onClick={closeMobileNav}>Home</Link>
         {navMenus.map((menu: NavItem, idx: number) => (
           <div key={menu.label} className="flex flex-col">
             <button
@@ -237,7 +251,7 @@ export default function Header({ locale = 'en' }: { locale?: string }) {
                     key={item.href}
                     href={item.href}
                     className="py-1 px-2 text-text-green hover:bg-[#E3E7D7] rounded"
-                    onClick={()=>{setMobileNavOpen(false); setOpenMenu(null);}}
+                    onClick={closeMobileNav}
                   >
                     {item.label}
                   </Link>
@@ -246,6 +260,66 @@ export default function Header({ locale = 'en' }: { locale?: string }) {
             )}
           </div>
         ))}
+
+        {isLoggedIn ? (
+          <div className="relative border-t border-[#E3E7D7] pt-4" ref={profileMenuRef}>
+            <button
+              type="button"
+              className="flex w-full items-center gap-3 rounded-lg px-2 py-2 text-left font-['inter'] text-[#265F44] font-semibold hover:bg-[#e4ebd8]"
+              onClick={() => {
+                setLangOpen(false);
+                setProfileOpen((current) => !current);
+              }}
+              aria-expanded={profileOpen}
+              aria-haspopup="menu"
+              aria-label="Open profile menu"
+            >
+              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#E3E7D7] text-sm font-semibold text-text-green">
+                {userInitials}
+              </span>
+              <span className="flex-1">Profile</span>
+              <span className="text-xs">▼</span>
+            </button>
+
+            {profileOpen && (
+              <div className="mt-2 rounded-xl border border-[#D9DCE0] bg-white p-1 shadow-lg">
+                <button
+                  type="button"
+                  className="flex w-full items-center rounded-lg px-3 py-2 text-left font-['inter'] text-sm font-medium text-[#325B53] transition-colors hover:bg-[#E6E9D4] disabled:cursor-not-allowed disabled:opacity-70"
+                  onClick={handleLogout}
+                  disabled={isLoggingOut}
+                >
+                  {isLoggingOut ? 'Logging out...' : 'Logout'}
+                </button>
+              </div>
+            )}
+          </div>
+        ) : (
+          <Link
+            href="/login"
+            className="flex items-center justify-between rounded-lg border-t border-[#E3E7D7] px-2 pt-4 pb-2 font-['inter'] text-base font-semibold text-[#265F44] hover:bg-[#e4ebd8]"
+            onClick={closeMobileNav}
+          >
+            <span>Login</span>
+            <svg
+              aria-hidden="true"
+              className="text-[#265F44]"
+              fill="none"
+              height="20"
+              viewBox="0 0 20 20"
+              width="20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M11.667 5L16.667 10M16.667 10L11.667 15M16.667 10H6.66699M6.66699 3.33333H5.33366C4.59604 3.33333 4.00033 3.92905 4.00033 4.66667V15.3333C4.00033 16.071 4.59604 16.6667 5.33366 16.6667H6.66699"
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="1.5"
+              />
+            </svg>
+          </Link>
+        )}
       </nav>
 
       <div className="relative flex items-center gap-3 flex-shrink-0 flex-grow-0">
@@ -296,7 +370,7 @@ export default function Header({ locale = 'en' }: { locale?: string }) {
         </div>
 
         {isLoggedIn ? (
-          <div className="relative" ref={profileMenuRef}>
+          <div className="relative hidden min-[940px]:block" ref={profileMenuRef}>
             <button
               type="button"
               className="flex h-10 w-10 items-center justify-center rounded-full bg-[#E3E7D7] font-['inter'] text-sm font-semibold text-text-green transition-colors hover:bg-[#d5dbc8]"
@@ -327,7 +401,7 @@ export default function Header({ locale = 'en' }: { locale?: string }) {
         ) : (
           <Link
             href="/login"
-            className={`flex items-center gap-2 font-['inter'] text-base font-medium ${isHome ? 'text-text-green' : 'text-text-white-broken'}`}
+            className={`hidden min-[940px]:flex items-center gap-2 font-['inter'] text-base font-medium ${isHome ? 'text-text-green' : 'text-text-white-broken'}`}
           >
             <span>Login</span>
             <svg

@@ -1,17 +1,17 @@
 import Image from "next/image";
 import Footer from "./components/Footer";
-import Link from 'next/link';
-import { getPayload } from 'payload';
-import Header from './components/Header';
-import config from '../../payload.config';
-import { cookies } from 'next/headers';
-import { formatDateRange, formatParticipants } from '../../lib/helpers';
+import Link from "next/link";
+import { getPayload } from "payload";
+import Header from "./components/Header";
+import config from "../../payload.config";
+import { cookies } from "next/headers";
+import { formatDateRange, formatParticipants } from "../../lib/helpers";
 
 const iconMap: Record<string, string> = {
-  globe: '/globe.svg',
-  stakeholder: '/stakeholder.svg',
-  book: '/book.svg',
-  bulb: '/bulb.svg',
+  globe: "/globe.svg",
+  stakeholder: "/stakeholder.svg",
+  book: "/book.svg",
+  bulb: "/bulb.svg",
 };
 
 const publicationTags: Record<string, { bg: string; text: string }> = {
@@ -31,7 +31,7 @@ const publicationTags: Record<string, { bg: string; text: string }> = {
     bg: "bg-background-light-danger-second",
     text: "text-text-icons-light-danger",
   },
-}
+};
 
 type pastPublication = {
   id?: string;
@@ -46,21 +46,20 @@ type pastPublication = {
 
 type HomepageBox = {
   id?: string;
-  icon: 'globe' | 'stakeholder' | 'book' | 'bulb';
+  icon: "globe" | "stakeholder" | "book" | "bulb";
   title: string;
   description: string;
 };
 
-
-async function getPublications(locale: string = 'en') {
+async function getPublications(locale: string = "en") {
   try {
     const payload = await getPayload({ config });
 
     const result = await payload.find({
-      collection: 'latest_publications',
+      collection: "latest_publications",
       limit: 10,
-      sort: 'id',
-      locale: locale as 'en' | 'id',
+      sort: "id",
+      locale: locale as "en" | "id",
     });
 
     return result.docs || [];
@@ -70,12 +69,12 @@ async function getPublications(locale: string = 'en') {
   }
 }
 
-async function getForum(locale: string = 'en') {
+async function getForum(locale: string = "en") {
   try {
     const payload = await getPayload({ config });
 
     const featuredResult = await payload.find({
-      collection: 'events',
+      collection: "events",
       limit: 1,
       where: {
         and: [
@@ -91,8 +90,8 @@ async function getForum(locale: string = 'en') {
           },
         ],
       },
-      sort: 'start_date',
-      locale: locale as 'en' | 'id',
+      sort: "start_date",
+      locale: locale as "en" | "id",
     });
 
     if (featuredResult.docs.length > 0) {
@@ -100,15 +99,15 @@ async function getForum(locale: string = 'en') {
     }
 
     const result = await payload.find({
-      collection: 'events',
+      collection: "events",
       limit: 1,
       where: {
         start_date: {
           greater_than: new Date(),
         },
       },
-      sort: 'start_date',
-      locale: locale as 'en' | 'id',
+      sort: "start_date",
+      locale: locale as "en" | "id",
     });
 
     return result.docs || [];
@@ -118,13 +117,13 @@ async function getForum(locale: string = 'en') {
   }
 }
 
-async function getHomepageContent(locale: string = 'en') {
+async function getHomepageContent(locale: string = "en") {
   try {
     const payload = await getPayload({ config });
 
     const result = await payload.findGlobal({
-      slug: 'homepage_content',
-      locale: locale as 'en' | 'id',
+      slug: "homepage_content",
+      locale: locale as "en" | "id",
       depth: 1,
     });
 
@@ -135,53 +134,97 @@ async function getHomepageContent(locale: string = 'en') {
   }
 }
 
-
 export default async function Home() {
   const cookieStore = await cookies();
-  const locale = cookieStore.get('locale')?.value || 'en';
-  
+  const locale = cookieStore.get("locale")?.value || "en";
+
   const pastPublications = await getPublications(locale);
   const upcomingForums = await getForum(locale);
   const homepageContent = await getHomepageContent(locale);
 
-  const aboutBoxes = (homepageContent?.about_section?.boxes as HomepageBox[]) || [];
-  const aboutLabel = (homepageContent?.about_section as Record<string, unknown>)?.label as string;
-  const aboutTitle = (homepageContent?.about_section as Record<string, unknown>)?.title as string;
-  const aboutDescription = (homepageContent?.about_section as Record<string, unknown>)?.description as string;
+  const aboutBoxes =
+    (homepageContent?.about_section?.boxes as HomepageBox[]) || [];
+  const aboutLabel = (homepageContent?.about_section as Record<string, unknown>)
+    ?.label as string;
+  const aboutTitle = (homepageContent?.about_section as Record<string, unknown>)
+    ?.title as string;
+  const aboutDescription = (
+    homepageContent?.about_section as Record<string, unknown>
+  )?.description as string;
 
-  const heroEvent = (homepageContent?.hero_section as Record<string, unknown>)?.featured_event as Record<string, unknown> | undefined;
-  const upcomingForumEvent = (homepageContent?.upcoming_forum_section as Record<string, unknown>)?.featured_event as Record<string, unknown> | undefined;
+  const heroEvent = (homepageContent?.hero_section as Record<string, unknown>)
+    ?.featured_event as Record<string, unknown> | undefined;
+  const upcomingForumEvent = (
+    homepageContent?.upcoming_forum_section as Record<string, unknown>
+  )?.featured_event as Record<string, unknown> | undefined;
 
-  const heroSection = homepageContent?.hero_section as Record<string, unknown> | undefined;
-  const heroTitle = heroSection?.title as string || 'ASEAN Biodiversity\nScience Forum';
-  const heroRegisterCta = heroSection?.register_cta as string || 'Register Now';
-  const heroRegisterCtaUrl = heroSection?.register_cta_url as string || '#';
-  const heroExploreCta = heroSection?.explore_cta as string || 'Explore Publications';
-  const heroExploreCtaUrl = heroSection?.explore_cta_url as string || '/publications';
-  const heroBgImage = (heroSection?.background_image as Record<string, unknown>)?.url as string || '/background.png';
+  const heroSection = homepageContent?.hero_section as
+    | Record<string, unknown>
+    | undefined;
+  const heroTitle =
+    (heroSection?.title as string) || "ASEAN Biodiversity\nScience Forum";
+  const heroRegisterCta =
+    (heroSection?.register_cta as string) || "Register Now";
+  const heroRegisterCtaUrl = (heroSection?.register_cta_url as string) || "#";
+  const heroExploreCta =
+    (heroSection?.explore_cta as string) || "Explore Publications";
+  const heroExploreCtaUrl =
+    (heroSection?.explore_cta_url as string) || "/publications";
+  const heroBgImage =
+    ((heroSection?.background_image as Record<string, unknown>)
+      ?.url as string) || "/background.png";
 
-  const upcomingForumSection = homepageContent?.upcoming_forum_section as Record<string, unknown> | undefined;
-  const upcomingForumLabel = upcomingForumSection?.label as string || 'Upcoming Forum';
-  const upcomingRegisterCta = upcomingForumSection?.register_cta as string || 'Register Now';
-  const upcomingRegisterCtaUrl = upcomingForumSection?.register_cta_url as string || '#';
-  const upcomingViewProgramCta = upcomingForumSection?.view_program_cta as string || 'View Program';
-  const upcomingViewProgramCtaUrl = upcomingForumSection?.view_program_cta_url as string || '#';
+  const upcomingForumSection = homepageContent?.upcoming_forum_section as
+    | Record<string, unknown>
+    | undefined;
+  const upcomingForumLabel =
+    (upcomingForumSection?.label as string) || "Upcoming Forum";
+  const upcomingRegisterCta =
+    (upcomingForumSection?.register_cta as string) || "Register Now";
+  const upcomingRegisterCtaUrl =
+    (upcomingForumSection?.register_cta_url as string) || "#";
+  const upcomingViewProgramCta =
+    (upcomingForumSection?.view_program_cta as string) || "View Program";
+  const upcomingViewProgramCtaUrl =
+    (upcomingForumSection?.view_program_cta_url as string) || "#";
 
-  const contactSection = homepageContent?.contact_section as Record<string, unknown> | undefined;
-  const contactLabel = contactSection?.label as string || 'Contact Us';
-  const contactTitle = contactSection?.title as string || 'Get in touch with the BSF team';
-  const contactDescription = contactSection?.description as string || "Whether you're interested in partnerships, have questions about the forum, or want to contribute to biodiversity science, we'd love to hear from you.";
-  const contactItems = (contactSection?.contact_items as Array<{ id?: string; label: string; value: string }>) || [];
-  const formNameLabel = contactSection?.form_name_label as string || 'Full Name';
-  const formNamePlaceholder = contactSection?.form_name_placeholder as string || 'Your name';
-  const formEmailLabel = contactSection?.form_email_label as string || 'Email';
-  const formEmailPlaceholder = contactSection?.form_email_placeholder as string || 'you@example.com';
-  const formSubjectLabel = contactSection?.form_subject_label as string || 'Subject';
-  const formSubjectPlaceholder = contactSection?.form_subject_placeholder as string || 'Add a subject';
-  const formMessageLabel = contactSection?.form_message_label as string || 'Message';
-  const formMessagePlaceholder = contactSection?.form_message_placeholder as string || 'Write your message';
-  const formPrivacyText = contactSection?.form_privacy_text as string || 'Your request will be sent securely and remain private.';
-  const formSubmitCta = contactSection?.form_submit_cta as string || 'Send your message';
+  const contactSection = homepageContent?.contact_section as
+    | Record<string, unknown>
+    | undefined;
+  const contactLabel = (contactSection?.label as string) || "Contact Us";
+  const contactTitle =
+    (contactSection?.title as string) || "Get in touch with the BSF team";
+  const contactDescription =
+    (contactSection?.description as string) ||
+    "Whether you're interested in partnerships, have questions about the forum, or want to contribute to biodiversity science, we'd love to hear from you.";
+  const contactItems =
+    (contactSection?.contact_items as Array<{
+      id?: string;
+      label: string;
+      value: string;
+    }>) || [];
+  const formNameLabel =
+    (contactSection?.form_name_label as string) || "Full Name";
+  const formNamePlaceholder =
+    (contactSection?.form_name_placeholder as string) || "Your name";
+  const formEmailLabel =
+    (contactSection?.form_email_label as string) || "Email";
+  const formEmailPlaceholder =
+    (contactSection?.form_email_placeholder as string) || "you@example.com";
+  const formSubjectLabel =
+    (contactSection?.form_subject_label as string) || "Subject";
+  const formSubjectPlaceholder =
+    (contactSection?.form_subject_placeholder as string) || "Add a subject";
+  const formMessageLabel =
+    (contactSection?.form_message_label as string) || "Message";
+  const formMessagePlaceholder =
+    (contactSection?.form_message_placeholder as string) ||
+    "Write your message";
+  const formPrivacyText =
+    (contactSection?.form_privacy_text as string) ||
+    "Your request will be sent securely and remain private.";
+  const formSubmitCta =
+    (contactSection?.form_submit_cta as string) || "Send your message";
 
   return (
     <>
@@ -202,7 +245,7 @@ export default async function Home() {
                 {heroTitle}
               </div>
               <p className="font-['inter'] text-[15px] md:text-[18px] lg:text-[20px] font-normal text-text-grey-dark">
-                {heroSection?.subtitle as string} 
+                {heroSection?.subtitle as string}
               </p>
             </div>
             <div className="px-8 md:px-12 lg:px-0 lg:pr-10 flex items-end lg:justify-end">
@@ -211,14 +254,23 @@ export default async function Home() {
                   Upcoming Forum
                 </p>
                 <h3 className="text-[22px] md:text-[32px] lg:text-[38px] font-bold leading-[1.1] tracking-tight text-text-green">
-                  {heroEvent?.title as string || "Connecting Biodiversity Science, Policy, and Action"}
+                  {(heroEvent?.title as string) ||
+                    "Connecting Biodiversity Science, Policy, and Action"}
                 </h3>
                 <div className="flex w-full flex-col items-center justify-center gap-4 sm:gap-4 rounded-lg text-text-green">
                   <div className="flex w-full bg-background-base-green/20 justify-center items-baseline gap-2 whitespace-nowrap px-4 py-2">
-                    <span className="text-lg md:text-2xl font-bold leading-none tracking-normal text-text-green">{formatDateRange(heroEvent?.start_date as string, heroEvent?.end_date as string) || "14-19"}</span>
+                    <span className="text-lg md:text-2xl font-bold leading-none tracking-normal text-text-green">
+                      {formatDateRange(
+                        heroEvent?.start_date as string,
+                        heroEvent?.end_date as string,
+                      ) || "14-19"}
+                    </span>
                   </div>
                   <div className="flex w-full bg-background-base-green/20 justify-center items-baseline gap-2 whitespace-nowrap px-4 py-2">
-                    <span className="text-lg md:text-2xl font-bold leading-none tracking-normal text-text-green">{formatParticipants(heroEvent?.location as string) || "500+"}</span>
+                    <span className="text-lg md:text-2xl font-bold leading-none tracking-normal text-text-green">
+                      {formatParticipants(heroEvent?.location as string) ||
+                        "500+"}
+                    </span>
                   </div>
                 </div>
                 <div className="grid w-full grid-cols-2 gap-3">
@@ -227,9 +279,13 @@ export default async function Home() {
                       {heroExploreCta}
                     </button>
                   </Link>
-                  <Link href={heroRegisterCtaUrl}>
+                  <Link href={`/submit-abstract?event=${heroEvent?.id}`}>
+                    {/* WIP */}
+                    {/* <Link href={heroRegisterCtaUrl}> */}
                     <button className="w-full font-[inter] h-[36px] flex items-center justify-center gap-2 rounded-lg bg-[#1f4a31] px-4 py-[10px] text-sm font-semibold text-white transition-colors hover:bg-[#163824]">
-                      {heroRegisterCta}
+                      Submit Your Abstract
+                      {/* WIP */}
+                      {/* {heroRegisterCta} */}
                       <Image
                         src="/arrow_right.svg"
                         alt="Arrow Right"
@@ -267,16 +323,20 @@ export default async function Home() {
                 >
                   <div className="flex items-center gap-3">
                     <Image
-                      src={iconMap[box.icon] || '/globe.svg'}
+                      src={iconMap[box.icon] || "/globe.svg"}
                       alt={box.title}
                       width={22}
                       height={22}
                       style={{ width: "22px", height: "22px" }}
                       className="brightness-0 invert"
                     />
-                    <h3 className="text-[18px] font-semibold text-white">{box.title}</h3>
+                    <h3 className="text-[18px] font-semibold text-white">
+                      {box.title}
+                    </h3>
                   </div>
-                  <p className="font-['inter'] mt-2 whitespace-pre-line text-[13px] font-normal leading-[1.6] text-[#AFAFAF]">{box.description}</p>
+                  <p className="font-['inter'] mt-2 whitespace-pre-line text-[13px] font-normal leading-[1.6] text-[#AFAFAF]">
+                    {box.description}
+                  </p>
                 </div>
               ))}
             </div>
@@ -289,14 +349,21 @@ export default async function Home() {
                 {upcomingForumLabel}
               </p>
               <div className="flex flex-col gap-8">
-                
                 <span className="h-fit text-[2rem] font-semibold leading-[1] tracking-[0] text-text-black sm:text-[2.25rem] lg:text-[2.5rem]">
-                  {upcomingForumEvent?.title as string || "Implementing the Global Biodiversity Framework"}
+                  {(upcomingForumEvent?.title as string) ||
+                    "Implementing the Global Biodiversity Framework"}
                 </span>
                 <p className="font-[inter] text-lg leading-[1.3] tracking-[0] text-[#697d70] sm:text-xl">
-                  {upcomingForumEvent?.description as string || "The 6th ASEAN Biodiversity Science Forum will focus on the implementation of the Global Biodiversity Framework, fostering collaboration and knowledge exchange to drive biodiversity conservation efforts across the ASEAN region."}
+                  {(upcomingForumEvent?.description as string) ||
+                    "The 6th ASEAN Biodiversity Science Forum will focus on the implementation of the Global Biodiversity Framework, fostering collaboration and knowledge exchange to drive biodiversity conservation efforts across the ASEAN region."}
                 </p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))' }}>
+                <div
+                  className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"
+                  style={{
+                    gridTemplateColumns:
+                      "repeat(auto-fill, minmax(200px, 1fr))",
+                  }}
+                >
                   <div className="flex w-full items-center gap-3 rounded-[12px] border border-outline-green-light bg-[#c3d4be] p-4 sm:w-auto">
                     <Image
                       src="/book.svg"
@@ -306,7 +373,12 @@ export default async function Home() {
                       style={{ width: "20px", height: "18px" }}
                     />
                     <div className="flex flex-col">
-                      <span className="text-xl font-bold text-text-green lg:text-2xl">{formatDateRange(upcomingForumEvent?.start_date as string, upcomingForumEvent?.end_date as string) || "10-12 November 2026"}</span>
+                      <span className="text-xl font-bold text-text-green lg:text-2xl">
+                        {formatDateRange(
+                          upcomingForumEvent?.start_date as string,
+                          upcomingForumEvent?.end_date as string,
+                        ) || "10-12 November 2026"}
+                      </span>
                     </div>
                   </div>
                   <div className="flex w-full items-center gap-3 rounded-[12px] border border-outline-green-light bg-[#c3d4be] p-4 sm:w-auto">
@@ -318,7 +390,10 @@ export default async function Home() {
                       style={{ width: "20px", height: "18px" }}
                     />
                     <div className="flex flex-col">
-                      <span className="text-xl font-bold text-text-green lg:text-2xl">{upcomingForumEvent?.location as string || "Jakarta, Indonesia"}</span>
+                      <span className="text-xl font-bold text-text-green lg:text-2xl">
+                        {(upcomingForumEvent?.location as string) ||
+                          "Jakarta, Indonesia"}
+                      </span>
                     </div>
                   </div>
                   <div className="flex w-full items-center gap-3 rounded-[12px] border border-outline-green-light bg-[#c3d4be] p-4 sm:w-auto">
@@ -330,8 +405,15 @@ export default async function Home() {
                       style={{ width: "20px", height: "18px" }}
                     />
                     <div className="flex flex-col">
-                      <span className="text-xl font-bold text-text-green lg:text-2xl">{formatParticipants(upcomingForumEvent?.participants as string) || "500+"} Expected</span>
-                      <span className="font-['inter'] font-normal text-text-green">Participants</span>
+                      <span className="text-xl font-bold text-text-green lg:text-2xl">
+                        {formatParticipants(
+                          upcomingForumEvent?.participants as string,
+                        ) || "500+"}{" "}
+                        Expected
+                      </span>
+                      <span className="font-['inter'] font-normal text-text-green">
+                        Participants
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -340,12 +422,12 @@ export default async function Home() {
                     <button className="h-[36px] w-full font-['inter'] flex items-center justify-center gap-[6px] rounded-[8px] bg-[#225139] px-[34px] py-[10px] text-sm font-semibold text-white transition-colors hover:bg-[#173e28] sm:w-auto">
                       {upcomingRegisterCta}
                       <Image
-                          src="/arrow_right.svg"
-                          alt="Arrow Right"
-                          width={10}
-                          height={9}
-                          style={{ width: "10px", height: "9px" }}
-                        />
+                        src="/arrow_right.svg"
+                        alt="Arrow Right"
+                        width={10}
+                        height={9}
+                        style={{ width: "10px", height: "9px" }}
+                      />
                     </button>
                   </Link>
                   <Link href={upcomingViewProgramCtaUrl}>
@@ -362,69 +444,83 @@ export default async function Home() {
               </p>
               <div className="mt-6 space-y-6">
                 {(() => {
-                  const keyDates = (upcomingForumEvent?.key_dates as Array<{ date: string; label: string; show?: boolean }>) || [];
+                  const keyDates =
+                    (upcomingForumEvent?.key_dates as Array<{
+                      date: string;
+                      label: string;
+                      show?: boolean;
+                    }>) || [];
                   const today = new Date();
                   today.setHours(0, 0, 0, 0);
-                  
-                  return keyDates
-                    .filter(kd => kd.show !== false)
-                    .map((kd, index) => {
-                    const kdDate = kd.date ? new Date(kd.date) : null;
-                    let isPast = false;
-                    let isToday = false;
-                    let isFuture = false;
-                    
-                    if (kdDate) {
-                      const kdDateOnly = new Date(kdDate);
-                      kdDateOnly.setHours(0, 0, 0, 0);
-                      isPast = kdDateOnly < today;
-                      isToday = kdDateOnly.getTime() === today.getTime();
-                      isFuture = kdDateOnly > today;
-                    }
-                    
-                    let textColClass = "text-[#173e28]";
-                    let textSubClass = "text-[#486e57]";
-                    let dotClass = "bg-text-green";
-                    
-                    if (isPast) {
-                      textColClass = "text-text-green";
-                      textSubClass = "text-text-green";
-                      dotClass = "bg-text-green";
-                    } else if (isToday) {
-                      textColClass = "text-text-green-light";
-                      textSubClass = "text-text-green-light";
-                      dotClass = "bg-text-green ring-[3px] ring-text-green-light ring-offset-[#e4ebd8]";
-                    } else if (isFuture) {
-                      textColClass = "text-text-grey-light";
-                      textSubClass = "text-text-grey-light";
-                      dotClass = "bg-text-grey-light";
-                    }
-                    
-                    const formattedDate = kdDate ? kdDate.toLocaleDateString('en-GB', {
-                      day: '2-digit',
-                      month: 'long',
-                      year: 'numeric',
-                    }) : '';
 
-                    return (
-                      <div key={index} className="relative flex gap-4">
-                        <div className="relative z-10 mt-[6px] flex flex-col items-center w-[12px]">
-                          <span className={`h-[10px] w-[10px] rounded-full flex-shrink-0 ${dotClass}`} />
-                          {index < keyDates.length - 1 ? (
-                            <span className="absolute top-[10px] h-[calc(100%+1.5rem)] w-[1.5px] bg-[#c3cdbe]" />
-                          ) : null}
+                  return keyDates
+                    .filter((kd) => kd.show !== false)
+                    .map((kd, index) => {
+                      const kdDate = kd.date ? new Date(kd.date) : null;
+                      let isPast = false;
+                      let isToday = false;
+                      let isFuture = false;
+
+                      if (kdDate) {
+                        const kdDateOnly = new Date(kdDate);
+                        kdDateOnly.setHours(0, 0, 0, 0);
+                        isPast = kdDateOnly < today;
+                        isToday = kdDateOnly.getTime() === today.getTime();
+                        isFuture = kdDateOnly > today;
+                      }
+
+                      let textColClass = "text-[#173e28]";
+                      let textSubClass = "text-[#486e57]";
+                      let dotClass = "bg-text-green";
+
+                      if (isPast) {
+                        textColClass = "text-text-green";
+                        textSubClass = "text-text-green";
+                        dotClass = "bg-text-green";
+                      } else if (isToday) {
+                        textColClass = "text-text-green-light";
+                        textSubClass = "text-text-green-light";
+                        dotClass =
+                          "bg-text-green ring-[3px] ring-text-green-light ring-offset-[#e4ebd8]";
+                      } else if (isFuture) {
+                        textColClass = "text-text-grey-light";
+                        textSubClass = "text-text-grey-light";
+                        dotClass = "bg-text-grey-light";
+                      }
+
+                      const formattedDate = kdDate
+                        ? kdDate.toLocaleDateString("en-GB", {
+                            day: "2-digit",
+                            month: "long",
+                            year: "numeric",
+                          })
+                        : "";
+
+                      return (
+                        <div key={index} className="relative flex gap-4">
+                          <div className="relative z-10 mt-[6px] flex flex-col items-center w-[12px]">
+                            <span
+                              className={`h-[10px] w-[10px] rounded-full flex-shrink-0 ${dotClass}`}
+                            />
+                            {index < keyDates.length - 1 ? (
+                              <span className="absolute top-[10px] h-[calc(100%+1.5rem)] w-[1.5px] bg-[#c3cdbe]" />
+                            ) : null}
+                          </div>
+                          <div className="relative -top-[1px] flex flex-col gap-1">
+                            <p
+                              className={`font-['inter'] text-[13px] tracking-wide font-light leading-none ${textColClass}`}
+                            >
+                              {formattedDate}
+                            </p>
+                            <p
+                              className={`font-['inter'] text-base font-normal leading-tight ${textSubClass}`}
+                            >
+                              {kd.label}
+                            </p>
+                          </div>
                         </div>
-                        <div className="relative -top-[1px] flex flex-col gap-1">
-                          <p className={`font-['inter'] text-[13px] tracking-wide font-light leading-none ${textColClass}`}>
-                            {formattedDate}
-                          </p>
-                          <p className={`font-['inter'] text-base font-normal leading-tight ${textSubClass}`}>
-                            {kd.label}
-                          </p>
-                        </div>
-                      </div>
-                    );
-                  });
+                      );
+                    });
                 })()}
               </div>
             </div>
@@ -434,59 +530,102 @@ export default async function Home() {
           <div className="mx-auto flex w-full flex-wrap items-end justify-between gap-4">
             <div>
               <p className="font-['inter'] text-[20px] font-semibold uppercase text-[#b28d3c]">
-                {(homepageContent?.publications_section as Record<string, unknown>)?.label as string || 'Latest Publication'}
+                {((
+                  homepageContent?.publications_section as Record<
+                    string,
+                    unknown
+                  >
+                )?.label as string) || "Latest Publication"}
               </p>
               <h2 className="font-semibold text-[40px] mt-4 font-semibold">
-                {(homepageContent?.publications_section as Record<string, unknown>)?.title as string || 'Recent Knowledge Products'}
+                {((
+                  homepageContent?.publications_section as Record<
+                    string,
+                    unknown
+                  >
+                )?.title as string) || "Recent Knowledge Products"}
               </h2>
             </div>
-            <Link href="/publications" className="text-[16px] font-semibold text-text-green hover:underline">
-              {(homepageContent?.publications_section as Record<string, unknown>)?.view_all_text as string || 'View all publications →'}
+            <Link
+              href="/publications"
+              className="text-[16px] font-semibold text-text-green hover:underline"
+            >
+              {((
+                homepageContent?.publications_section as Record<string, unknown>
+              )?.view_all_text as string) || "View all publications →"}
             </Link>
           </div>
           <div className="mx-auto mt-8 w-full space-y-4">
-            {(pastPublications as unknown as pastPublication[]).map((publication: pastPublication) => {
-              const pubFile = publication.file as Record<string, unknown> | undefined;
-              const fileUrl = pubFile?.url as string || '#';
-              return (
-                <div
-                  key={publication.id}
-                  className="flex flex-col justify-between gap-4 rounded-2xl border border-[#e2e8e2] bg-[#fcfdfb] px-5 py-4"
-                >
-                  <div className="space-y-2">
-                    <p className="text-[24px] font-semibold text-text-black">
-                      {publication.title}
-                    </p>
-                    <p className="font-['inter'] text-[16px] leading-[24px] tracking-[0px] text-text-grey-mid">
-                      {publication.description}
-                    </p>
-                    <p className="font-['inter'] text-[16px] text-text-grey-light">
-                      {publication.date ? new Date(publication.date).toLocaleDateString('en-GB', {
-                        day: '2-digit',
-                        month: 'short',
-                        year: 'numeric',
-                      }) : publication.source}
-                      {publication.file_type ? ` | ${publication.file_type}` : ''}
-                    </p>
-                  </div>
-                  <div className="mt-1 flex flex-col sm:flex-row sm:publications-center justify-between gap-4">
-                    <div className="flex items-center gap-3">
-                      <span
-                        className={`font-['inter'] font-medium border rounded-md px-3 py-1 text-[14px] font-semibold ${publicationTags[publication.tag].bg} ${publicationTags[publication.tag].text}`}
-                      >
-                        {publication.tag}
-                      </span>
+            {(pastPublications as unknown as pastPublication[]).map(
+              (publication: pastPublication) => {
+                const pubFile = publication.file as
+                  | Record<string, unknown>
+                  | undefined;
+                const fileUrl = (pubFile?.url as string) || "#";
+                return (
+                  <div
+                    key={publication.id}
+                    className="flex flex-col justify-between gap-4 rounded-2xl border border-[#e2e8e2] bg-[#fcfdfb] px-5 py-4"
+                  >
+                    <div className="space-y-2">
+                      <p className="text-[24px] font-semibold text-text-black">
+                        {publication.title}
+                      </p>
+                      <p className="font-['inter'] text-[16px] leading-[24px] tracking-[0px] text-text-grey-mid">
+                        {publication.description}
+                      </p>
+                      <p className="font-['inter'] text-[16px] text-text-grey-light">
+                        {publication.date
+                          ? new Date(publication.date).toLocaleDateString(
+                              "en-GB",
+                              {
+                                day: "2-digit",
+                                month: "short",
+                                year: "numeric",
+                              },
+                            )
+                          : publication.source}
+                        {publication.file_type
+                          ? ` | ${publication.file_type}`
+                          : ""}
+                      </p>
                     </div>
-                    <div className="flex flex-wrap items-center gap-2 sm:ml-auto">
-                      <a href={fileUrl} target="_blank" download rel="noopener noreferrer">
-                        <button className="flex h-[36px] flex-1 sm:flex-none sm:w-[136px] items-center justify-center gap-2 rounded-xl border border-text-green text-sm font-semibold text-text-green min-w-[120px]">
-                          {(homepageContent?.publications_section as Record<string, unknown>)?.download_cta as string || 'Download'} <Image src="/download.svg" alt="Download Icon" width={16} height={16} />
-                        </button>
-                      </a>
+                    <div className="mt-1 flex flex-col sm:flex-row sm:publications-center justify-between gap-4">
+                      <div className="flex items-center gap-3">
+                        <span
+                          className={`font-['inter'] font-medium border rounded-md px-3 py-1 text-[14px] font-semibold ${publicationTags[publication.tag].bg} ${publicationTags[publication.tag].text}`}
+                        >
+                          {publication.tag}
+                        </span>
+                      </div>
+                      <div className="flex flex-wrap items-center gap-2 sm:ml-auto">
+                        <a
+                          href={fileUrl}
+                          target="_blank"
+                          download
+                          rel="noopener noreferrer"
+                        >
+                          <button className="flex h-[36px] flex-1 sm:flex-none sm:w-[136px] items-center justify-center gap-2 rounded-xl border border-text-green text-sm font-semibold text-text-green min-w-[120px]">
+                            {((
+                              homepageContent?.publications_section as Record<
+                                string,
+                                unknown
+                              >
+                            )?.download_cta as string) || "Download"}{" "}
+                            <Image
+                              src="/download.svg"
+                              alt="Download Icon"
+                              width={16}
+                              height={16}
+                            />
+                          </button>
+                        </a>
+                      </div>
                     </div>
                   </div>
-                </div>
-              )},)}
+                );
+              },
+            )}
           </div>
         </section>
         <section className="bg-background-base-green-light px-20 py-30">
@@ -503,7 +642,10 @@ export default async function Home() {
               </p>
               <div className="mt-10 flex flex-col gap-8 text-text-green">
                 {contactItems.map((item) => (
-                  <div key={item.id || item.label} className="flex items-center gap-4">
+                  <div
+                    key={item.id || item.label}
+                    className="flex items-center gap-4"
+                  >
                     <Image
                       src="/book.svg"
                       alt={item.label}
@@ -512,8 +654,12 @@ export default async function Home() {
                       style={{ width: "22px", height: "22px" }}
                     />
                     <div>
-                      <p className="font-['inter'] text-lg font-semibold leading-6">{item.label}</p>
-                      <p className="font-['inter'] text-base whitespace-pre-line">{item.value}</p>
+                      <p className="font-['inter'] text-lg font-semibold leading-6">
+                        {item.label}
+                      </p>
+                      <p className="font-['inter'] text-base whitespace-pre-line">
+                        {item.value}
+                      </p>
                     </div>
                   </div>
                 ))}
@@ -522,7 +668,9 @@ export default async function Home() {
             <div className="flex flex-col justify-space-between w-full rounded-2xl font-['Plus_Jakarta_Sans']">
               <div className="grid gap-4 sm:grid-cols-2">
                 <label className="flex flex-col gap-2">
-                  <span className="block h-[22px] text-sm font-semibold leading-[22px] text-text-black">{formNameLabel}</span>
+                  <span className="block h-[22px] text-sm font-semibold leading-[22px] text-text-black">
+                    {formNameLabel}
+                  </span>
                   <input
                     className="w-full rounded-lg border border-outline-grey-light bg-white px-3 py-3 text-sm font-normal text-[#1b2d1f]"
                     placeholder={formNamePlaceholder}
@@ -530,7 +678,9 @@ export default async function Home() {
                   />
                 </label>
                 <label className="flex flex-col gap-2">
-                  <span className="block h-[22px] text-sm font-semibold leading-[22px] text-text-black">{formEmailLabel}</span>
+                  <span className="block h-[22px] text-sm font-semibold leading-[22px] text-text-black">
+                    {formEmailLabel}
+                  </span>
                   <input
                     className="w-full rounded-lg border border-outline-grey-light bg-white px-3 py-3 text-sm font-normal text-[#1b2d1f]"
                     placeholder={formEmailPlaceholder}
@@ -539,15 +689,19 @@ export default async function Home() {
                 </label>
               </div>
               <label className="mt-6 flex flex-col gap-2">
-                <span className="block h-[22px] text-sm font-semibold leading-[22px] text-text-black">{formSubjectLabel}</span>
+                <span className="block h-[22px] text-sm font-semibold leading-[22px] text-text-black">
+                  {formSubjectLabel}
+                </span>
                 <input
                   className="w-full rounded-lg border border-outline-grey-light bg-white px-3 py-3 text-sm font-normal text-[#1b2d1f]"
-                    placeholder={formSubjectPlaceholder}
+                  placeholder={formSubjectPlaceholder}
                   type="text"
                 />
               </label>
               <label className="mt-6 flex flex-col gap-2">
-                <span className="block h-[22px] text-sm font-semibold leading-[22px] text-text-black">{formMessageLabel}</span>
+                <span className="block h-[22px] text-sm font-semibold leading-[22px] text-text-black">
+                  {formMessageLabel}
+                </span>
                 <textarea
                   className="min-h-[158px] w-full rounded-lg border border-outline-grey-light bg-white px-3 py-3 text-sm font-normal text-[#1b2d1f]"
                   placeholder={formMessagePlaceholder}
