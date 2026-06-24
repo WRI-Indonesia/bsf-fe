@@ -3,6 +3,7 @@ import { getPayload } from "payload";
 import config from "@payload-config";
 
 import {
+  REGISTRATION_UPLOAD_MAX_BYTES,
   foodPreferenceOptions,
   type EventRegistrationFieldErrors,
   type EventRegistrationPayloadValues,
@@ -85,6 +86,10 @@ function readFileField(formData: FormData, key: string) {
   return null;
 }
 
+function isOversizedUpload(file: File | null) {
+  return file != null && file.size > REGISTRATION_UPLOAD_MAX_BYTES;
+}
+
 function readFoodPreferenceField(formData: FormData) {
   const value = formData.get("foodPreference");
 
@@ -163,6 +168,36 @@ export async function POST(request: Request) {
     const passportInfoPageFile = readFileField(formData, "passportInfoPageFile");
     const signatureFile = readFileField(formData, "signatureFile");
 
+    if (isOversizedUpload(cvFile)) {
+      return jsonError(
+        {
+          errors: { cvFile: "File size must be 5 MB or less." },
+          message: "Please correct the highlighted fields.",
+        },
+        400,
+      );
+    }
+
+    if (isOversizedUpload(profilePhotoFile)) {
+      return jsonError(
+        {
+          errors: { profilePhotoFile: "File size must be 5 MB or less." },
+          message: "Please correct the highlighted fields.",
+        },
+        400,
+      );
+    }
+
+    if (isOversizedUpload(signatureFile)) {
+      return jsonError(
+        {
+          errors: { signatureFile: "File size must be 5 MB or less." },
+          message: "Please correct the highlighted fields.",
+        },
+        400,
+      );
+    }
+
     const payloadValues: Partial<EventRegistrationPayloadValues> = {
       bioSketch: readStringField(formData, "bioSketch"),
       cvFile: cvFile ?? getUploadId(registration.cvFile),
@@ -181,7 +216,10 @@ export async function POST(request: Request) {
       lastName: readStringField(formData, "lastName"),
       middleName: readStringField(formData, "middleName"),
       mobile: readStringField(formData, "mobile"),
-      nationality: readStringField(formData, "nationality"),
+      nationality: readStringField(
+        formData,
+        "nationality",
+      ) as EventRegistrationPayloadValues["nationality"],
       organization: readStringField(formData, "organization"),
       passportInfoPageFile:
         passportInfoPageFile ?? getUploadId(registration.passportInfoPageFile),

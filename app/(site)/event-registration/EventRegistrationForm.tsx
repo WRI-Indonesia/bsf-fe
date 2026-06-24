@@ -7,7 +7,9 @@ import { useId, useState, type ChangeEvent, type ReactNode } from "react";
 import {
   createEmptyEventRegistrationValues,
   foodPreferenceOptions,
+  REGISTRATION_PHONE_EXAMPLE,
   registrationPrefixOptions,
+  worldNationalityOptions,
   type EventRegistrationFieldErrors,
   type EventRegistrationFileValue,
   type EventRegistrationFormValues,
@@ -132,7 +134,11 @@ function getInitialValues(
     lastName: registration.lastName ?? "",
     middleName: registration.middleName ?? "",
     mobile: registration.mobile ?? "",
-    nationality: registration.nationality ?? "",
+    nationality: worldNationalityOptions.includes(
+      registration.nationality as (typeof worldNationalityOptions)[number],
+    )
+      ? (registration.nationality as EventRegistrationFormValues["nationality"])
+      : "",
     organization: registration.organization ?? "",
     passportInfoPageFile: toUploadedAsset(registration.passportInfoPageFile),
     passportNumber: registration.passportNumber ?? "",
@@ -969,7 +975,7 @@ export default function EventRegistrationForm({
                 />
                 <UploadField
                   accept=".jpg,.jpeg,.png,image/jpeg,image/png"
-                  acceptedFilesLabel="JPG / PNG . square preferred"
+                  acceptedFilesLabel="JPG / PNG . square preferred, max 5 MB"
                   disabled={isSubmitting}
                   error={fieldErrors.profilePhotoFile}
                   file={values.profilePhotoFile}
@@ -1006,13 +1012,16 @@ export default function EventRegistrationForm({
                   id="mobile"
                   label="Mobile"
                   onChange={handleChange("mobile")}
+                  placeholder={REGISTRATION_PHONE_EXAMPLE}
                   value={values.mobile}
                 />
                 <TextField
                   disabled={isSubmitting}
+                  error={fieldErrors.whatsappOrViber}
                   id="whatsappOrViber"
                   label="Whatsapp / viber"
                   onChange={handleChange("whatsappOrViber")}
+                  placeholder={REGISTRATION_PHONE_EXAMPLE}
                   value={values.whatsappOrViber}
                 />
               </div>
@@ -1102,12 +1111,14 @@ export default function EventRegistrationForm({
                     onChange={handleChange("passportNumber")}
                     value={values.passportNumber}
                   />
-                  <TextField
+                  <SelectField
                     disabled={isSubmitting}
                     error={fieldErrors.nationality}
                     id="nationality"
                     label="Nationality"
                     onChange={handleChange("nationality")}
+                    options={worldNationalityOptions}
+                    placeholder="Select nationality"
                     value={values.nationality}
                   />
                 </div>
