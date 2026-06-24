@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+
 import { useId, useState, type ChangeEvent, type ReactNode } from "react";
 
 const steps = [
@@ -8,7 +10,6 @@ const steps = [
   "Additional",
   "Travel",
   "Declaration",
-  "Conforme",
 ] as const;
 
 const foodPreferenceOptions = [
@@ -44,6 +45,7 @@ type RegistrationFormValues = {
   preferredDepartureDate: string;
   profilePhotoFile: File | null;
   prefix: string;
+  signatureFile: File | null;
   whatsappOrViber: string;
 };
 
@@ -71,6 +73,7 @@ const initialValues: RegistrationFormValues = {
   preferredDepartureDate: "",
   profilePhotoFile: null,
   prefix: "",
+  signatureFile: null,
   whatsappOrViber: "",
 };
 
@@ -86,6 +89,8 @@ const iconButtonClassName =
   "flex h-9 w-9 items-center justify-center rounded-lg border border-outline-green bg-white text-text-green shadow-[0px_1px_2px_0px_rgba(16,24,40,0.04)] transition-colors hover:bg-[#F6F9F5]";
 const textareaClassName =
   "min-h-[140px] w-full rounded-md border border-outline-grey-light bg-white px-3 py-[10px] font-['inter'] text-sm leading-5 text-text-black placeholder:text-[#717D96] focus:border-text-green focus:outline-none sm:min-h-[200px]";
+const downloadButtonClassName =
+  "flex h-10 w-full items-center justify-center gap-2 rounded-lg border border-outline-green bg-white px-4 py-2 font-['inter'] text-sm font-semibold tracking-[0.1px] text-text-green shadow-[0px_1px_2px_0px_rgba(16,24,40,0.04)] transition-colors hover:bg-[#F6F9F5]";
 
 function StepIndicator({ activeStep }: { activeStep: number }) {
   return (
@@ -331,63 +336,13 @@ function RadioOption({
   );
 }
 
-function FutureStepPlaceholder({
-  activeStep,
-  onBack,
-  onContinue,
-}: {
-  activeStep: number;
-  onBack: () => void;
-  onContinue: () => void;
-}) {
-  const isLastStep = activeStep === steps.length;
-
-  return (
-    <CardShell
-      actions={
-        <>
-          <button
-            aria-label={`Back to ${steps[activeStep - 2].toLowerCase()}`}
-            className={iconButtonClassName}
-            onClick={onBack}
-            type="button"
-          >
-            <BackIcon />
-          </button>
-
-          <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center sm:justify-end">
-            <button className={secondaryButtonClassName} type="button">
-              Save as draft
-            </button>
-            <button
-              className={primaryButtonClassName}
-              onClick={onContinue}
-              type="button"
-            >
-              {isLastStep ? "Complete" : "Continue"}
-            </button>
-          </div>
-        </>
-      }
-      description={`This ${steps[activeStep - 1].toLowerCase()} step will be implemented next.`}
-      title={`${steps[activeStep - 1]} details`}
-    >
-      <div className="rounded-xl border border-dashed border-[#C8D2C3] bg-[#FBFBF9] px-6 py-10">
-        <p className="font-['inter'] text-base leading-7 text-text-black">
-          The {steps[activeStep - 1].toLowerCase()} step is reserved for the
-          next part of the registration flow.
-        </p>
-      </div>
-    </CardShell>
-  );
-}
-
 export default function EventRegistrationForm() {
   const [activeStep, setActiveStep] = useState(1);
   const [values, setValues] = useState(initialValues);
   const cvUploadId = useId();
   const passportInfoPageUploadId = useId();
   const profilePhotoUploadId = useId();
+  const signatureUploadId = useId();
 
   const handleChange =
     (field: keyof RegistrationFormValues) =>
@@ -403,7 +358,13 @@ export default function EventRegistrationForm() {
     };
 
   const handleFileChange =
-    (field: "cvFile" | "passportInfoPageFile" | "profilePhotoFile") =>
+    (
+      field:
+        | "cvFile"
+        | "passportInfoPageFile"
+        | "profilePhotoFile"
+        | "signatureFile",
+    ) =>
     (event: ChangeEvent<HTMLInputElement>) => {
       const nextFile = event.target.files?.[0] ?? null;
 
@@ -787,15 +748,57 @@ export default function EventRegistrationForm() {
           </div>
         </CardShell>
       ) : (
-        <FutureStepPlaceholder
-          activeStep={activeStep}
-          onBack={() => setActiveStep(activeStep - 1)}
-          onContinue={() =>
-            setActiveStep((current) =>
-              current < steps.length ? current + 1 : current,
-            )
+        <CardShell
+          actions={
+            <>
+              <button
+                aria-label="Back to travel details"
+                className={iconButtonClassName}
+                onClick={() => setActiveStep(4)}
+                type="button"
+              >
+                <BackIcon />
+              </button>
+
+              <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center sm:justify-end">
+                <button className={secondaryButtonClassName} type="button">
+                  Save as draft
+                </button>
+                <button className={primaryButtonClassName} type="button">
+                  Submit
+                </button>
+              </div>
+            </>
           }
-        />
+          description="Download the PDF document, sign it, then upload it below."
+          title="Conforme"
+        >
+          <div className="flex flex-col gap-6 pb-6">
+            <a
+              className={downloadButtonClassName}
+              download
+              href="/publication.pdf"
+            >
+              <Image
+                alt=""
+                aria-hidden="true"
+                height={16}
+                src="/download.svg"
+                width={16}
+              />
+              Download PDF document
+            </a>
+
+            <UploadField
+              accept=".pdf,.png,.jpg,.jpeg,application/pdf,image/png,image/jpeg"
+              acceptedFilesLabel="PDF / PNG / JPG . max 5 MB"
+              file={values.signatureFile}
+              id={signatureUploadId}
+              label="Signature"
+              onChange={handleFileChange("signatureFile")}
+            />
+          </div>
+        </CardShell>
       )}
     </div>
   );
