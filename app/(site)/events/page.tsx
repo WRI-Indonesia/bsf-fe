@@ -6,6 +6,7 @@ import { cookies } from "next/headers";
 import { getPayload } from "payload";
 import config from "../../../payload.config";
 import { formatDateRange } from "../../../lib/helpers";
+import { getVisibleKeyDates } from "@/lib/event-key-dates";
 import { getCanonicalUpcomingEvent } from "@/lib/upcoming-event";
 
 function slugify(value: string) {
@@ -107,31 +108,6 @@ async function getUpcomingEvent(locale: string = "en") {
   }
 }
 
-async function getKeyDates(locale: string = "en") {
-  try {
-    const payload = await getPayload({ config });
-    const result = await payload.find({
-      collection: "events",
-      limit: 10,
-      where: {
-        and: [
-          {
-            "key_dates.show": {
-              not_equals: false,
-            },
-          },
-        ],
-      },
-      sort: "key_dates.date",
-      locale: locale as "en" | "id",
-    });
-    return result.docs || [];
-  } catch (error) {
-    console.error("Error fetching key dates:", error);
-    return [];
-  }
-}
-
 async function getPastEvents(locale: string = "en") {
   try {
     const payload = await getPayload({ config });
@@ -161,7 +137,18 @@ export default async function Events() {
 
   const eventsContent = await getEventsContent(locale);
   const upcomingEvent = await getUpcomingEvent(locale);
-  const keyDates = await getKeyDates(locale);
+  const keyDates = getVisibleKeyDates(
+    upcomingEvent as
+      | {
+          key_dates?: Array<{
+            date: string;
+            label: string;
+            show?: boolean;
+          }> | null;
+        }
+      | null
+      | undefined,
+  );
   const pastEvents = await getPastEvents(locale);
 
   // Hero section
@@ -169,19 +156,15 @@ export default async function Events() {
     | Record<string, unknown>
     | undefined;
   const heroLabel = getSectionField(heroSection, "label", "UPCOMING FORUM");
-  const heroTitle =
-    (upcomingEvent?.title as string) || "4th Biodiversity Science Forum 2026";
+  const heroTitle = (upcomingEvent?.title as string) || "";
   const heroDate =
     formatDateRange(
       upcomingEvent?.start_date as string,
       upcomingEvent?.end_date as string,
     ) || "10-12 November 2026";
-  const heroLocation = (upcomingEvent?.location as string) || "Singapore";
-  const heroParticipants =
-    (upcomingEvent?.participants as string) || "500+ Expected Participants";
-  const heroDescription =
-    (upcomingEvent?.description as string) ||
-    "Join leading scientists, policy experts, and conservation practitioners for five days of keynotes, sessions, and collaborative workshops on the future of biodiversity in Southeast Asia.";
+  const heroLocation = (upcomingEvent?.location as string) || "";
+  const heroParticipants = (upcomingEvent?.participants as string) || "";
+  const heroDescription = (upcomingEvent?.description as string) || "";
   const heroImage = getUploadUrl(
     heroSection,
     "image",
@@ -399,46 +382,36 @@ export default async function Events() {
                     </p>
                   </div>
                   <div className="w-full grid gap-6 sm:grid-cols-2 lg:grid-cols-5 2xl:grid-cols-5">
-                    {keyDates.flatMap((item) => {
-                      const keyDatesArray =
-                        (item.key_dates as Array<{
-                          date: string;
-                          label: string;
-                          show?: boolean;
-                        }>) || [];
-                      return keyDatesArray
-                        .filter((kd) => kd.show !== false)
-                        .map((kd, i) => {
-                          const formattedDate = kd.date
-                            ? new Date(kd.date).toLocaleDateString("en-GB", {
-                                day: "2-digit",
-                                month: "long",
-                                year: "numeric",
-                              })
-                            : "";
-                          return (
-                            <div
-                              key={`${item.id}-${i}`}
-                              className="flex flex-col items-center justify-center text-center p-6 rounded-3xl border border-outline-grey-light gap-3 bg-background-base-grey-light"
-                            >
-                              <Image
-                                src="/book.svg"
-                                alt="Important Date"
-                                width={24}
-                                height={38}
-                                style={{ width: "24px", height: "38px" }}
-                              />
-                              <div className="flex flex-col gap-3">
-                                <p className="font-semibold text-lg text-text-black">
-                                  {formattedDate}
-                                </p>
-                                <p className="font-['inter'] text-base font-normal leading-[100%] text-text-grey-dark">
-                                  {kd.label}
-                                </p>
-                              </div>
-                            </div>
-                          );
-                        });
+                    {keyDates.map((keyDate, i) => {
+                      const formattedDate = keyDate.date
+                        ? new Date(keyDate.date).toLocaleDateString("en-GB", {
+                            day: "2-digit",
+                            month: "long",
+                            year: "numeric",
+                          })
+                        : "";
+                      return (
+                        <div
+                          key={`${featuredEventId || "upcoming-event"}-${i}`}
+                          className="flex flex-col items-center justify-center text-center p-6 rounded-3xl border border-outline-grey-light gap-3 bg-background-base-grey-light"
+                        >
+                          <Image
+                            src="/book.svg"
+                            alt="Important Date"
+                            width={24}
+                            height={38}
+                            style={{ width: "24px", height: "38px" }}
+                          />
+                          <div className="flex flex-col gap-3">
+                            <p className="font-semibold text-lg text-text-black">
+                              {formattedDate}
+                            </p>
+                            <p className="font-['inter'] text-base font-normal leading-[100%] text-text-grey-dark">
+                              {keyDate.label}
+                            </p>
+                          </div>
+                        </div>
+                      );
                     })}
                   </div>
                 </div>
@@ -609,7 +582,7 @@ export default async function Events() {
               </section>
             )}
 
-            <section className="flex bg-background-base-green-mid px-20 py-30 2xl:justify-center">
+            <section className="hidden flex bg-background-base-green-mid px-20 py-30 2xl:justify-center">
               <div className="flex flex-col max-w-[1400px] gap-20 2xl:items-center">
                 <div className="flex flex-col 2xl:items-center">
                   <p className="font-['inter'] text-xl font-semibold uppercase tracking-widest text-text-green">
