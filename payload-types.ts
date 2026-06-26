@@ -269,6 +269,10 @@ export interface Event {
   } | null;
   description?: string | null;
   show_on_homepage?: boolean | null;
+  /**
+   * Marks this event as the site-wide upcoming event. Checking this will uncheck it on any other event.
+   */
+  is_upcoming_event?: boolean | null;
   key_dates?:
     | {
         date: string;
@@ -677,6 +681,7 @@ export interface EventsSelect<T extends boolean = true> {
   article?: T;
   description?: T;
   show_on_homepage?: T;
+  is_upcoming_event?: T;
   key_dates?:
     | T
     | {
@@ -801,10 +806,6 @@ export interface HomepageContent {
   id: number;
   hero_section?: {
     /**
-     * Select an event to display in the hero section
-     */
-    featured_event?: (number | null) | Event;
-    /**
      * Upload a custom background image for the hero section.
      */
     background_image?: (number | null) | Media;
@@ -829,12 +830,16 @@ export interface HomepageContent {
       | null;
   };
   upcoming_forum_section?: {
-    featured_event?: (number | null) | Event;
     label?: string | null;
+    hero_card_label?: string | null;
+    hero_card_submit_cta?: string | null;
     register_cta?: string | null;
     register_cta_url?: string | null;
     view_program_cta?: string | null;
     view_program_cta_url?: string | null;
+    participants_suffix?: string | null;
+    participants_label?: string | null;
+    key_dates_label?: string | null;
   };
   publications_section?: {
     label?: string | null;
@@ -953,10 +958,6 @@ export interface AboutContent {
 export interface EventsContent {
   id: number;
   hero_section?: {
-    /**
-     * Select an event to display in the hero section
-     */
-    featured_event?: (number | null) | Event;
     label?: string | null;
     /**
      * Upload a custom image. If empty, will use the featured event image.
@@ -1136,7 +1137,6 @@ export interface HomepageContentSelect<T extends boolean = true> {
   hero_section?:
     | T
     | {
-        featured_event?: T;
         background_image?: T;
         title?: T;
         subtitle?: T;
@@ -1163,12 +1163,16 @@ export interface HomepageContentSelect<T extends boolean = true> {
   upcoming_forum_section?:
     | T
     | {
-        featured_event?: T;
         label?: T;
+        hero_card_label?: T;
+        hero_card_submit_cta?: T;
         register_cta?: T;
         register_cta_url?: T;
         view_program_cta?: T;
         view_program_cta_url?: T;
+        participants_suffix?: T;
+        participants_label?: T;
+        key_dates_label?: T;
       };
   publications_section?:
     | T
@@ -1285,7 +1289,6 @@ export interface EventsContentSelect<T extends boolean = true> {
   hero_section?:
     | T
     | {
-        featured_event?: T;
         label?: T;
         image?: T;
         buttons?:

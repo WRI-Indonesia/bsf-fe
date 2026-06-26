@@ -133,6 +133,11 @@ export default async function Home() {
     | undefined;
   const upcomingForumLabel = upcomingForumSection?.label as string;
   // (upcomingForumSection?.label as string) || "Upcoming Forum";
+  const upcomingForumHeroCardLabel =
+    (upcomingForumSection?.hero_card_label as string) || "Upcoming Forum";
+  const upcomingForumHeroCardSubmitCta =
+    (upcomingForumSection?.hero_card_submit_cta as string) ||
+    "Submit Your Abstract";
   const upcomingRegisterCta = upcomingForumSection?.register_cta as string;
   // (upcomingForumSection?.register_cta as string) || "Register Now";
   const upcomingRegisterCtaUrl =
@@ -144,6 +149,12 @@ export default async function Home() {
   const upcomingViewProgramCtaUrl =
     upcomingForumSection?.view_program_cta_url as string;
   // (upcomingForumSection?.view_program_cta_url as string) || "#";
+  const upcomingForumParticipantsSuffix =
+    (upcomingForumSection?.participants_suffix as string) || "Expected";
+  const upcomingForumParticipantsLabel =
+    (upcomingForumSection?.participants_label as string) || "Participants";
+  const upcomingForumKeyDatesLabel =
+    (upcomingForumSection?.key_dates_label as string) || "KEY DATES";
 
   const contactSection = homepageContent?.contact_section as
     | Record<string, unknown>
@@ -225,7 +236,7 @@ export default async function Home() {
               {upcomingEvent && (
                 <div className="flex flex-col gap-4 w-full sm:max-w-[480px] rounded-xl bg-white/75 p-6">
                   <p className="text-base md:text-lg font-['inter'] font-semibold text-text-lime">
-                    Upcoming Forum
+                    {upcomingForumHeroCardLabel}
                   </p>
                   <h3 className="text-[22px] md:text-[32px] lg:text-[38px] font-bold leading-[1.1] tracking-tight text-text-green">
                     {(upcomingEvent?.title as string) ||
@@ -242,9 +253,8 @@ export default async function Home() {
                     </div>
                     <div className="flex w-full bg-background-base-green/20 justify-center items-baseline gap-2 whitespace-nowrap px-4 py-2">
                       <span className="text-lg md:text-2xl font-bold leading-none tracking-normal text-text-green">
-                        {formatParticipants(
-                          upcomingEvent?.location as string,
-                        ) || "500+"}
+                        {formatParticipants(upcomingEvent?.location as string)}
+                        {/* ) || "500+"} */}
                       </span>
                     </div>
                   </div>
@@ -258,7 +268,7 @@ export default async function Home() {
                       {/* WIP */}
                       {/* <Link href={heroRegisterCtaUrl}> */}
                       <button className="w-full font-[inter] h-[36px] flex items-center justify-center gap-2 rounded-lg bg-[#1f4a31] px-4 py-[10px] text-sm font-semibold text-white transition-colors hover:bg-[#163824]">
-                        Submit Your Abstract
+                        {upcomingForumHeroCardSubmitCta}
                         {/* WIP */}
                         {/* {heroRegisterCta} */}
                         <Image
@@ -354,7 +364,8 @@ export default async function Home() {
                           {formatDateRange(
                             upcomingEvent?.start_date as string,
                             upcomingEvent?.end_date as string,
-                          ) || "10-12 November 2026"}
+                          )}
+                          {/* ) || "10-12 November 2026"} */}
                         </span>
                       </div>
                     </div>
@@ -368,8 +379,8 @@ export default async function Home() {
                       />
                       <div className="flex flex-col">
                         <span className="text-xl font-bold text-text-green lg:text-2xl">
-                          {(upcomingEvent?.location as string) ||
-                            "Jakarta, Indonesia"}
+                          {upcomingEvent?.location as string}
+                          {/* "Jakarta, Indonesia"} */}
                         </span>
                       </div>
                     </div>
@@ -387,10 +398,10 @@ export default async function Home() {
                             upcomingEvent?.participants as string,
                           )}{" "}
                           {/* ) || "500+"}{" "} */}
-                          Expected
+                          {upcomingForumParticipantsSuffix}
                         </span>
                         <span className="font-['inter'] font-normal text-text-green">
-                          Participants
+                          {upcomingForumParticipantsLabel}
                         </span>
                       </div>
                     </div>
@@ -419,7 +430,7 @@ export default async function Home() {
               {keyDates.length > 0 && (
                 <div className="flex flex-col justify-center items-center lg:pl-2 xl:pl-6">
                   <p className="font-['inter'] text-base font-bold uppercase tracking-wider text-text-green">
-                    KEY DATES
+                    {upcomingForumKeyDatesLabel}
                   </p>
                   <div className="mt-6 space-y-6">
                     {keyDates

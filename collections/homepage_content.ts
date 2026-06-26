@@ -141,6 +141,20 @@ const homepageContent: GlobalConfig = {
         localized: true,
       },
       {
+        name: 'hero_card_label',
+        type: 'text',
+        label: 'Hero Card Label',
+        defaultValue: 'Upcoming Forum',
+        localized: true,
+      },
+      {
+        name: 'hero_card_submit_cta',
+        type: 'text',
+        label: 'Hero Card Submit CTA',
+        defaultValue: 'Submit Your Abstract',
+        localized: true,
+      },
+      {
         name: 'register_cta',
         type: 'text',
         label: 'Register CTA Text',
@@ -165,6 +179,27 @@ const homepageContent: GlobalConfig = {
         type: 'text',
         label: 'View Program CTA URL',
         defaultValue: '#',
+      },
+      {
+        name: 'participants_suffix',
+        type: 'text',
+        label: 'Participants Suffix',
+        defaultValue: 'Expected',
+        localized: true,
+      },
+      {
+        name: 'participants_label',
+        type: 'text',
+        label: 'Participants Label',
+        defaultValue: 'Participants',
+        localized: true,
+      },
+      {
+        name: 'key_dates_label',
+        type: 'text',
+        label: 'Key Dates Label',
+        defaultValue: 'KEY DATES',
+        localized: true,
       },
     ]
     },
