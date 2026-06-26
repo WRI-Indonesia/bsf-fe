@@ -102,6 +102,7 @@ export default async function MediaPage() {
   const photosSection = mediaContent?.photos_section as Record<string, unknown> | undefined;
   const photosLabel = getSectionField(photosSection, 'label', 'Gallery');
   const photosTitle = getSectionField(photosSection, 'title', 'Photos & Videos');
+  const albumCountLabel = getSectionField(photosSection, 'album_count_label', 'Photos & Videos');
   const photosViewAllText = getSectionField(photosSection, 'view_all_text', 'Click here to see all albums');
   const photosViewAllLink = getSectionField(photosSection, 'view_all_link', '/media/gallery');
 
@@ -154,7 +155,7 @@ export default async function MediaPage() {
                     </div>
                     <div className="px-4 pb-6 text-center">
                       <p className="mt-2 font-['inter'] text-[16px] font-semibold text-text-black">{album.title}</p>
-                      <p className="mt-1 font-['inter'] text-[13px] text-text-grey-light">{mediaCount} Photos &amp; Videos</p>
+                      <p className="mt-1 font-['inter'] text-[13px] text-text-grey-light">{mediaCount} {albumCountLabel}</p>
                     </div>
                   </Link>
                 );

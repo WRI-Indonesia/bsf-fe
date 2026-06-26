@@ -29,6 +29,13 @@ const mediaContent: GlobalConfig = {
           localized: true,
         },
         {
+          name: 'album_count_label',
+          type: 'text',
+          label: 'Album Count Label',
+          defaultValue: 'Photos & Videos',
+          localized: true,
+        },
+        {
           name: 'albums',
           type: 'relationship',
           relationTo: 'album_media',

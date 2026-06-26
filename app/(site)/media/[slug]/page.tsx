@@ -61,6 +61,21 @@ async function getAlbumBySlug(slug: string, locale: string = 'en') {
   }
 }
 
+async function getMediaContent(locale: string = 'en') {
+  try {
+    const payload = await getPayload({ config });
+    const result = await payload.findGlobal({
+      slug: 'media_content',
+      locale: locale as 'en' | 'id',
+      depth: 2,
+    });
+    return result;
+  } catch (error) {
+    console.error("Error fetching media content:", error);
+    return null;
+  }
+}
+
 export default async function AlbumDetailPage({
   params,
 }: {
@@ -69,6 +84,7 @@ export default async function AlbumDetailPage({
   const { slug } = await params;
   const cookieStore = await cookies();
   const locale = cookieStore.get('locale')?.value || 'en';
+  const mediaContent = await getMediaContent(locale);
   const album = await getAlbumBySlug(slug, locale);
 
   if (!album) {
@@ -76,6 +92,9 @@ export default async function AlbumDetailPage({
   }
 
   const mediaCount = album.media_items?.length || 0;
+  const photosSection = mediaContent?.photos_section as Record<string, unknown> | undefined;
+  const albumCountLabel =
+    (photosSection?.album_count_label as string) || 'Photos & Videos';
 
   return (
     <div className="min-h-screen bg-text-white-broken">
@@ -96,7 +115,7 @@ export default async function AlbumDetailPage({
               {album.title}
             </h1>
             <p className="font-[inter] text-text-grey-mid text-lg font-normal">
-              {mediaCount} Photos &amp; Videos
+              {mediaCount} {albumCountLabel}
             </p>
           </div>
         </section>
