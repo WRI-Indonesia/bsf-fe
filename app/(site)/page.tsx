@@ -120,10 +120,10 @@ export default async function Home() {
     | undefined;
   const heroTitle =
     (heroSection?.title as string) || "ASEAN Biodiversity\nScience Forum";
-  const heroExploreCta =
-    (heroSection?.explore_cta as string) || "Explore Publications";
-  const heroExploreCtaUrl =
-    (heroSection?.explore_cta_url as string) || "/publications";
+  const heroExploreCta = heroSection?.explore_cta as string;
+  // (heroSection?.explore_cta as string) || "Explore Publications";
+  const heroExploreCtaUrl = heroSection?.explore_cta_url as string;
+  // (heroSection?.explore_cta_url as string) || "/publications";
   const heroBgImage =
     ((heroSection?.background_image as Record<string, unknown>)
       ?.url as string) || "/background.png";
@@ -131,26 +131,29 @@ export default async function Home() {
   const upcomingForumSection = homepageContent?.upcoming_forum_section as
     | Record<string, unknown>
     | undefined;
-  const upcomingForumLabel =
-    (upcomingForumSection?.label as string) || "Upcoming Forum";
-  const upcomingRegisterCta =
-    (upcomingForumSection?.register_cta as string) || "Register Now";
+  const upcomingForumLabel = upcomingForumSection?.label as string;
+  // (upcomingForumSection?.label as string) || "Upcoming Forum";
+  const upcomingRegisterCta = upcomingForumSection?.register_cta as string;
+  // (upcomingForumSection?.register_cta as string) || "Register Now";
   const upcomingRegisterCtaUrl =
-    (upcomingForumSection?.register_cta_url as string) || "#";
+    upcomingForumSection?.register_cta_url as string;
+  // (upcomingForumSection?.register_cta_url as string) || "#";
   const upcomingViewProgramCta =
-    (upcomingForumSection?.view_program_cta as string) || "View Program";
+    upcomingForumSection?.view_program_cta as string;
+  // (upcomingForumSection?.view_program_cta as string) || "View Program";
   const upcomingViewProgramCtaUrl =
-    (upcomingForumSection?.view_program_cta_url as string) || "#";
+    upcomingForumSection?.view_program_cta_url as string;
+  // (upcomingForumSection?.view_program_cta_url as string) || "#";
 
   const contactSection = homepageContent?.contact_section as
     | Record<string, unknown>
     | undefined;
-  const contactLabel = (contactSection?.label as string) || "Contact Us";
-  const contactTitle =
-    (contactSection?.title as string) || "Get in touch with the BSF team";
-  const contactDescription =
-    (contactSection?.description as string) ||
-    "Whether you're interested in partnerships, have questions about the forum, or want to contribute to biodiversity science, we'd love to hear from you.";
+  const contactLabel = contactSection?.label as string;
+  // const contactLabel = (contactSection?.label as string) || "Contact Us";
+  const contactTitle = contactSection?.title as string;
+  // (contactSection?.title as string) || "Get in touch with the BSF team";
+  const contactDescription = contactSection?.description as string;
+  // "Whether you're interested in partnerships, have questions about the forum, or want to contribute to biodiversity science, we'd love to hear from you.";
   const contactItems =
     (contactSection?.contact_items as Array<{
       id?: string;
@@ -324,12 +327,12 @@ export default async function Home() {
                 </p>
                 <div className="flex flex-col gap-8">
                   <span className="h-fit text-[2rem] font-semibold leading-[1] tracking-[0] text-text-black sm:text-[2.25rem] lg:text-[2.5rem]">
-                    {(upcomingEvent?.title as string) ||
-                      "Implementing the Global Biodiversity Framework"}
+                    {upcomingEvent?.title as string}
+                    {/* "Implementing the Global Biodiversity Framework"} */}
                   </span>
                   <p className="font-[inter] text-lg leading-[1.3] tracking-[0] text-[#697d70] sm:text-xl">
-                    {(upcomingEvent?.description as string) ||
-                      "The 6th ASEAN Biodiversity Science Forum will focus on the implementation of the Global Biodiversity Framework, fostering collaboration and knowledge exchange to drive biodiversity conservation efforts across the ASEAN region."}
+                    {upcomingEvent?.description as string}
+                    {/* "The 6th ASEAN Biodiversity Science Forum will focus on the implementation of the Global Biodiversity Framework, fostering collaboration and knowledge exchange to drive biodiversity conservation efforts across the ASEAN region."} */}
                   </p>
                   <div
                     className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"
@@ -382,7 +385,8 @@ export default async function Home() {
                         <span className="text-xl font-bold text-text-green lg:text-2xl">
                           {formatParticipants(
                             upcomingEvent?.participants as string,
-                          ) || "500+"}{" "}
+                          )}{" "}
+                          {/* ) || "500+"}{" "} */}
                           Expected
                         </span>
                         <span className="font-['inter'] font-normal text-text-green">
@@ -413,7 +417,7 @@ export default async function Home() {
                 </div>
               </div>
               {keyDates.length > 0 && (
-                <div className="flex flex-col justify-center lg:pl-2 xl:pl-6">
+                <div className="flex flex-col justify-center items-center lg:pl-2 xl:pl-6">
                   <p className="font-['inter'] text-base font-bold uppercase tracking-wider text-text-green">
                     KEY DATES
                   </p>
@@ -492,108 +496,113 @@ export default async function Home() {
             </div>
           </section>
         )}
-        <section className="bg-white px-[80px] py-[120px] text-[#1b2d1f]">
-          <div className="mx-auto flex w-full flex-wrap items-end justify-between gap-4">
-            <div>
-              <p className="font-['inter'] text-[20px] font-semibold uppercase text-[#b28d3c]">
+        {pastPublications && pastPublications.length > 0 && (
+          <section className="bg-white px-[80px] py-[120px] text-[#1b2d1f]">
+            <div className="mx-auto flex w-full flex-wrap items-end justify-between gap-4">
+              <div>
+                <p className="font-['inter'] text-[20px] font-semibold uppercase text-[#b28d3c]">
+                  {((
+                    homepageContent?.publications_section as Record<
+                      string,
+                      unknown
+                    >
+                  )?.label as string) || "Latest Publication"}
+                </p>
+                <h2 className="font-semibold text-[40px] mt-4 font-semibold">
+                  {((
+                    homepageContent?.publications_section as Record<
+                      string,
+                      unknown
+                    >
+                  )?.title as string) || "Recent Knowledge Products"}
+                </h2>
+              </div>
+              <Link
+                href="/publications"
+                className="text-[16px] font-semibold text-text-green hover:underline"
+              >
                 {((
                   homepageContent?.publications_section as Record<
                     string,
                     unknown
                   >
-                )?.label as string) || "Latest Publication"}
-              </p>
-              <h2 className="font-semibold text-[40px] mt-4 font-semibold">
-                {((
-                  homepageContent?.publications_section as Record<
-                    string,
-                    unknown
-                  >
-                )?.title as string) || "Recent Knowledge Products"}
-              </h2>
+                )?.view_all_text as string) || "View all publications →"}
+              </Link>
             </div>
-            <Link
-              href="/publications"
-              className="text-[16px] font-semibold text-text-green hover:underline"
-            >
-              {((
-                homepageContent?.publications_section as Record<string, unknown>
-              )?.view_all_text as string) || "View all publications →"}
-            </Link>
-          </div>
-          <div className="mx-auto mt-8 w-full space-y-4">
-            {(pastPublications as unknown as pastPublication[]).map(
-              (publication: pastPublication) => {
-                const pubFile = publication.file as
-                  | Record<string, unknown>
-                  | undefined;
-                const fileUrl = (pubFile?.url as string) || "#";
-                return (
-                  <div
-                    key={publication.id}
-                    className="flex flex-col justify-between gap-4 rounded-2xl border border-[#e2e8e2] bg-[#fcfdfb] px-5 py-4"
-                  >
-                    <div className="space-y-2">
-                      <p className="text-[24px] font-semibold text-text-black">
-                        {publication.title}
-                      </p>
-                      <p className="font-['inter'] text-[16px] leading-[24px] tracking-[0px] text-text-grey-mid">
-                        {publication.description}
-                      </p>
-                      <p className="font-['inter'] text-[16px] text-text-grey-light">
-                        {publication.date
-                          ? new Date(publication.date).toLocaleDateString(
-                              "en-GB",
-                              {
-                                day: "2-digit",
-                                month: "short",
-                                year: "numeric",
-                              },
-                            )
-                          : publication.source}
-                        {publication.file_type
-                          ? ` | ${publication.file_type}`
-                          : ""}
-                      </p>
-                    </div>
-                    <div className="mt-1 flex flex-col sm:flex-row sm:publications-center justify-between gap-4">
-                      <div className="flex items-center gap-3">
-                        <span
-                          className={`font-['inter'] font-medium border rounded-md px-3 py-1 text-[14px] font-semibold ${publicationTags[publication.tag].bg} ${publicationTags[publication.tag].text}`}
-                        >
-                          {publication.tag}
-                        </span>
+            <div className="mx-auto mt-8 w-full space-y-4">
+              {(pastPublications as unknown as pastPublication[]).map(
+                (publication: pastPublication) => {
+                  const pubFile = publication.file as
+                    | Record<string, unknown>
+                    | undefined;
+                  const fileUrl = (pubFile?.url as string) || "#";
+                  return (
+                    <div
+                      key={publication.id}
+                      className="flex flex-col justify-between gap-4 rounded-2xl border border-[#e2e8e2] bg-[#fcfdfb] px-5 py-4"
+                    >
+                      <div className="space-y-2">
+                        <p className="text-[24px] font-semibold text-text-black">
+                          {publication.title}
+                        </p>
+                        <p className="font-['inter'] text-[16px] leading-[24px] tracking-[0px] text-text-grey-mid">
+                          {publication.description}
+                        </p>
+                        <p className="font-['inter'] text-[16px] text-text-grey-light">
+                          {publication.date
+                            ? new Date(publication.date).toLocaleDateString(
+                                "en-GB",
+                                {
+                                  day: "2-digit",
+                                  month: "short",
+                                  year: "numeric",
+                                },
+                              )
+                            : publication.source}
+                          {publication.file_type
+                            ? ` | ${publication.file_type}`
+                            : ""}
+                        </p>
                       </div>
-                      <div className="flex flex-wrap items-center gap-2 sm:ml-auto">
-                        <a
-                          href={fileUrl}
-                          target="_blank"
-                          download
-                          rel="noopener noreferrer"
-                        >
-                          <button className="flex h-[36px] flex-1 sm:flex-none sm:w-[136px] items-center justify-center gap-2 rounded-xl border border-text-green text-sm font-semibold text-text-green min-w-[120px]">
-                            {((
-                              homepageContent?.publications_section as Record<
-                                string,
-                                unknown
-                              >
-                            )?.download_cta as string) || "Download"}{" "}
-                            <Image
-                              src="/download.svg"
-                              alt="Download Icon"
-                              width={16}
-                              height={16}
-                            />
-                          </button>
-                        </a>
+                      <div className="mt-1 flex flex-col sm:flex-row sm:publications-center justify-between gap-4">
+                        <div className="flex items-center gap-3">
+                          <span
+                            className={`font-['inter'] font-medium border rounded-md px-3 py-1 text-[14px] font-semibold ${publicationTags[publication.tag].bg} ${publicationTags[publication.tag].text}`}
+                          >
+                            {publication.tag}
+                          </span>
+                        </div>
+                        <div className="flex flex-wrap items-center gap-2 sm:ml-auto">
+                          <a
+                            href={fileUrl}
+                            target="_blank"
+                            download
+                            rel="noopener noreferrer"
+                          >
+                            <button className="flex h-[36px] flex-1 sm:flex-none sm:w-[136px] items-center justify-center gap-2 rounded-xl border border-text-green text-sm font-semibold text-text-green min-w-[120px]">
+                              {((
+                                homepageContent?.publications_section as Record<
+                                  string,
+                                  unknown
+                                >
+                              )?.download_cta as string) || "Download"}{" "}
+                              <Image
+                                src="/download.svg"
+                                alt="Download Icon"
+                                width={16}
+                                height={16}
+                              />
+                            </button>
+                          </a>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                );
-              },
-            )}
-          </div>
-        </section>
+                  );
+                },
+              )}
+            </div>
+          </section>
+        )}
         <section className="bg-background-base-green-light px-20 py-30">
           <div className="mx-auto grid w-full gap-[48px] lg:grid-cols-2 xl:grid-cols-[572px_1fr]">
             <div>
