@@ -32,6 +32,21 @@ const eventsContent: GlobalConfig = {
           },
         },
         {
+          name: "abstract_cta_text",
+          type: "text",
+          label: "Abstract CTA Text",
+          defaultValue: "Submit your Abstract",
+          localized: true,
+        },
+        {
+          name: "registration_note",
+          type: "textarea",
+          label: "Registration Note",
+          defaultValue:
+            "note : Registration is by invitation only, selected authors will receive an email link after abstract review.",
+          localized: true,
+        },
+        {
           name: "buttons",
           type: "array",
           label: "Buttons",

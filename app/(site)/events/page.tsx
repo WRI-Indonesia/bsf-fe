@@ -161,7 +161,7 @@ export default async function Events() {
     formatDateRange(
       upcomingEvent?.start_date as string,
       upcomingEvent?.end_date as string,
-    ) || "10-12 November 2026";
+    ) || "TBD";
   const heroLocation = (upcomingEvent?.location as string) || "";
   const heroParticipants = (upcomingEvent?.participants as string) || "";
   const heroDescription = (upcomingEvent?.description as string) || "";
@@ -172,6 +172,16 @@ export default async function Events() {
       "/events/hero.png",
   );
   const heroButtons = getSectionArray<ButtonItem>(heroSection, "buttons");
+  const abstractCtaText = getSectionField(
+    heroSection,
+    "abstract_cta_text",
+    "Submit your Abstract",
+  );
+  const registrationNote = getSectionField(
+    heroSection,
+    "registration_note",
+    "note : Registration is by invitation only, selected authors will receive an email link after abstract review.",
+  );
   const featuredEventId =
     typeof upcomingEvent?.id === "string"
       ? upcomingEvent.id
@@ -328,7 +338,7 @@ export default async function Events() {
                   <div className="flex w-full flex-col items-center justify-end gap-3">
                     <Link href={abstractSubmissionHref} className="w-full">
                       <div className="flex h-12 w-full items-center justify-center gap-[6px] rounded-[8px] bg-text-green px-4 py-[10px] font-['inter'] text-[20px] leading-none font-semibold text-text-white-broken shadow-[0px_1px_2px_0px_rgba(16,24,40,0.04)] transition-opacity hover:opacity-95">
-                        <span>Submit your Abstract</span>
+                        <span>{abstractCtaText}</span>
                         <Image
                           src="/arrow_right.svg"
                           alt="Arrow Right"
@@ -339,8 +349,7 @@ export default async function Events() {
                       </div>
                     </Link>
                     <p className="w-full font-['inter'] text-[14px] leading-none text-text-grey-light">
-                      note : Registration is by invitation only, selected
-                      authors will receive an email link after abstract review.
+                      {registrationNote}
                     </p>
                   </div>
                 </div>
