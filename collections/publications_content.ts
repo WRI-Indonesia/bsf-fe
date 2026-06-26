@@ -93,6 +93,13 @@ const publicationsContent: GlobalConfig = {
       defaultValue: 'Download',
       localized: true,
     },
+    {
+      name: 'empty_state_message',
+      type: 'text',
+      label: 'Empty State Message',
+      defaultValue: 'No publications found.',
+      localized: true,
+    },
   ],
 };
 

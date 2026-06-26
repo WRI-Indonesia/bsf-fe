@@ -143,6 +143,7 @@ export default async function Publications({
   const filtersSection = content?.filters_section as Record<string, unknown> | undefined;
   const paginationSection = content?.pagination_section as Record<string, unknown> | undefined;
   const downloadLabel = (content?.download_button_label as string) || 'Download';
+  const emptyStateMessage = (content?.empty_state_message as string) || 'No publications found.';
 
   const heroLabel = (heroSection?.label as string) || 'PUBLICATIONS';
   const heroTitle = (heroSection?.title as string) || 'Featured Publications';
@@ -251,7 +252,7 @@ export default async function Publications({
               <div className="flex-1 flex flex-col gap-4">
                 {PUBLICATIONS_DATA.length === 0 ? (
                   <div className="text-center py-20">
-                    <p className="font-['inter'] text-lg text-text-grey-mid">No publications found.</p>
+                    <p className="font-['inter'] text-lg text-text-grey-mid">{emptyStateMessage}</p>
                   </div>
                 ) : (
                   PUBLICATIONS_DATA.map((pub, i) => {
