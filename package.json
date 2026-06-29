@@ -14,7 +14,8 @@
     "migrate:create": "NODE_OPTIONS=\"--import tsx\" npx payload migrate:create",
     "migrate": "NODE_OPTIONS=\"--import tsx\" npx payload migrate",
     "migrate:status": "NODE_OPTIONS=\"--import tsx\" npx payload migrate:status",
-    "migrate:fresh": "NODE_OPTIONS=\"--import tsx\" npx payload migrate:fresh"
+    "migrate:fresh": "NODE_OPTIONS=\"--import tsx\" npx payload migrate:fresh",
+    "migrate:reset": "NODE_OPTIONS=\"--import tsx\" npx payload migrate:reset"
   },
   "dependencies": {
     "@payloadcms/db-postgres": "^3.84.1",

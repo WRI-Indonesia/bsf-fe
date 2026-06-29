@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import { getPayload } from 'payload';
+import { getPayload, type Where } from 'payload';
 import config from '../../../payload.config';
 import { cookies } from 'next/headers';
 import YearFilter from './YearFilter';
@@ -11,7 +11,7 @@ async function getPublications(locale: string = 'en', page: number = 1, limit: n
   try {
     const payload = await getPayload({ config });
 
-    const where: Record<string, unknown> = {};
+    const where: Where = {};
 
     if (filters?.tag && filters.tag !== 'All') {
       where.tag = { equals: filters.tag };
@@ -37,7 +37,7 @@ async function getPublications(locale: string = 'en', page: number = 1, limit: n
       page,
       sort: '-date',
       locale: locale as 'en' | 'id',
-      where: Object.keys(where).length > 0 ? (where as any) : undefined,
+      where: Object.keys(where).length > 0 ? where : undefined,
     });
 
     return {
