@@ -671,7 +671,7 @@ export default async function Events() {
               </div>
             </div>
 
-            <div className="grid gap-[48px] md:grid-cols-1 md:gap-y-[60px] lg:grid-cols-2 lg:gap-x-[60px] lg:gap-y-[72px]">
+            <div className="grid gap-[48px] md:grid-cols-1 grid-flow-row md:gap-y-[60px] lg:grid-cols-2 lg:gap-x-[60px] lg:gap-y-[72px]">
               {pastEvents.map((event, i) => {
                 const eventImg = getUploadUrl(
                   event as unknown as Record<string, unknown>,
