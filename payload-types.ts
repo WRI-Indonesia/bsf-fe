@@ -963,6 +963,8 @@ export interface EventsContent {
      * Upload a custom image. If empty, will use the featured event image.
      */
     image?: (number | null) | Media;
+    abstract_cta_text?: string | null;
+    registration_note?: string | null;
     buttons?:
       | {
           text: string;
@@ -1051,6 +1053,7 @@ export interface PublicationsContent {
     next_label?: string | null;
   };
   download_button_label?: string | null;
+  empty_state_message?: string | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1063,6 +1066,7 @@ export interface MediaContent {
   photos_section?: {
     label?: string | null;
     title?: string | null;
+    album_count_label?: string | null;
     /**
      * Select up to 9 albums to display on the media page.
      */
@@ -1291,6 +1295,8 @@ export interface EventsContentSelect<T extends boolean = true> {
     | {
         label?: T;
         image?: T;
+        abstract_cta_text?: T;
+        registration_note?: T;
         buttons?:
           | T
           | {
@@ -1403,6 +1409,7 @@ export interface PublicationsContentSelect<T extends boolean = true> {
         next_label?: T;
       };
   download_button_label?: T;
+  empty_state_message?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
@@ -1417,6 +1424,7 @@ export interface MediaContentSelect<T extends boolean = true> {
     | {
         label?: T;
         title?: T;
+        album_count_label?: T;
         albums?: T;
         view_all_text?: T;
         view_all_link?: T;

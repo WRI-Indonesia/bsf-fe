@@ -374,6 +374,18 @@
           "primaryKey": false,
           "notNull": false
         },
+        "_verified": {
+          "name": "_verified",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "_verificationtoken": {
+          "name": "_verificationtoken",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
         "login_attempts": {
           "name": "login_attempts",
           "type": "numeric",
@@ -681,6 +693,404 @@
           "tableTo": "public_users",
           "columnsFrom": [
             "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.event_registrations": {
+      "name": "event_registrations",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "abstract_id": {
+          "name": "abstract_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "registration_key": {
+          "name": "registration_key",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "enum_event_registrations_status",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'draft'"
+        },
+        "prefix": {
+          "name": "prefix",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "first_name": {
+          "name": "first_name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "middle_name": {
+          "name": "middle_name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "last_name": {
+          "name": "last_name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "organization": {
+          "name": "organization",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "department": {
+          "name": "department",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "postal_code": {
+          "name": "postal_code",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "full_address": {
+          "name": "full_address",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "position_title": {
+          "name": "position_title",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "field_of_expertise": {
+          "name": "field_of_expertise",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "bio_sketch": {
+          "name": "bio_sketch",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "mobile": {
+          "name": "mobile",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "whatsapp_or_viber": {
+          "name": "whatsapp_or_viber",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "food_preference": {
+          "name": "food_preference",
+          "type": "enum_event_registrations_food_preference",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "food_preference_other": {
+          "name": "food_preference_other",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "is_international_participant": {
+          "name": "is_international_participant",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "passport_number": {
+          "name": "passport_number",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "nationality": {
+          "name": "nationality",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "preferred_arrival_date": {
+          "name": "preferred_arrival_date",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "preferred_departure_date": {
+          "name": "preferred_departure_date",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "flight_notes": {
+          "name": "flight_notes",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cv_file_id": {
+          "name": "cv_file_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "profile_photo_file_id": {
+          "name": "profile_photo_file_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "passport_info_page_file_id": {
+          "name": "passport_info_page_file_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "signature_file_id": {
+          "name": "signature_file_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "event_registrations_abstract_idx": {
+          "name": "event_registrations_abstract_idx",
+          "columns": [
+            {
+              "expression": "abstract_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "event_registrations_registration_key_idx": {
+          "name": "event_registrations_registration_key_idx",
+          "columns": [
+            {
+              "expression": "registration_key",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "event_registrations_cv_file_idx": {
+          "name": "event_registrations_cv_file_idx",
+          "columns": [
+            {
+              "expression": "cv_file_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "event_registrations_profile_photo_file_idx": {
+          "name": "event_registrations_profile_photo_file_idx",
+          "columns": [
+            {
+              "expression": "profile_photo_file_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "event_registrations_passport_info_page_file_idx": {
+          "name": "event_registrations_passport_info_page_file_idx",
+          "columns": [
+            {
+              "expression": "passport_info_page_file_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "event_registrations_signature_file_idx": {
+          "name": "event_registrations_signature_file_idx",
+          "columns": [
+            {
+              "expression": "signature_file_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "event_registrations_updated_at_idx": {
+          "name": "event_registrations_updated_at_idx",
+          "columns": [
+            {
+              "expression": "updated_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "event_registrations_created_at_idx": {
+          "name": "event_registrations_created_at_idx",
+          "columns": [
+            {
+              "expression": "created_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "event_registrations_abstract_id_abstracts_id_fk": {
+          "name": "event_registrations_abstract_id_abstracts_id_fk",
+          "tableFrom": "event_registrations",
+          "tableTo": "abstracts",
+          "columnsFrom": [
+            "abstract_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "event_registrations_cv_file_id_media_id_fk": {
+          "name": "event_registrations_cv_file_id_media_id_fk",
+          "tableFrom": "event_registrations",
+          "tableTo": "media",
+          "columnsFrom": [
+            "cv_file_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "event_registrations_profile_photo_file_id_media_id_fk": {
+          "name": "event_registrations_profile_photo_file_id_media_id_fk",
+          "tableFrom": "event_registrations",
+          "tableTo": "media",
+          "columnsFrom": [
+            "profile_photo_file_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "event_registrations_passport_info_page_file_id_media_id_fk": {
+          "name": "event_registrations_passport_info_page_file_id_media_id_fk",
+          "tableFrom": "event_registrations",
+          "tableTo": "media",
+          "columnsFrom": [
+            "passport_info_page_file_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "event_registrations_signature_file_id_media_id_fk": {
+          "name": "event_registrations_signature_file_id_media_id_fk",
+          "tableFrom": "event_registrations",
+          "tableTo": "media",
+          "columnsFrom": [
+            "signature_file_id"
           ],
           "columnsTo": [
             "id"
@@ -1410,6 +1820,13 @@
         },
         "show_on_homepage": {
           "name": "show_on_homepage",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "is_upcoming_event": {
+          "name": "is_upcoming_event",
           "type": "boolean",
           "primaryKey": false,
           "notNull": false,
@@ -2628,6 +3045,12 @@
           "primaryKey": false,
           "notNull": false
         },
+        "event_registrations_id": {
+          "name": "event_registrations_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
         "latest_publications_id": {
           "name": "latest_publications_id",
           "type": "integer",
@@ -2740,6 +3163,21 @@
           "columns": [
             {
               "expression": "abstracts_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "payload_locked_documents_rels_event_registrations_id_idx": {
+          "name": "payload_locked_documents_rels_event_registrations_id_idx",
+          "columns": [
+            {
+              "expression": "event_registrations_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -2872,6 +3310,19 @@
           "tableTo": "abstracts",
           "columnsFrom": [
             "abstracts_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "payload_locked_documents_rels_event_registrations_fk": {
+          "name": "payload_locked_documents_rels_event_registrations_fk",
+          "tableFrom": "payload_locked_documents_rels",
+          "tableTo": "event_registrations",
+          "columnsFrom": [
+            "event_registrations_id"
           ],
           "columnsTo": [
             "id"
@@ -3613,12 +4064,6 @@
           "primaryKey": true,
           "notNull": true
         },
-        "hero_section_featured_event_id": {
-          "name": "hero_section_featured_event_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
         "hero_section_background_image_id": {
           "name": "hero_section_background_image_id",
           "type": "integer",
@@ -3638,12 +4083,6 @@
           "primaryKey": false,
           "notNull": false,
           "default": "'/publications'"
-        },
-        "upcoming_forum_section_featured_event_id": {
-          "name": "upcoming_forum_section_featured_event_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
         },
         "upcoming_forum_section_register_cta_url": {
           "name": "upcoming_forum_section_register_cta_url",
@@ -3673,21 +4112,6 @@
         }
       },
       "indexes": {
-        "homepage_content_hero_section_hero_section_featured_even_idx": {
-          "name": "homepage_content_hero_section_hero_section_featured_even_idx",
-          "columns": [
-            {
-              "expression": "hero_section_featured_event_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
         "homepage_content_hero_section_hero_section_background_im_idx": {
           "name": "homepage_content_hero_section_hero_section_background_im_idx",
           "columns": [
@@ -3702,56 +4126,15 @@
           "concurrently": false,
           "method": "btree",
           "with": {}
-        },
-        "homepage_content_upcoming_forum_section_upcoming_forum_s_idx": {
-          "name": "homepage_content_upcoming_forum_section_upcoming_forum_s_idx",
-          "columns": [
-            {
-              "expression": "upcoming_forum_section_featured_event_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
         }
       },
       "foreignKeys": {
-        "homepage_content_hero_section_featured_event_id_events_id_fk": {
-          "name": "homepage_content_hero_section_featured_event_id_events_id_fk",
-          "tableFrom": "homepage_content",
-          "tableTo": "events",
-          "columnsFrom": [
-            "hero_section_featured_event_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "set null",
-          "onUpdate": "no action"
-        },
         "homepage_content_hero_section_background_image_id_media_id_fk": {
           "name": "homepage_content_hero_section_background_image_id_media_id_fk",
           "tableFrom": "homepage_content",
           "tableTo": "media",
           "columnsFrom": [
             "hero_section_background_image_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "set null",
-          "onUpdate": "no action"
-        },
-        "homepage_content_upcoming_forum_section_featured_event_id_events_id_fk": {
-          "name": "homepage_content_upcoming_forum_section_featured_event_id_events_id_fk",
-          "tableFrom": "homepage_content",
-          "tableTo": "events",
-          "columnsFrom": [
-            "upcoming_forum_section_featured_event_id"
           ],
           "columnsTo": [
             "id"
@@ -3826,6 +4209,20 @@
           "notNull": false,
           "default": "'Upcoming Forum'"
         },
+        "upcoming_forum_section_hero_card_label": {
+          "name": "upcoming_forum_section_hero_card_label",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'Upcoming Forum'"
+        },
+        "upcoming_forum_section_hero_card_submit_cta": {
+          "name": "upcoming_forum_section_hero_card_submit_cta",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'Submit Your Abstract'"
+        },
         "upcoming_forum_section_register_cta": {
           "name": "upcoming_forum_section_register_cta",
           "type": "varchar",
@@ -3839,6 +4236,27 @@
           "primaryKey": false,
           "notNull": false,
           "default": "'View Program'"
+        },
+        "upcoming_forum_section_participants_suffix": {
+          "name": "upcoming_forum_section_participants_suffix",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'Expected'"
+        },
+        "upcoming_forum_section_participants_label": {
+          "name": "upcoming_forum_section_participants_label",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'Participants'"
+        },
+        "upcoming_forum_section_key_dates_label": {
+          "name": "upcoming_forum_section_key_dates_label",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'KEY DATES'"
         },
         "publications_section_label": {
           "name": "publications_section_label",
@@ -5189,12 +5607,6 @@
           "primaryKey": true,
           "notNull": true
         },
-        "hero_section_featured_event_id": {
-          "name": "hero_section_featured_event_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
         "hero_section_image_id": {
           "name": "hero_section_image_id",
           "type": "integer",
@@ -5245,21 +5657,6 @@
         }
       },
       "indexes": {
-        "events_content_hero_section_hero_section_featured_event_idx": {
-          "name": "events_content_hero_section_hero_section_featured_event_idx",
-          "columns": [
-            {
-              "expression": "hero_section_featured_event_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
         "events_content_hero_section_hero_section_image_idx": {
           "name": "events_content_hero_section_hero_section_image_idx",
           "columns": [
@@ -5277,19 +5674,6 @@
         }
       },
       "foreignKeys": {
-        "events_content_hero_section_featured_event_id_events_id_fk": {
-          "name": "events_content_hero_section_featured_event_id_events_id_fk",
-          "tableFrom": "events_content",
-          "tableTo": "events",
-          "columnsFrom": [
-            "hero_section_featured_event_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "set null",
-          "onUpdate": "no action"
-        },
         "events_content_hero_section_image_id_media_id_fk": {
           "name": "events_content_hero_section_image_id_media_id_fk",
           "tableFrom": "events_content",
@@ -5320,6 +5704,20 @@
           "primaryKey": false,
           "notNull": false,
           "default": "'UPCOMING FORUM'"
+        },
+        "hero_section_abstract_cta_text": {
+          "name": "hero_section_abstract_cta_text",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'Submit your Abstract'"
+        },
+        "hero_section_registration_note": {
+          "name": "hero_section_registration_note",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'note : Registration is by invitation only, selected authors will receive an email link after abstract review.'"
         },
         "key_dates_section_label": {
           "name": "key_dates_section_label",
@@ -5395,37 +5793,37 @@
           "name": "registration_section_left_box_title",
           "type": "varchar",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "registration_section_left_box_description": {
           "name": "registration_section_left_box_description",
           "type": "varchar",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "registration_section_left_box_button_text": {
           "name": "registration_section_left_box_button_text",
           "type": "varchar",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "registration_section_right_box_title": {
           "name": "registration_section_right_box_title",
           "type": "varchar",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "registration_section_right_box_description": {
           "name": "registration_section_right_box_description",
           "type": "varchar",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "registration_section_right_box_button_text": {
           "name": "registration_section_right_box_button_text",
           "type": "varchar",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "past_events_section_label": {
           "name": "past_events_section_label",
@@ -5609,6 +6007,13 @@
           "primaryKey": false,
           "notNull": false,
           "default": "'Download'"
+        },
+        "empty_state_message": {
+          "name": "empty_state_message",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'No publications found.'"
         },
         "id": {
           "name": "id",
@@ -5971,6 +6376,13 @@
         },
         "photos_section_title": {
           "name": "photos_section_title",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'Photos & Videos'"
+        },
+        "photos_section_album_count_label": {
+          "name": "photos_section_album_count_label",
           "type": "varchar",
           "primaryKey": false,
           "notNull": false,
@@ -6521,6 +6933,24 @@
         "rejected"
       ]
     },
+    "public.enum_event_registrations_status": {
+      "name": "enum_event_registrations_status",
+      "schema": "public",
+      "values": [
+        "draft",
+        "submitted"
+      ]
+    },
+    "public.enum_event_registrations_food_preference": {
+      "name": "enum_event_registrations_food_preference",
+      "schema": "public",
+      "values": [
+        "Halal",
+        "Vegetarian",
+        "No restriction",
+        "Other"
+      ]
+    },
     "public.enum_latest_publications_tag": {
       "name": "enum_latest_publications_tag",
       "schema": "public",
@@ -6584,6 +7014,6 @@
     "tables": {},
     "columns": {}
   },
-  "id": "28cfa49a-a678-439a-a024-1a41eec8150a",
+  "id": "0905fd7c-91cb-486b-90b9-f38e55ad8a3e",
   "prevId": "00000000-0000-0000-0000-000000000000"
 }
