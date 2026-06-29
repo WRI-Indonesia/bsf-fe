@@ -13,7 +13,8 @@
     "postinstall": "node scripts/patch-loadenv.js",
     "migrate:create": "NODE_OPTIONS=\"--import tsx\" npx payload migrate:create",
     "migrate": "NODE_OPTIONS=\"--import tsx\" npx payload migrate",
-    "migrate:status": "NODE_OPTIONS=\"--import tsx\" npx payload migrate:status"
+    "migrate:status": "NODE_OPTIONS=\"--import tsx\" npx payload migrate:status",
+    "migrate:fresh": "NODE_OPTIONS=\"--import tsx\" npx payload migrate:fresh"
   },
   "dependencies": {
     "@payloadcms/db-postgres": "^3.84.1",
