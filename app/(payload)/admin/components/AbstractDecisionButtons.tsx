@@ -88,7 +88,7 @@ export function AbstractDecisionButtons({
   };
 
   const handleClick =
-    (decision: Decision) => (event: MouseEvent<HTMLButtonElement>) => {
+    (decision: Decision) => (event: MouseEvent<Element>) => {
       event.preventDefault();
       event.stopPropagation();
       void runDecision(decision);

@@ -16,7 +16,7 @@ type AbstractSubmissionNotificationArgs = {
       subject: string;
       text: string;
       to: string;
-    }) => Promise<void>;
+    }) => Promise<unknown>;
   };
   submitterEmail: string;
   submission: {

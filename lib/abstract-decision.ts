@@ -44,48 +44,23 @@ type MinimalPayload = {
       };
     };
   };
-  create: (args: {
-    collection: string;
-    data: Record<string, unknown>;
-    req: PayloadRequest;
-  }) => Promise<RegistrationDoc>;
-  delete: (args: {
-    collection: string;
-    id: number | string;
-    req: PayloadRequest;
-  }) => Promise<unknown>;
+  create: (...args: any[]) => Promise<RegistrationDoc>;
+  delete: (...args: any[]) => Promise<unknown>;
   email: {
     defaultFromAddress?: string | null;
     defaultFromName?: string | null;
   };
-  find: (args: {
-    collection: string;
-    depth?: number;
-    limit?: number;
-    pagination?: boolean;
-    req: PayloadRequest;
-    where: Record<string, unknown>;
-  }) => Promise<{
+  find: (...args: any[]) => Promise<{
     docs: RegistrationDoc[];
   }>;
-  findByID: (args: {
-    collection: string;
-    id: number | string;
-    depth?: number;
-    req: PayloadRequest;
-  }) => Promise<AbstractDoc | EventDoc | PublicUserDoc>;
+  findByID: (...args: any[]) => Promise<AbstractDoc | EventDoc | PublicUserDoc>;
   sendEmail: (message: {
     from?: string;
     subject: string;
     text: string;
     to: string;
-  }) => Promise<void>;
-  update: (args: {
-    collection: string;
-    data: Record<string, unknown>;
-    id: number | string;
-    req: PayloadRequest;
-  }) => Promise<AbstractDoc>;
+  }) => Promise<unknown>;
+  update: (...args: any[]) => Promise<AbstractDoc>;
 };
 
 const getRelationId = (value: RelationValue): number | string | null => {

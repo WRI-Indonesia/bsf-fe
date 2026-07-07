@@ -60,13 +60,18 @@ export const smtpEmailAdapter: PayloadEmailAdapter = ({ payload }) => {
 
       const from = message.from ?? buildDefaultFrom();
       const envelopeFrom = buildEnvelopeFrom(message);
+      const envelope = message.envelope
+        ? envelopeFrom
+          ? {
+              ...message.envelope,
+              from: envelopeFrom,
+            }
+          : message.envelope
+        : undefined;
 
       await transport.sendMail({
         ...message,
-        envelope: {
-          ...message.envelope,
-          from: envelopeFrom,
-        },
+        envelope,
         from,
         sender: message.sender ?? envelopeFrom,
       });

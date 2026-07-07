@@ -9,7 +9,7 @@ type AbstractAcceptanceEmailArgs = {
       subject: string;
       text: string;
       to: string;
-    }) => Promise<void>;
+    }) => Promise<unknown>;
   };
   recipientEmail: string;
   registrationURL: string;
